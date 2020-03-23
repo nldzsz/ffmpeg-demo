@@ -121,3 +121,18 @@ char* getTimeFormatForDebug()
     
     return returnStr;
 }
+
+void printUint32toHex(uint32_t val)
+{
+    LOGD("%x %x %x %x",val&0xff,val>>8&0xff,val>>16&0xff,val>>24&0xff);
+}
+
+void printUint16toHex(uint16_t val)
+{
+    LOGD("%x %x",val&0xff,val>>8&0xff);
+}
+
+void printUint8toHex(uint8_t val)
+{
+    LOGD("%x",val&0xff);
+}

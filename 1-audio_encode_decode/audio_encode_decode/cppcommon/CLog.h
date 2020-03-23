@@ -40,6 +40,11 @@ extern void LOGD(const char* format,...);
 extern void LOGI(const char* format,...);
 extern void LOGW(const char* format,...);
 extern void LOGE(const char* format,...);
+
+// 格式转化
+extern void printUint32toHex(uint32_t val);
+extern void printUint16toHex(uint16_t val);
+extern void printUint8toHex(uint8_t val);
     
 #ifdef __cplusplus
 } // extern "C"

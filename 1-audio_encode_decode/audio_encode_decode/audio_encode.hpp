@@ -12,6 +12,8 @@
 extern "C" {
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
+#include <libswresample/swresample.h>
+#include <libavutil/opt.h>
 #include <libavutil/error.h>
 }
 #include <stdio.h>
@@ -21,27 +23,29 @@ extern "C" {
  *  则进入target-->signing&capabilities-->将选项Disable Library Validation 打上钩
  */
 using namespace std;
+typedef enum {
+    CodecFormatAAC,
+    CodecFormatMP3,
+    CodecFormatAC3,
+} CodecFormat;
 
 class AudioEncode
 {
 public:
     AudioEncode();
     ~AudioEncode();
-    /** aac有两种分装格式，ADIF和ADTS，比较常用的是ADTS。FFMpeg再进行aac编码后还需要将编码后的音频封装为aac格式，
-     *  这个过程称为aac muxer，有两种方式。方式一：通过FFMpeg库提供的接口封装；方式二：手动封装
-     *  doEncode_flt32_le2_to_aac1通过FFMpeg库提供的接口封装，doEncode_flt32_le2_to_aac2手动封装
+    /** aac有两种分装格式，ADIF和ADTS，比较常用的是ADTS。FFMpeg进行aac编码后的数据就是ADTS的格式数据。这个数据直接写入文件即可播放。
+     *  doEncode_to_aac默认通过FFMpeg库提供的AVFormatContext写入数据，如果saveByFile为true，还同时直接将编码后的aac数据由File提供接口写入文件
      */
-    void doEncode_flt32_le2_to_aac1(string &pcmpath,string &dstpath);
-    void doEncode_flt32_le2_to_aac2(string &pcmpath,string &dstpath);
+    void doEncode(CodecFormat format=CodecFormatAAC, bool saveByFile = false);
     
 private:
-    AVCodec         *pCodec;
     AVCodecContext  *pCodecCtx;
     AVFormatContext *pFormatCtx;
+    SwrContext      *pSwrCtx;
     
     void privateLeaseResources();
-    void doEncode1(AVFormatContext*fmtCtx,AVCodecContext *cCtx,AVPacket *packet,AVFrame *frame);
-    void doEncode2(AVCodecContext *cCtx,AVPacket *packet,AVFrame *frame,FILE *file);
+    void doEncode1(AVFormatContext*fmtCtx,AVCodecContext *cCtx,AVPacket *packet,AVFrame *frame,FILE *file);
 };
 
 #endif /* audio_encode_hpp */
