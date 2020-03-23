@@ -100,7 +100,7 @@ AudioEncode::~AudioEncode()
 void AudioEncode::privateLeaseResources()
 {
     if (pFormatCtx) {
-        avformat_close_input(&pFormatCtx);
+        avformat_free_context(pFormatCtx);
         pFormatCtx = NULL;
     }
     if (pCodecCtx) {
@@ -141,7 +141,7 @@ void AudioEncode::doEncode1(AVFormatContext*fmtCtx,AVCodecContext *cCtx,AVPacket
 }
 
 /**
- *  1、一个编码格式可以有多个封装格式，一个封装格式也可以有多个编码格式。要查询一个编码格式支持的所有封装格式，打开ffmpeg源码通过以下方式查询：
+ *  1、一个编码格式可以有多个封装格式，一个封装格式也可以用于多个编码格式。要查询一个编码格式支持的所有封装格式，打开ffmpeg源码通过以下方式查询：
  *      以AAC为例，输入 .audio_codec       = AV_CODEC_ID_AAC  即可查询所有支持AAC的封装格式，对应的文件后缀名为.extensions        =对应的值
  *  2、用AVFormatContext进行封装时，ffmpeg必须编译了对应的封装格式选项才可以，对应的封装格式选项名为.name              =对应的值。即在编译时加上--enable_muxer=该值即可
 */

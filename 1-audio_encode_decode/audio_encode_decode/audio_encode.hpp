@@ -35,7 +35,7 @@ public:
     AudioEncode();
     ~AudioEncode();
     /** aac有两种分装格式，ADIF和ADTS，比较常用的是ADTS。FFMpeg进行aac编码后的数据就是ADTS的格式数据。这个数据直接写入文件即可播放。
-     *  doEncode_to_aac默认通过FFMpeg库提供的AVFormatContext写入数据，如果saveByFile为true，还同时直接将编码后的aac数据由File提供接口写入文件
+     *  doEncode默认通过FFMpeg库提供的AVFormatContext写入数据，如果saveByFile为true，还同时直接将编码后的aac数据由File提供接口写入文件
      */
     void doEncode(CodecFormat format=CodecFormatAAC, bool saveByFile = false);
     
