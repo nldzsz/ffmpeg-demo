@@ -27,8 +27,8 @@
 		180D4C4B24164C5200443A04 /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 180D4C4224164C5200443A04 /* libmp3lame.a */; };
 		180D4C4C24164C5200443A04 /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 180D4C4324164C5200443A04 /* libavutil.a */; };
 		180D4C4D24164C5200443A04 /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 180D4C4424164C5200443A04 /* libswresample.a */; };
+		184129C724299C96005F2C1F /* CLog.c in Sources */ = {isa = PBXBuildFile; fileRef = 184129C524299C96005F2C1F /* CLog.c */; };
 		188BF054239649F300C43EDF /* audio_encode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 188BF052239649F300C43EDF /* audio_encode.cpp */; };
-		188BF0C82398E07600C43EDF /* CLog.c in Sources */ = {isa = PBXBuildFile; fileRef = 188BF0C62398E07600C43EDF /* CLog.c */; };
 		188C118223A9F5AC0013E028 /* audio_resample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 188C118023A9F5AC0013E028 /* audio_resample.cpp */; };
 		189F8F3423910A7F00023702 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 189F8F3323910A7F00023702 /* main.cpp */; };
 /* End PBXBuildFile section */
@@ -66,11 +66,11 @@
 		180D4C4224164C5200443A04 /* libmp3lame.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmp3lame.a; path = "../../ffmpeg-build-scripts/mac/build/ffmpeg-x86_64/lib/libmp3lame.a"; sourceTree = "<group>"; };
 		180D4C4324164C5200443A04 /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavutil.a; path = "../../ffmpeg-build-scripts/mac/build/ffmpeg-x86_64/lib/libavutil.a"; sourceTree = "<group>"; };
 		180D4C4424164C5200443A04 /* libswresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswresample.a; path = "../../ffmpeg-build-scripts/mac/build/ffmpeg-x86_64/lib/libswresample.a"; sourceTree = "<group>"; };
+		184129C524299C96005F2C1F /* CLog.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CLog.c; sourceTree = "<group>"; };
+		184129C624299C96005F2C1F /* CLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLog.h; sourceTree = "<group>"; };
 		188BF052239649F300C43EDF /* audio_encode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = audio_encode.cpp; sourceTree = "<group>"; };
 		188BF053239649F300C43EDF /* audio_encode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = audio_encode.hpp; sourceTree = "<group>"; };
 		188BF0C32398D91800C43EDF /* audio_encode_decode.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = audio_encode_decode.entitlements; sourceTree = "<group>"; };
-		188BF0C62398E07600C43EDF /* CLog.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CLog.c; sourceTree = "<group>"; };
-		188BF0C72398E07600C43EDF /* CLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLog.h; sourceTree = "<group>"; };
 		188C118023A9F5AC0013E028 /* audio_resample.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = audio_resample.cpp; sourceTree = "<group>"; };
 		188C118123A9F5AC0013E028 /* audio_resample.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = audio_resample.hpp; sourceTree = "<group>"; };
 		189F8F3023910A7F00023702 /* audio_encode_decode */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = audio_encode_decode; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -108,6 +108,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		184129C424299C96005F2C1F /* cppcommon */ = {
+			isa = PBXGroup;
+			children = (
+				184129C524299C96005F2C1F /* CLog.c */,
+				184129C624299C96005F2C1F /* CLog.h */,
+			);
+			name = cppcommon;
+			path = ../../cppcommon;
+			sourceTree = "<group>";
+		};
 		188BF0552397514D00C43EDF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -135,15 +145,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		188BF0C52398E07600C43EDF /* cppcommon */ = {
-			isa = PBXGroup;
-			children = (
-				188BF0C62398E07600C43EDF /* CLog.c */,
-				188BF0C72398E07600C43EDF /* CLog.h */,
-			);
-			path = cppcommon;
-			sourceTree = "<group>";
-		};
 		189F8F2723910A7F00023702 = {
 			isa = PBXGroup;
 			children = (
@@ -164,8 +165,8 @@
 		189F8F3223910A7F00023702 /* audio_encode_decode */ = {
 			isa = PBXGroup;
 			children = (
+				184129C424299C96005F2C1F /* cppcommon */,
 				188BF0C32398D91800C43EDF /* audio_encode_decode.entitlements */,
-				188BF0C52398E07600C43EDF /* cppcommon */,
 				189F8F3323910A7F00023702 /* main.cpp */,
 				188BF052239649F300C43EDF /* audio_encode.cpp */,
 				188BF053239649F300C43EDF /* audio_encode.hpp */,
@@ -232,7 +233,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				188BF0C82398E07600C43EDF /* CLog.c in Sources */,
+				184129C724299C96005F2C1F /* CLog.c in Sources */,
 				188C118223A9F5AC0013E028 /* audio_resample.cpp in Sources */,
 				188BF054239649F300C43EDF /* audio_encode.cpp in Sources */,
 				189F8F3423910A7F00023702 /* main.cpp in Sources */,
@@ -358,7 +359,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = AKBWT3F327;
 				ENABLE_HARDENED_RUNTIME = YES;
-				HEADER_SEARCH_PATHS = "/Users/apple/devoloper/mine/ffmpeg/ffmpeg-build-scripts/mac/build/ffmpeg-x86_64/include";
+				HEADER_SEARCH_PATHS = (
+					"/Users/apple/devoloper/mine/ffmpeg/ffmpeg-build-scripts/mac/build/ffmpeg-x86_64/include",
+					"${SRCROOT}/../",
+				);
 				LIBRARY_SEARCH_PATHS = "/Users/apple/devoloper/mine/ffmpeg/ffmpeg-build-scripts/mac/build/ffmpeg-x86_64/lib";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -373,7 +377,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = AKBWT3F327;
 				ENABLE_HARDENED_RUNTIME = YES;
-				HEADER_SEARCH_PATHS = "/Users/apple/devoloper/mine/ffmpeg/ffmpeg-build-scripts/mac/build/ffmpeg-x86_64/include";
+				HEADER_SEARCH_PATHS = (
+					"/Users/apple/devoloper/mine/ffmpeg/ffmpeg-build-scripts/mac/build/ffmpeg-x86_64/include",
+					"${SRCROOT}/../",
+				);
 				LIBRARY_SEARCH_PATHS = "/Users/apple/devoloper/mine/ffmpeg/ffmpeg-build-scripts/mac/build/ffmpeg-x86_64/lib";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_NAME = "$(TARGET_NAME)";
