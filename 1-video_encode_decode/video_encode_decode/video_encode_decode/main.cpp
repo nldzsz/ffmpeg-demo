@@ -13,7 +13,7 @@
 
 int main(int argc, const char * argv[]) {
     
-    int test_use = 1;
+    int test_use = 2;
     if (test_use == 0) {
         // 视频像素格式转换示例
         VideoScale scale;
@@ -23,9 +23,11 @@ int main(int argc, const char * argv[]) {
         demuxer.doDemuxer();
     } else if (test_use == 2) {
         Muxer muxer;
-        muxer.doMuxer();
+        muxer.doMuxerTwoFile();
+    } else if (test_use == 3) {
+        Muxer muxer;
+        muxer.doReMuxer();
     }
-    
     
     return 0;
 }

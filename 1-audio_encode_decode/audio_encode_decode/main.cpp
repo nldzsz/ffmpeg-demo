@@ -16,7 +16,7 @@ int main(int argc, const char * argv[]) {
     
     // 编码
     AudioEncode aEncode;
-    aEncode.doEncode(CodecFormatAC3,false);
+    aEncode.doEncode(CodecFormatAAC,false);
     
     
     // 音频重采样

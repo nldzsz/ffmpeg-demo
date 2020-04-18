@@ -14,6 +14,7 @@
 
 extern "C"{
 #include <libavformat/avformat.h>
+#include <libavutil/timestamp.h>
 #include "CLog.h"
 }
 using namespace std;
@@ -27,7 +28,10 @@ public:
     */
     Muxer();
     ~Muxer();
-    void doMuxer();
+    // 解析文件并原封不动在封装
+    void doReMuxer();
+    // 将两个文件中音频和视频合并，如果两个文件时间不一致，则将较长的进行截断
+    void doMuxerTwoFile();
 };
 
 #endif /* muxer_hpp */

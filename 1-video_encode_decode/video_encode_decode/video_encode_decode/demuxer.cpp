@@ -92,7 +92,7 @@ void Demuxer::doDemuxer()
     
     AVFormatContext *inFmtCtx = NULL;
     int ret = 0;
-#define Use_Custom_io   1
+#define Use_Custom_io   0
 #if Use_Custom_io
     AVIOContext *ioCtx;
     uint8_t *io_ctx_buffer = NULL,*buffer = NULL;
