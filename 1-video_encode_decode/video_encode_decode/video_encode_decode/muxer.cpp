@@ -154,12 +154,14 @@ void Muxer::doMuxerTwoFile()
     }
     
     string srcDic = curFile.substr(0,pos) + "filesources/";
-    /** 遇到问题：最终合成的MP4文件 在苹果系产品(mac iOS下默认播放器无声音)，但是VLC及ffplay播放正常。在安卓/windows下默认播放器正常
+    /** 遇到问题：当输入文件为mp3时，最终合成的MP4文件 在苹果系产品(mac iOS下默认播放器无声音)，提示"DecoderConfigDescr::DeserializeMPEG1Or2AudioDecoderSpecificPayload: the DecoderSpecificInfo tag is incorrect"
+     *  但是VLC及ffplay播放正常。在安卓/windows下默认播放器正常;ffmpeg命令合成的也是一样。苹果系统对MP4音频采用MP3编码的解析bug？
+     *  备注：如果最终合成文件为MOV，则都正常
      */
     string aduio_srcPath = srcDic + "test-mp3-1.mp3";
 //    string aduio_srcPath = srcDic + "test_441_f32le_2.aac";
     string video_srcPath = srcDic + "test_1280x720_2.mp4";
-    string dstPath = "test.MP4";
+    string dstPath = "test.MOV";
     
     AVFormatContext *audio_fmtCtx = NULL,*video_fmtCtx = NULL;
     AVFormatContext *out_fmtCtx = NULL;
@@ -309,7 +311,7 @@ void Muxer::doMuxerTwoFile()
             
             if (!video_finish) {
                 found_video = true;
-                /** 遇到问题：写入视频的帧率信息
+                /** 遇到问题：写入视频的帧率信息不正确
                  *  分析原因：avformat_parameters_copy()只是将编码参数进行了赋值，再进行封装时，帧率，视频时长是根据AVPacket的pts,dts,duration进行
                  *  计算的，所以这个时间就一定要和AVstream的time_base对应。
                  *  解决方案：进行如下的时间基的转换
