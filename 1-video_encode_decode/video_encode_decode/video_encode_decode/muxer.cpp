@@ -154,10 +154,10 @@ void Muxer::doMuxerTwoFile()
     }
     
     string srcDic = curFile.substr(0,pos) + "filesources/";
-    /** 遇到问题：如果这里音频文件换成是mp3的，最终合成的MP4文件 在苹果系产品(mac iOS下默认播放器无声音)，但是VLC及ffplay播放正常。在安卓/windows下默认播放器正常
+    /** 遇到问题：最终合成的MP4文件 在苹果系产品(mac iOS下默认播放器无声音)，但是VLC及ffplay播放正常。在安卓/windows下默认播放器正常
      */
-//    string aduio_srcPath = srcDic + "test-mp3-1.mp3";
-    string aduio_srcPath = srcDic + "test_441_f32le_2.aac";
+    string aduio_srcPath = srcDic + "test-mp3-1.mp3";
+//    string aduio_srcPath = srcDic + "test_441_f32le_2.aac";
     string video_srcPath = srcDic + "test_1280x720_2.mp4";
     string dstPath = "test.MP4";
     
@@ -283,6 +283,13 @@ void Muxer::doMuxerTwoFile()
                 aSPacket->pos = -1;
                 // 要写入的packet的stream_index必须要设置正确
                 aSPacket->stream_index = audio_ou_stream->index;
+                
+                AVRational tb = audio_ou_stream->time_base;
+                LOGD("audio pts:%s dts:%s duration %s size %d finish %d",
+                     av_ts2timestr(aSPacket->pts,&tb),
+                     av_ts2timestr(aSPacket->dts,&tb),
+                     av_ts2timestr(aSPacket->duration,&tb),
+                     aSPacket->size,audio_finish);
             }
         }
         
@@ -302,29 +309,43 @@ void Muxer::doMuxerTwoFile()
             
             if (!video_finish) {
                 found_video = true;
+                /** 遇到问题：写入视频的帧率信息
+                 *  分析原因：avformat_parameters_copy()只是将编码参数进行了赋值，再进行封装时，帧率，视频时长是根据AVPacket的pts,dts,duration进行
+                 *  计算的，所以这个时间就一定要和AVstream的time_base对应。
+                 *  解决方案：进行如下的时间基的转换
+                 */
                 // 要写入的packet的stream_index必须要设置正确
                 vSPacket->stream_index = video_ou_stream->index;
+                vSPacket->pts = av_rescale_q_rnd(vSPacket->pts,video_in_stream->time_base,video_ou_stream->time_base,AV_ROUND_INF);
+                vSPacket->dts = av_rescale_q_rnd(vSPacket->dts, video_in_stream->time_base, video_ou_stream->time_base, AV_ROUND_INF);
+                vSPacket->duration = av_rescale_q_rnd(vSPacket->duration, video_in_stream->time_base, video_ou_stream->time_base, AV_ROUND_INF);
+                
+                AVRational tb = video_in_stream->time_base;
+                LOGD("video pts:%s dts:%s duration %s size %d key:%d finish %d",
+                     av_ts2timestr(vSPacket->pts,&tb),
+                     av_ts2timestr(vSPacket->dts,&tb),
+                     av_ts2timestr(vSPacket->duration,&tb),
+                     vSPacket->size,vSPacket->flags&AV_PKT_FLAG_KEY,video_finish);
             }
         }
         
         // 打印日志
-        if (found_audio && !audio_finish) {
-            AVRational tb = audio_in_stream->time_base;
-            LOGD("audio pts:%s dts:%s duration %s size %d finish %d",av_ts2timestr(aSPacket->pts,tb),
-                 av_ts2timestr(aSPacket->dts,tb),av_ts2timestr(aSPacket->duration,tb),
-                 aSPacket->size,audio_finish);
-        }
-        if (found_video && !video_finish) {
-            LOGD("video pts:%d dts:%d duration %d size %d key:%d finish %d",vSPacket->pts,vSPacket->dts,vSPacket->duration,vSPacket->size,vSPacket->flags&AV_PKT_FLAG_KEY,video_finish);
-        }
-        
-        if (found_video) {
-            if ((ret = av_write_frame(out_fmtCtx, vSPacket)) < 0) {
-                LOGD("av_write_frame video 1 fail %d",ret);
-                releaseResource(&audio_fmtCtx, &video_fmtCtx, &out_fmtCtx);
-            }
-            found_video = false;
-        }
+//        if (found_audio && !audio_finish) {
+//            AVRational tb = audio_in_stream->time_base;
+//            LOGD("audio pts:%s dts:%s duration %s size %d finish %d",
+//                 av_ts2timestr(aSPacket->pts,&tb),
+//                 av_ts2timestr(aSPacket->dts,&tb),
+//                 av_ts2timestr(aSPacket->duration,&tb),
+//                 aSPacket->size,audio_finish);
+//        }
+//        if (found_video && !video_finish) {
+//            AVRational tb = video_in_stream->time_base;
+//            LOGD("video pts:%s dts:%s duration %s size %d key:%d finish %d",
+//                 av_ts2timestr(vSPacket->pts,&tb),
+//                 av_ts2timestr(vSPacket->dts,&tb),
+//                 av_ts2timestr(vSPacket->duration,&tb),
+//                 vSPacket->size,vSPacket->flags&AV_PKT_FLAG_KEY,video_finish);
+//        }
         
         /** 遇到问题：[mp4 @ 0x10200b400] Timestamps are unset in a packet for stream 0. This is deprecated and will stop working in the future.
          *  Fix your code to set the timestamps properly
