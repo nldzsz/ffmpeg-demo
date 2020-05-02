@@ -30,7 +30,9 @@
 		184129F7242B5EFA005F2C1F /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 184129EA2429B7DC005F2C1F /* libiconv.tbd */; };
 		184129F8242B5F6E005F2C1F /* libbz2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 184129E92429B7CF005F2C1F /* libbz2.tbd */; };
 		184129F9242B5F7F005F2C1F /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 184129EC2429B7EE005F2C1F /* libz.tbd */; };
+		1870F7D1244FF23E0038FCAA /* HardEnDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1870F7D0244FF23E0038FCAA /* HardEnDecoder.cpp */; };
 		188BF0BD2398D8FF00C43EDF /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 188BF0BC2398D8FF00C43EDF /* main.cpp */; };
+		189F00ED244D1C820073B7E7 /* SoftEnDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 189F00EB244D1C820073B7E7 /* SoftEnDecoder.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -74,8 +76,12 @@
 		184129F12429B80A005F2C1F /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
 		184129F42429B84F005F2C1F /* CLog.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CLog.c; sourceTree = "<group>"; };
 		184129F52429B84F005F2C1F /* CLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLog.h; sourceTree = "<group>"; };
+		1870F7CF244FF23E0038FCAA /* HardEnDecoder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HardEnDecoder.hpp; sourceTree = "<group>"; };
+		1870F7D0244FF23E0038FCAA /* HardEnDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HardEnDecoder.cpp; sourceTree = "<group>"; };
 		188BF0B92398D8FF00C43EDF /* video_encode_decode */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = video_encode_decode; sourceTree = BUILT_PRODUCTS_DIR; };
 		188BF0BC2398D8FF00C43EDF /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		189F00EB244D1C820073B7E7 /* SoftEnDecoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SoftEnDecoder.cpp; sourceTree = "<group>"; };
+		189F00EC244D1C820073B7E7 /* SoftEnDecoder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SoftEnDecoder.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +178,10 @@
 				184129CC24299EAC005F2C1F /* demuxer.hpp */,
 				181699392445D72B00F99583 /* muxer.cpp */,
 				1816993A2445D72B00F99583 /* muxer.hpp */,
+				189F00EB244D1C820073B7E7 /* SoftEnDecoder.cpp */,
+				189F00EC244D1C820073B7E7 /* SoftEnDecoder.hpp */,
+				1870F7D0244FF23E0038FCAA /* HardEnDecoder.cpp */,
+				1870F7CF244FF23E0038FCAA /* HardEnDecoder.hpp */,
 			);
 			path = video_encode_decode;
 			sourceTree = "<group>";
@@ -234,7 +244,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				184129F62429B84F005F2C1F /* CLog.c in Sources */,
+				189F00ED244D1C820073B7E7 /* SoftEnDecoder.cpp in Sources */,
 				184129CA24299DE8005F2C1F /* videoresample.cpp in Sources */,
+				1870F7D1244FF23E0038FCAA /* HardEnDecoder.cpp in Sources */,
 				184129CD24299EAC005F2C1F /* demuxer.cpp in Sources */,
 				1816993B2445D72B00F99583 /* muxer.cpp in Sources */,
 				188BF0BD2398D8FF00C43EDF /* main.cpp in Sources */,
@@ -371,6 +383,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				LIBRARY_SEARCH_PATHS = "/Users/apple/devoloper/mine/ffmpeg/ffmpeg-build-scripts/mac/build/ffmpeg-x86_64/lib";
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				OTHER_CFLAGS = "-fno-stack-check";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
@@ -386,6 +399,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				LIBRARY_SEARCH_PATHS = "/Users/apple/devoloper/mine/ffmpeg/ffmpeg-build-scripts/mac/build/ffmpeg-x86_64/lib";
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				OTHER_CFLAGS = "-fno-stack-check";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 			};

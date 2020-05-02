@@ -10,10 +10,12 @@
 #include "videoresample.hpp"
 #include "demuxer.hpp"
 #include "muxer.hpp"
+#include "SoftEnDecoder.hpp"
+#include "HardEnDecoder.hpp"
 
 int main(int argc, const char * argv[]) {
     
-    int test_use = 2;
+    int test_use = 8;
     if (test_use == 0) {
         // 视频像素格式转换示例
         VideoScale scale;
@@ -27,6 +29,21 @@ int main(int argc, const char * argv[]) {
     } else if (test_use == 3) {
         Muxer muxer;
         muxer.doReMuxer();
+    } else if (test_use == 4) {
+       SoftEnDecoder decoder;
+       decoder.doDecode();
+    } else if (test_use == 5) {
+       SoftEnDecoder decoder;
+       decoder.doDecode2();
+    } else if (test_use == 6) {
+        SoftEnDecoder decoder;
+        decoder.doEncode();
+    } else if (test_use == 7) {
+        HardEnDecoder decoder;
+        decoder.doDecode();
+    } else if (test_use == 8) {
+        HardEnDecoder decoder;
+        decoder.doEncode();
     }
     
     return 0;
