@@ -1,0 +1,14 @@
+prefix=/Users/apple/devoloper/mine/ffmpeg/ffmpeg-demo/ffmpeglib
+exec_prefix=${prefix}
+libdir=/Users/apple/devoloper/mine/ffmpeg/ffmpeg-demo/ffmpeglib/lib
+includedir=/Users/apple/devoloper/mine/ffmpeg/ffmpeg-demo/ffmpeglib/include
+
+Name: libswresample
+Description: FFmpeg audio resampling library
+Version: 3.5.100
+Requires: libavutil >= 56.31.100
+Requires.private: 
+Conflicts:
+Libs: -L${libdir}  -lswresample -lm
+Libs.private: 
+Cflags: -I${includedir}

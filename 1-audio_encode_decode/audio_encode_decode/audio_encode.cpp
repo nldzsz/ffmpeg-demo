@@ -177,8 +177,8 @@ static AVCodec* select_codec(CodecFormat format)
     if (format == CodecFormatAAC) {
         /** 可以通过如下两个方法查找编码器，aac编码器对应的库是fdk_aac
          */
-//        codec = avcodec_find_encoder(AV_CODEC_ID_AAC);
-        codec = avcodec_find_encoder_by_name("libfdk_aac");
+        codec = avcodec_find_encoder(AV_CODEC_ID_AAC);
+//        codec = avcodec_find_encoder_by_name("libfdk_aac");
     } else if (format == CodecFormatMP3) {
 //        codec = avcodec_find_encoder(AV_CODEC_ID_MP3);
         codec = avcodec_find_encoder_by_name("libmp3lame");

@@ -14,7 +14,6 @@
 		184129D92429B524005F2C1F /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 184129D02429B524005F2C1F /* libswresample.a */; };
 		184129DA2429B524005F2C1F /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 184129D12429B524005F2C1F /* libavfilter.a */; };
 		184129DB2429B524005F2C1F /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 184129D22429B524005F2C1F /* libswscale.a */; };
-		184129DC2429B524005F2C1F /* libfdk-aac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 184129D32429B524005F2C1F /* libfdk-aac.a */; };
 		184129DD2429B524005F2C1F /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 184129D42429B524005F2C1F /* libavformat.a */; };
 		184129DE2429B524005F2C1F /* libx264.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 184129D52429B524005F2C1F /* libx264.a */; };
 		184129DF2429B524005F2C1F /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 184129D62429B524005F2C1F /* libavcodec.a */; };
@@ -58,7 +57,6 @@
 		184129D02429B524005F2C1F /* libswresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswresample.a; path = "../../../ffmpeg-build-scripts/mac/build/ffmpeg-x86_64/lib/libswresample.a"; sourceTree = "<group>"; };
 		184129D12429B524005F2C1F /* libavfilter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavfilter.a; path = "../../../ffmpeg-build-scripts/mac/build/ffmpeg-x86_64/lib/libavfilter.a"; sourceTree = "<group>"; };
 		184129D22429B524005F2C1F /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswscale.a; path = "../../../ffmpeg-build-scripts/mac/build/ffmpeg-x86_64/lib/libswscale.a"; sourceTree = "<group>"; };
-		184129D32429B524005F2C1F /* libfdk-aac.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libfdk-aac.a"; path = "../../../ffmpeg-build-scripts/mac/build/ffmpeg-x86_64/lib/libfdk-aac.a"; sourceTree = "<group>"; };
 		184129D42429B524005F2C1F /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavformat.a; path = "../../../ffmpeg-build-scripts/mac/build/ffmpeg-x86_64/lib/libavformat.a"; sourceTree = "<group>"; };
 		184129D52429B524005F2C1F /* libx264.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libx264.a; path = "../../../ffmpeg-build-scripts/mac/build/ffmpeg-x86_64/lib/libx264.a"; sourceTree = "<group>"; };
 		184129D62429B524005F2C1F /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavcodec.a; path = "../../../ffmpeg-build-scripts/mac/build/ffmpeg-x86_64/lib/libavcodec.a"; sourceTree = "<group>"; };
@@ -98,7 +96,6 @@
 				184129E82429B7C2005F2C1F /* CoreVideo.framework in Frameworks */,
 				184129DB2429B524005F2C1F /* libswscale.a in Frameworks */,
 				184129F9242B5F7F005F2C1F /* libz.tbd in Frameworks */,
-				184129DC2429B524005F2C1F /* libfdk-aac.a in Frameworks */,
 				184129F8242B5F6E005F2C1F /* libbz2.tbd in Frameworks */,
 				184129DD2429B524005F2C1F /* libavformat.a in Frameworks */,
 				184129F02429B803005F2C1F /* VideoDecodeAcceleration.framework in Frameworks */,
@@ -132,7 +129,6 @@
 				184129D12429B524005F2C1F /* libavfilter.a */,
 				184129D42429B524005F2C1F /* libavformat.a */,
 				184129D72429B524005F2C1F /* libavutil.a */,
-				184129D32429B524005F2C1F /* libfdk-aac.a */,
 				184129CF2429B524005F2C1F /* libmp3lame.a */,
 				184129D02429B524005F2C1F /* libswresample.a */,
 				184129D22429B524005F2C1F /* libswscale.a */,
