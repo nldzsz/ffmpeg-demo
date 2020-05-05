@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		1849FF3C245E443A00B41581 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1849FF3B245E443A00B41581 /* main.cpp */; };
-		1849FF45245E446C00B41581 /* CLog.c in Sources */ = {isa = PBXBuildFile; fileRef = 1849FF43245E446C00B41581 /* CLog.c */; };
 		1849FF47245E453300B41581 /* transcode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1849FF46245E453300B41581 /* transcode.cpp */; };
 		1849FF5B245EBAE800B41581 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1849FF5A245EBAE800B41581 /* VideoToolbox.framework */; };
 		1849FF5D245EBAF000B41581 /* VideoDecodeAcceleration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1849FF5C245EBAF000B41581 /* VideoDecodeAcceleration.framework */; };
@@ -29,6 +28,7 @@
 		18740CB924619E99009B57A8 /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18740CB124619E99009B57A8 /* libavfilter.a */; };
 		18740CBA24619E99009B57A8 /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18740CB224619E99009B57A8 /* libavcodec.a */; };
 		18740CBB24619E99009B57A8 /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18740CB324619E99009B57A8 /* libavformat.a */; };
+		18740CC72461A097009B57A8 /* CLog.c in Sources */ = {isa = PBXBuildFile; fileRef = 18740CC52461A097009B57A8 /* CLog.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -46,8 +46,6 @@
 /* Begin PBXFileReference section */
 		1849FF38245E443A00B41581 /* 2-video_audio_advanced */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "2-video_audio_advanced"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1849FF3B245E443A00B41581 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		1849FF43245E446C00B41581 /* CLog.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CLog.c; sourceTree = "<group>"; };
-		1849FF44245E446C00B41581 /* CLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLog.h; sourceTree = "<group>"; };
 		1849FF46245E453300B41581 /* transcode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = transcode.cpp; sourceTree = "<group>"; };
 		1849FF48245EB95B00B41581 /* transcode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = transcode.hpp; sourceTree = "<group>"; };
 		1849FF5A245EBAE800B41581 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
@@ -69,6 +67,8 @@
 		18740CB124619E99009B57A8 /* libavfilter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavfilter.a; path = ../ffmpeglib/lib/libavfilter.a; sourceTree = "<group>"; };
 		18740CB224619E99009B57A8 /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavcodec.a; path = ../ffmpeglib/lib/libavcodec.a; sourceTree = "<group>"; };
 		18740CB324619E99009B57A8 /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavformat.a; path = ../ffmpeglib/lib/libavformat.a; sourceTree = "<group>"; };
+		18740CC52461A097009B57A8 /* CLog.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CLog.c; sourceTree = "<group>"; };
+		18740CC62461A097009B57A8 /* CLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLog.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,21 +121,12 @@
 		1849FF3A245E443A00B41581 /* 2-video_audio_advanced */ = {
 			isa = PBXGroup;
 			children = (
-				1849FF42245E446C00B41581 /* cppcommon */,
+				18740CC42461A097009B57A8 /* cppcommon */,
 				1849FF3B245E443A00B41581 /* main.cpp */,
 				1849FF46245E453300B41581 /* transcode.cpp */,
 				1849FF48245EB95B00B41581 /* transcode.hpp */,
 			);
 			path = "2-video_audio_advanced";
-			sourceTree = "<group>";
-		};
-		1849FF42245E446C00B41581 /* cppcommon */ = {
-			isa = PBXGroup;
-			children = (
-				1849FF43245E446C00B41581 /* CLog.c */,
-				1849FF44245E446C00B41581 /* CLog.h */,
-			);
-			path = cppcommon;
 			sourceTree = "<group>";
 		};
 		1849FF49245EB9C400B41581 /* Frameworks */ = {
@@ -162,6 +153,16 @@
 				1849FF5A245EBAE800B41581 /* VideoToolbox.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		18740CC42461A097009B57A8 /* cppcommon */ = {
+			isa = PBXGroup;
+			children = (
+				18740CC52461A097009B57A8 /* CLog.c */,
+				18740CC62461A097009B57A8 /* CLog.h */,
+			);
+			name = cppcommon;
+			path = ../../cppcommon;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -221,8 +222,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18740CC72461A097009B57A8 /* CLog.c in Sources */,
 				1849FF47245E453300B41581 /* transcode.cpp in Sources */,
-				1849FF45245E446C00B41581 /* CLog.c in Sources */,
 				1849FF3C245E443A00B41581 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -345,7 +346,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = AKBWT3F327;
 				ENABLE_HARDENED_RUNTIME = YES;
-				HEADER_SEARCH_PATHS = "${SRCROOT}/../ffmpeglib/include";
+				HEADER_SEARCH_PATHS = (
+					"${SRCROOT}/../ffmpeglib/include",
+					"${SRCROOT}/../",
+				);
 				LIBRARY_SEARCH_PATHS = "${SRCROOT}/../ffmpeglib/lib";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -358,7 +362,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = AKBWT3F327;
 				ENABLE_HARDENED_RUNTIME = YES;
-				HEADER_SEARCH_PATHS = "${SRCROOT}/../ffmpeglib/include";
+				HEADER_SEARCH_PATHS = (
+					"${SRCROOT}/../ffmpeglib/include",
+					"${SRCROOT}/../",
+				);
 				LIBRARY_SEARCH_PATHS = "${SRCROOT}/../ffmpeglib/lib";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";

@@ -18,7 +18,15 @@
 		180D4C372414EEC100443A04 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 180D4C362414EEC100443A04 /* AudioToolbox.framework */; };
 		180D4C392414EECA00443A04 /* VideoDecodeAcceleration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 180D4C382414EECA00443A04 /* VideoDecodeAcceleration.framework */; };
 		180D4C3B2414EED500443A04 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 180D4C3A2414EED500443A04 /* Security.framework */; };
-		184129C724299C96005F2C1F /* CLog.c in Sources */ = {isa = PBXBuildFile; fileRef = 184129C524299C96005F2C1F /* CLog.c */; };
+		18740CCB2461A0CC009B57A8 /* CLog.c in Sources */ = {isa = PBXBuildFile; fileRef = 18740CC92461A0CC009B57A8 /* CLog.c */; };
+		18740CCC2461A12F009B57A8 /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18740CC024619F0E009B57A8 /* libavcodec.a */; };
+		18740CCD2461A12F009B57A8 /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18740CBF24619F0E009B57A8 /* libavfilter.a */; };
+		18740CCE2461A12F009B57A8 /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18740CC224619F0E009B57A8 /* libavformat.a */; };
+		18740CCF2461A12F009B57A8 /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18740CC324619F0E009B57A8 /* libavutil.a */; };
+		18740CD02461A12F009B57A8 /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18740CBD24619F0E009B57A8 /* libmp3lame.a */; };
+		18740CD12461A12F009B57A8 /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18740CBC24619F0E009B57A8 /* libswresample.a */; };
+		18740CD22461A12F009B57A8 /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18740CBE24619F0E009B57A8 /* libswscale.a */; };
+		18740CD32461A12F009B57A8 /* libx264.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18740CC124619F0E009B57A8 /* libx264.a */; };
 		188BF054239649F300C43EDF /* audio_encode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 188BF052239649F300C43EDF /* audio_encode.cpp */; };
 		188C118223A9F5AC0013E028 /* audio_resample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 188C118023A9F5AC0013E028 /* audio_resample.cpp */; };
 		189F8F3423910A7F00023702 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 189F8F3323910A7F00023702 /* main.cpp */; };
@@ -48,8 +56,6 @@
 		180D4C362414EEC100443A04 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		180D4C382414EECA00443A04 /* VideoDecodeAcceleration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoDecodeAcceleration.framework; path = System/Library/Frameworks/VideoDecodeAcceleration.framework; sourceTree = SDKROOT; };
 		180D4C3A2414EED500443A04 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		184129C524299C96005F2C1F /* CLog.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CLog.c; sourceTree = "<group>"; };
-		184129C624299C96005F2C1F /* CLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLog.h; sourceTree = "<group>"; };
 		18740CBC24619F0E009B57A8 /* libswresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswresample.a; path = ../ffmpeglib/lib/libswresample.a; sourceTree = "<group>"; };
 		18740CBD24619F0E009B57A8 /* libmp3lame.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmp3lame.a; path = ../ffmpeglib/lib/libmp3lame.a; sourceTree = "<group>"; };
 		18740CBE24619F0E009B57A8 /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswscale.a; path = ../ffmpeglib/lib/libswscale.a; sourceTree = "<group>"; };
@@ -58,6 +64,8 @@
 		18740CC124619F0E009B57A8 /* libx264.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libx264.a; path = ../ffmpeglib/lib/libx264.a; sourceTree = "<group>"; };
 		18740CC224619F0E009B57A8 /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavformat.a; path = ../ffmpeglib/lib/libavformat.a; sourceTree = "<group>"; };
 		18740CC324619F0E009B57A8 /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavutil.a; path = ../ffmpeglib/lib/libavutil.a; sourceTree = "<group>"; };
+		18740CC92461A0CC009B57A8 /* CLog.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CLog.c; sourceTree = "<group>"; };
+		18740CCA2461A0CC009B57A8 /* CLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLog.h; sourceTree = "<group>"; };
 		188BF052239649F300C43EDF /* audio_encode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = audio_encode.cpp; sourceTree = "<group>"; };
 		188BF053239649F300C43EDF /* audio_encode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = audio_encode.hpp; sourceTree = "<group>"; };
 		188BF0C32398D91800C43EDF /* audio_encode_decode.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = audio_encode_decode.entitlements; sourceTree = "<group>"; };
@@ -72,28 +80,36 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18740CCF2461A12F009B57A8 /* libavutil.a in Frameworks */,
+				18740CD02461A12F009B57A8 /* libmp3lame.a in Frameworks */,
 				180D4C3B2414EED500443A04 /* Security.framework in Frameworks */,
 				180D4C392414EECA00443A04 /* VideoDecodeAcceleration.framework in Frameworks */,
+				18740CD32461A12F009B57A8 /* libx264.a in Frameworks */,
+				18740CCD2461A12F009B57A8 /* libavfilter.a in Frameworks */,
 				180D4C372414EEC100443A04 /* AudioToolbox.framework in Frameworks */,
+				18740CD22461A12F009B57A8 /* libswscale.a in Frameworks */,
 				180D4C352414EEBA00443A04 /* CoreMedia.framework in Frameworks */,
 				180D4C332414EEB000443A04 /* CoreFoundation.framework in Frameworks */,
 				180D4C312414EEA300443A04 /* CoreVideo.framework in Frameworks */,
 				180D4C2F2414EE9900443A04 /* VideoToolbox.framework in Frameworks */,
 				180D4C2D2414EE8500443A04 /* liblzma.tbd in Frameworks */,
+				18740CD12461A12F009B57A8 /* libswresample.a in Frameworks */,
+				18740CCE2461A12F009B57A8 /* libavformat.a in Frameworks */,
 				180D4C2B2414EE7C00443A04 /* libbz2.tbd in Frameworks */,
 				180D4C292414EE7400443A04 /* libiconv.tbd in Frameworks */,
 				180D4C272414EE5B00443A04 /* libz.tbd in Frameworks */,
+				18740CCC2461A12F009B57A8 /* libavcodec.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		184129C424299C96005F2C1F /* cppcommon */ = {
+		18740CC82461A0CC009B57A8 /* cppcommon */ = {
 			isa = PBXGroup;
 			children = (
-				184129C524299C96005F2C1F /* CLog.c */,
-				184129C624299C96005F2C1F /* CLog.h */,
+				18740CC92461A0CC009B57A8 /* CLog.c */,
+				18740CCA2461A0CC009B57A8 /* CLog.h */,
 			);
 			name = cppcommon;
 			path = ../../cppcommon;
@@ -145,7 +161,7 @@
 		189F8F3223910A7F00023702 /* audio_encode_decode */ = {
 			isa = PBXGroup;
 			children = (
-				184129C424299C96005F2C1F /* cppcommon */,
+				18740CC82461A0CC009B57A8 /* cppcommon */,
 				188BF0C32398D91800C43EDF /* audio_encode_decode.entitlements */,
 				189F8F3323910A7F00023702 /* main.cpp */,
 				188BF052239649F300C43EDF /* audio_encode.cpp */,
@@ -213,7 +229,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				184129C724299C96005F2C1F /* CLog.c in Sources */,
+				18740CCB2461A0CC009B57A8 /* CLog.c in Sources */,
 				188C118223A9F5AC0013E028 /* audio_resample.cpp in Sources */,
 				188BF054239649F300C43EDF /* audio_encode.cpp in Sources */,
 				189F8F3423910A7F00023702 /* main.cpp in Sources */,
@@ -341,12 +357,9 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = (
 					"${SRCROOT}/../ffmpeglib/include",
-					"${SRCROOT}/../**",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"${SRCROOT}/../ffmpeglib/lib",
 					"${SRCROOT}/../",
 				);
+				LIBRARY_SEARCH_PATHS = "${SRCROOT}/../ffmpeglib/lib";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -362,12 +375,9 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = (
 					"${SRCROOT}/../ffmpeglib/include",
-					"${SRCROOT}/../**",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"${SRCROOT}/../ffmpeglib/lib",
 					"${SRCROOT}/../",
 				);
+				LIBRARY_SEARCH_PATHS = "${SRCROOT}/../ffmpeglib/lib";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
