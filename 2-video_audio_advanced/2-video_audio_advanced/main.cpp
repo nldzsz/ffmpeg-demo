@@ -9,12 +9,21 @@
 #include <iostream>
 
 #include "transcode.hpp"
+#include "encodeMuxer.hpp"
+
 
 int main(int argc, const char * argv[]) {
-    int test_use = 0;
+    
+    int test_use = 1;
     if (test_use == 0) {
-        Transcode code;
-        code.doTranscodeForMuxer();
+        Transcode codec;
+        codec.doExtensionTranscode();
+    } else if (test_use == 1) {
+        Transcode codec;
+        codec.doTranscode();
+    } else if (test_use == 2) {
+        EncodeMuxer muxer;
+        muxer.doEncodeMuxer();
     }
     
     return 0;

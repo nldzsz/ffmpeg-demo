@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		18473D1F2468217B0058A9FB /* encodeMuxer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18473D1D2468217B0058A9FB /* encodeMuxer.cpp */; };
 		1849FF3C245E443A00B41581 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1849FF3B245E443A00B41581 /* main.cpp */; };
 		1849FF47245E453300B41581 /* transcode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1849FF46245E453300B41581 /* transcode.cpp */; };
 		1849FF5B245EBAE800B41581 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1849FF5A245EBAE800B41581 /* VideoToolbox.framework */; };
@@ -44,6 +45,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		18473D1D2468217B0058A9FB /* encodeMuxer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = encodeMuxer.cpp; sourceTree = "<group>"; };
+		18473D1E2468217B0058A9FB /* encodeMuxer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = encodeMuxer.hpp; sourceTree = "<group>"; };
 		1849FF38245E443A00B41581 /* 2-video_audio_advanced */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "2-video_audio_advanced"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1849FF3B245E443A00B41581 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		1849FF46245E453300B41581 /* transcode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = transcode.cpp; sourceTree = "<group>"; };
@@ -125,6 +128,8 @@
 				1849FF3B245E443A00B41581 /* main.cpp */,
 				1849FF46245E453300B41581 /* transcode.cpp */,
 				1849FF48245EB95B00B41581 /* transcode.hpp */,
+				18473D1D2468217B0058A9FB /* encodeMuxer.cpp */,
+				18473D1E2468217B0058A9FB /* encodeMuxer.hpp */,
 			);
 			path = "2-video_audio_advanced";
 			sourceTree = "<group>";
@@ -225,6 +230,7 @@
 				18740CC72461A097009B57A8 /* CLog.c in Sources */,
 				1849FF47245E453300B41581 /* transcode.cpp in Sources */,
 				1849FF3C245E443A00B41581 /* main.cpp in Sources */,
+				18473D1F2468217B0058A9FB /* encodeMuxer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

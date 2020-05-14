@@ -182,7 +182,7 @@ void VideoScale::doScale()
     
     while (true) {
         
-        // 读取YUV420P的方式;注意这里用的是src_w而非linesize中的值；yuv中uv的宽高为实际宽高的一半
+        // 读取YUV420P的方式;注意这里要用src_w而非linesize中的值；yuv中uv的宽高为实际宽高的一半
         if (src_pix_fmt == AV_PIX_FMT_YUV420P) {
             size_t size_y = fread(src_buffer[0],1,src_w*src_h,srcFile);
             size_t size_u = fread(src_buffer[1],1,src_w/2*src_h/2,srcFile);
@@ -220,7 +220,7 @@ void VideoScale::doScale()
         *  参数5：换换源数据的height(视频的高)
         *  参数6：转换目的数据内存地址
         *  参数7：转换目的linesize数组
-        *  返回：转换后的目的数据的height(转换后的视频的实际高)
+        *  返回：转换后的目的数据的height(该数据等于目标视频的高)
         */
         int size = sws_scale(swsCtx,src_buffer,src_linesize,0,src_h,
                   dst_buffer,dst_linesize);
