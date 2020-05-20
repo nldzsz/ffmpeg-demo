@@ -30,6 +30,7 @@
 		18740CBA24619E99009B57A8 /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18740CB224619E99009B57A8 /* libavcodec.a */; };
 		18740CBB24619E99009B57A8 /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18740CB324619E99009B57A8 /* libavformat.a */; };
 		18740CC72461A097009B57A8 /* CLog.c in Sources */ = {isa = PBXBuildFile; fileRef = 18740CC52461A097009B57A8 /* CLog.c */; };
+		18B7757624725B5D00C334B3 /* Cut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18B7757424725B5D00C334B3 /* Cut.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -72,6 +73,8 @@
 		18740CB324619E99009B57A8 /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavformat.a; path = ../ffmpeglib/lib/libavformat.a; sourceTree = "<group>"; };
 		18740CC52461A097009B57A8 /* CLog.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CLog.c; sourceTree = "<group>"; };
 		18740CC62461A097009B57A8 /* CLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLog.h; sourceTree = "<group>"; };
+		18B7757424725B5D00C334B3 /* Cut.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Cut.cpp; sourceTree = "<group>"; };
+		18B7757524725B5D00C334B3 /* Cut.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Cut.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +133,8 @@
 				1849FF48245EB95B00B41581 /* transcode.hpp */,
 				18473D1D2468217B0058A9FB /* encodeMuxer.cpp */,
 				18473D1E2468217B0058A9FB /* encodeMuxer.hpp */,
+				18B7757524725B5D00C334B3 /* Cut.hpp */,
+				18B7757424725B5D00C334B3 /* Cut.cpp */,
 			);
 			path = "2-video_audio_advanced";
 			sourceTree = "<group>";
@@ -229,6 +234,7 @@
 			files = (
 				18740CC72461A097009B57A8 /* CLog.c in Sources */,
 				1849FF47245E453300B41581 /* transcode.cpp in Sources */,
+				18B7757624725B5D00C334B3 /* Cut.cpp in Sources */,
 				1849FF3C245E443A00B41581 /* main.cpp in Sources */,
 				18473D1F2468217B0058A9FB /* encodeMuxer.cpp in Sources */,
 			);
