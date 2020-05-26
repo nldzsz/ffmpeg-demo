@@ -17,7 +17,7 @@
 
 int main(int argc, const char * argv[]) {
     
-    int test_use = 5;
+    int test_use = 6;
     if (test_use == 0) {
         Transcode codec;
         codec.doExtensionTranscode();

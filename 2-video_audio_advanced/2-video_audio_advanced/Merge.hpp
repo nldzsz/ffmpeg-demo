@@ -128,6 +128,10 @@ index.fps = fp;
     int             left_size;
     bool            audio_init;
     
+    // 用于添加背景音乐
+    int64_t start_pos;
+    
+    
     bool openInputFile();
     bool addStream();
     void doDecode(AVPacket *pkt,bool isVideo);

@@ -901,6 +901,164 @@ void Merge::doEncode(AVFrame *frame,bool isVideo)
 
 void Merge::addMusic()
 {
+    string curFile(__FILE__);
+    unsigned long pos = curFile.find("2-video_audio_advanced");
+    if (pos == string::npos) {
+        LOGD("not found fil");
+        return;
+    }
+    /** 遇到问题：如果添加的音频文件为Mp3文件，则使用苹果的内置播放器及苹果手机没有声音。如果添加的是aac音频 则没有问题
+     *  分析原因：暂时未知
+     *  解决方案：暂时未知
+     */
+    string srcDic = curFile.substr(0,pos) + "filesources/";
+    string srcpath  = srcDic + "test_1280x720_4.mp4";
+//    string srcpath2 = srcDic + "test-mp3-1.mp3";
+    string srcpath2 = srcDic + "test_441_f32le_2.aac";
+    string dstpath = srcDic + "11_add_music.mp4";
+    
+    string start = "00:00:05";
+    start_pos += stoi(start.substr(0,2))*3600;
+    start_pos += stoi(start.substr(3,2))*60;
+    start_pos += stoi(start.substr(6,2));
+    
+    in_fmt1 = NULL;// 用于解封装视频
+    in_fmt2 = NULL;// 用于解封装音频
+    ou_fmt = NULL;  //用于封装音视频
+    
+    // 打开视频文件
+    if (avformat_open_input(&in_fmt1, srcpath.c_str(), NULL, NULL) < 0) {
+        LOGD("1 avformat_open_input() fail");
+        return;
+    }
+    if (avformat_find_stream_info(in_fmt1, NULL) < 0) {
+        LOGD("1 avformat_find_stream_info");
+        releasesources();
+        return;
+    }
+    
+    // 打开音频文件
+    if (avformat_open_input(&in_fmt2, srcpath2.c_str(), NULL, NULL) < 0) {
+        LOGD("2 avformat_open_input() fail");
+        return;
+    }
+    if (avformat_find_stream_info(in_fmt2, NULL) < 0) {
+        LOGD("2 avformat_find_stream_info");
+        releasesources();
+        return;
+    }
+    for (int i=0; i<in_fmt1->nb_streams; i++) {
+        AVStream *stream = in_fmt1->streams[i];
+        if (stream->codecpar->codec_type == AVMEDIA_TYPE_VIDEO) {
+            video1_in_index = i;
+            break;
+        }
+    }
+    for (int i = 0; i<in_fmt2->nb_streams; i++) {
+        AVStream *stream = in_fmt2->streams[i];
+        if (stream->codecpar->codec_type == AVMEDIA_TYPE_AUDIO) {
+            audio1_in_index = i;
+            break;
+        }
+    }
+    
+    // 打开输出文件的封装器
+    if (avformat_alloc_output_context2(&ou_fmt, NULL, NULL, dstpath.c_str()) < 0) {
+        LOGD("avformat_alloc_out_context2 ()");
+        releasesources();
+        return;
+    }
+    
+    // 添加视频流并从输入源拷贝视频流编码参数
+    AVStream *stream = avformat_new_stream(ou_fmt, NULL);
+    video_ou_index = stream->index;
+    if (avcodec_parameters_copy(stream->codecpar, in_fmt1->streams[video1_in_index]->codecpar) < 0) {
+        releasesources();
+        return;
+    }
+    // 如果源和目标文件的码流格式不一致，则将目标文件的code_tag赋值为0
+    if (av_codec_get_id(ou_fmt->oformat->codec_tag, in_fmt1->streams[video1_in_index]->codecpar->codec_tag) != stream->codecpar->codec_id) {
+        stream->codecpar->codec_tag = 0;
+    }
+    // 添加音频流并从输入源拷贝编码参数
+    AVStream *a_stream = avformat_new_stream(ou_fmt, NULL);
+    audio_ou_index = a_stream->index;
+    if (avcodec_parameters_copy(a_stream->codecpar, in_fmt2->streams[audio1_in_index]->codecpar) < 0) {
+        LOGD("avcodec_parameters_copy fail");
+        releasesources();
+        return;
+    }
+    if (av_codec_get_id(ou_fmt->oformat->codec_tag, in_fmt2->streams[audio1_in_index]->codecpar->codec_tag) != a_stream->codecpar->codec_id) {
+        a_stream->codecpar->codec_tag = 0;
+    }
+    
+    // 打开输出上下文
+    if (!(ou_fmt->oformat->flags & AVFMT_NOFILE)) {
+        if (avio_open2(&ou_fmt->pb, dstpath.c_str(), AVIO_FLAG_WRITE, NULL, NULL) < 0) {
+            LOGD("avio_open2() fail");
+            releasesources();
+            return;
+        }
+    }
+    
+    // 写入头文件
+    if (avformat_write_header(ou_fmt, NULL) < 0) {
+        LOGD("avformat_write_header()");
+        releasesources();
+        return;
+    }
+    
+
+    AVPacket *v_pkt = av_packet_alloc();
+    AVPacket *a_pkt = av_packet_alloc();
+    // 写入视频
+    int64_t video_max_pts = 0;
+    while (av_read_frame(in_fmt1, v_pkt) >= 0) {
+        if (v_pkt->stream_index == video1_in_index) {   // 说明是视频
+            // 因为源文件和目的文件时间基可能不一致，所以这里要进行转换
+            av_packet_rescale_ts(v_pkt, in_fmt1->streams[video1_in_index]->time_base, ou_fmt->streams[video_ou_index]->time_base);
+            v_pkt->stream_index = video_ou_index;
+            video_max_pts = max(v_pkt->pts, video_max_pts);
+            LOGD("video pts %d(%s)",v_pkt->pts,av_ts2timestr(v_pkt->pts, &stream->time_base));
+            if (av_write_frame(ou_fmt, v_pkt) < 0) {
+                LOGD("1 av_write_frame < 0");
+                releasesources();
+                return;
+            }
+        }
+    }
+
+    int64_t start_pts = start_pos * a_stream->time_base.den;
+    video_max_pts = av_rescale_q(video_max_pts, stream->time_base, a_stream->time_base);
+    // 写入音频
+    while (av_read_frame(in_fmt2, a_pkt) >= 0) {
+        if (a_pkt->stream_index == audio1_in_index) {   // 音频
+    
+            // 源文件和目标文件的时间基可能不一致，需要转化
+            av_packet_rescale_ts(a_pkt, in_fmt2->streams[audio1_in_index]->time_base, ou_fmt->streams[audio_ou_index]->time_base);
+            // 保证以视频时间轴的指定时间进行添加，那么实际上就是改变pts及dts的值即可
+            a_pkt->pts += start_pts;
+            a_pkt->dts += start_pts;
+            a_pkt->stream_index = audio_ou_index;
+            LOGD("audio pts %d(%s)",a_pkt->pts,av_ts2timestr(a_pkt->pts, &a_stream->time_base));
+            // 加入音频的时长不能超过视频的总时长
+            if (a_pkt->pts >= video_max_pts) {
+                break;
+            }
+            
+            if (av_write_frame(ou_fmt, a_pkt) < 0) {
+                LOGD("2 av_write_frame < 0");
+                releasesources();
+                return;
+            }
+        }
+    }
+    
+    av_write_trailer(ou_fmt);
+    LOGD("写入完毕");
+    
+    // 释放资源
+    releasesources();
     
 }
 
