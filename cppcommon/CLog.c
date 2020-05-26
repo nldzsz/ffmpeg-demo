@@ -56,11 +56,12 @@ void setDebuglevel(int level)
 void LOGD(const char* format,...)
 {
     if (staticEnableDebug==1 && staticDebugLevel<=staticDebugLevelDebug) {
-        char s[300];
+        int len = 200;
+        char s[len];
         va_list argp;
         int n=0;
         va_start(argp, format); //获得可变参数列表
-        n=vsnprintf (s, 300, format, argp); //写入字符串s
+        n=vsnprintf (s, len, format, argp); //写入字符串s
         va_end(argp); //释放资源
         
         ILOGD("Debug:%s",s);
@@ -135,4 +136,24 @@ void printUint16toHex(uint16_t val)
 void printUint8toHex(uint8_t val)
 {
     LOGD("%x",val&0xff);
+}
+
+void printHex(uint8_t* buff,int len)
+{
+    int  i;
+//    char str[293] = {0};
+    char str[10000] = {0};
+    int lo = 4;
+    float tt = len;
+    int loop = len + (int)ceilf(tt/(lo));
+    for( i = 0; i < loop; i++ ) {
+        if (i % (lo+1) == 0) {
+            str[i * 2] = 0x20;
+            str[i * 2 + 1] = 0x20;
+        } else {
+            sprintf(&str[i * 2], "%02X", (unsigned char) buff[i]);
+        }
+    }
+
+    LOGD("\n%s",str);
 }

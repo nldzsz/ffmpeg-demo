@@ -50,6 +50,12 @@
             ReferencedContainer = "container:2-video_audio_advanced.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "/Users/apple/devoloper/mine/ffmpeg/ffmpeg-demo/filesources/ll.mpg"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

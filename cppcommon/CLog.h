@@ -45,6 +45,9 @@ extern void LOGE(const char* format,...);
 extern void printUint32toHex(uint32_t val);
 extern void printUint16toHex(uint16_t val);
 extern void printUint8toHex(uint8_t val);
+
+// 打印二进制串
+void printHex(uint8_t* buff,int len);
     
 #ifdef __cplusplus
 } // extern "C"
