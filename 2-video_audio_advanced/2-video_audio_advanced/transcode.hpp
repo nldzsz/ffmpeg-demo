@@ -23,6 +23,7 @@ extern "C" {
 #include <libswresample/swresample.h>
 #include <libswscale/swscale.h>
 #include <libavutil/channel_layout.h>
+#include <libavutil/timestamp.h>
 }
 
 using namespace std;
@@ -56,6 +57,10 @@ private:
     
     AVFormatContext *inFmtCtx;
     AVFormatContext *ouFmtCtx;
+    uint8_t         **audio_buffer;
+    int             left_size;
+    bool            audio_init;
+    
     // 用于音频解码
     AVCodecContext  *audio_de_ctx;
     // 用于视频解码

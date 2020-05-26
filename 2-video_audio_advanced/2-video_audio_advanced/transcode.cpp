@@ -189,9 +189,9 @@ void Transcode::doTranscode()
     video_need_transcode = true;
     
     // 音频
-    dst_audio_id =  Par_CodeId(false,AV_CODEC_ID_MP3);
+    dst_audio_id =  Par_CodeId(false,AV_CODEC_ID_AAC);
     dst_audio_bit_rate = Par_Int64t(true,128*1000);
-    dst_sample_rate = Par_Int32t(true,44100);    // 44.1khz
+    dst_sample_rate = Par_Int32t(false,48000);    // 44.1khz
     dst_sample_fmt = Par_SmpFmt(false,AV_SAMPLE_FMT_FLTP);
     dst_channel_layout = Par_Int64t(false,AV_CH_LAYOUT_STEREO);   // 双声道
     audio_need_transcode = true;
@@ -336,6 +336,9 @@ static int select_sample_rate(AVCodec *codec,int rate)
     int deft_rate = 44100;
     bool surport = false;
     const int* p = codec->supported_samplerates;
+    if (!p) {
+        return deft_rate;
+    }
     while (*p) {
         best_rate = *p;
         if (*p == rate) {
@@ -357,6 +360,9 @@ static enum AVSampleFormat select_sample_format(AVCodec *codec,enum AVSampleForm
     enum AVSampleFormat retfmt = AV_SAMPLE_FMT_NONE;
     enum AVSampleFormat deffmt = AV_SAMPLE_FMT_FLTP;
     const enum AVSampleFormat * fmts = codec->sample_fmts;
+    if (!fmts) {
+        return deffmt;
+    }
     while (*fmts != AV_SAMPLE_FMT_NONE) {
         retfmt = *fmts;
         if (retfmt == fmt) {
@@ -377,6 +383,9 @@ static int64_t select_channel_layout(AVCodec *codec,int64_t ch_layout)
     int64_t retch = 0;
     int64_t defch = AV_CH_LAYOUT_STEREO;
     const uint64_t * chs = codec->channel_layouts;
+    if (!chs) {
+        return defch;
+    }
     while (*chs) {
         retch = *chs;
         if (retch == ch_layout) {
@@ -396,6 +405,9 @@ static enum AVPixelFormat select_pixel_format(AVCodec *codec,enum AVPixelFormat 
     enum AVPixelFormat retpixfmt = AV_PIX_FMT_NONE;
     enum AVPixelFormat defaltfmt = AV_PIX_FMT_YUV420P;
     const enum AVPixelFormat *fmts = codec->pix_fmts;
+    if (!fmts) {
+        return defaltfmt;
+    }
     while (*fmts != AV_PIX_FMT_NONE) {
         retpixfmt = *fmts;
         if (retpixfmt == fmt) {
@@ -808,45 +820,104 @@ void Transcode::doDecodeAudio(AVPacket *packet)
         // 为了避免数据污染，所以这里只需要要将解码后得到的AVFrame中data数据拷贝到编码用的audio_en_frame中，解码后的其它数据则丢弃
         int pts_num = 0;
         if (audio_need_convert) {
-            int dst_nb_samples = (int)av_rescale_rnd(swr_get_delay(swr_ctx, audio_de_frame->sample_rate)+audio_de_frame->nb_samples, audio_en_ctx->sample_rate, audio_de_frame->sample_rate, AV_ROUND_UP);
-            if (dst_nb_samples != audio_en_frame->nb_samples) {
-                av_frame_free(&audio_en_frame);
-                audio_en_frame = get_audio_frame(audio_en_ctx->sample_fmt, audio_en_ctx->channel_layout, audio_en_ctx->sample_rate, dst_nb_samples);
-                if (audio_en_frame == NULL) {
-                    LOGD("can not create audio frame2 ");
-                    releaseSources();
-                    return;
-                }
+            
+            if (!audio_init) {
+                ret = av_samples_alloc_array_and_samples(&audio_buffer, audio_en_frame->linesize, audio_en_frame->channels, audio_en_frame->nb_samples, (enum AVSampleFormat)audio_en_frame->format, 0);
+                audio_init = true;
+                left_size = 0;
             }
             /** 遇到问题：当音频编码方式不一致时转码后无声音
              *  分析原因：因为每个编码方式对应的AVFrame中的nb_samples不一样，所以再进行编码前要进行AVFrame的转换
              *  解决方案：进行编码前先转换
              */
-            // 进行转换
-            ret = swr_convert(swr_ctx, audio_en_frame->data, dst_nb_samples, (const uint8_t**)audio_de_frame->data, audio_de_frame->nb_samples);
-            if (ret < 0) {
-                LOGD("swr_convert() fail %d",ret);
-                releaseSources();
-                doEncodeAudio(NULL);
-                break;
+            bool first = true;
+            while (true) {
+                // 进行转换
+                if (first) {
+                    ret = swr_convert(swr_ctx, audio_buffer, audio_en_frame->nb_samples, (const uint8_t**)audio_de_frame->data, audio_de_frame->nb_samples);
+                    if (ret < 0) {
+                        LOGD("swr_convert() fail %d",ret);
+                        releaseSources();
+                        return;
+                    }
+                    first = false;
+                    
+                    int use = ret-left_size >= 0 ?ret - left_size:ret;
+                    int size = av_get_bytes_per_sample((enum AVSampleFormat)audio_en_frame->format);
+                    for (int ch=0; ch<audio_en_frame->channels; ch++) {
+                        for (int i = 0; i<use; i++) {
+                            audio_en_frame->data[ch][(i+left_size)*size] = audio_buffer[ch][i*size];
+                            audio_en_frame->data[ch][(i+left_size)*size+1] = audio_buffer[ch][i*size+1];
+                            audio_en_frame->data[ch][(i+left_size)*size+2] = audio_buffer[ch][i*size+2];
+                            audio_en_frame->data[ch][(i+left_size)*size+3] = audio_buffer[ch][i*size+3];
+                        }
+                    }
+                    // 编码
+                    left_size += ret;
+                    if (left_size >= audio_en_frame->nb_samples) {
+                        left_size -= audio_en_frame->nb_samples;
+                        // 编码
+                        audio_en_frame->pts = av_rescale_q(audio_pts, (AVRational){1,audio_en_frame->sample_rate}, audio_en_ctx->time_base);
+                        audio_pts += audio_en_frame->nb_samples;
+                        doEncodeAudio(audio_en_frame);
+                        
+                        if (left_size > 0) {
+                            int size = av_get_bytes_per_sample((enum AVSampleFormat)audio_en_frame->format);
+                            for (int ch=0; ch<audio_en_frame->channels; ch++) {
+                                for (int i = 0; i<left_size; i++) {
+                                    audio_en_frame->data[ch][i*size] = audio_buffer[ch][(use+i)*size];
+                                    audio_en_frame->data[ch][i*size+1] = audio_buffer[ch][(use+i)*size+1];
+                                    audio_en_frame->data[ch][i*size+2] = audio_buffer[ch][(use+i)*size+2];
+                                    audio_en_frame->data[ch][i*size+3] = audio_buffer[ch][(use+i)*size+3];
+                                }
+                            }
+                        }
+                    }
+                    
+                } else {
+                    ret = swr_convert(swr_ctx, audio_buffer, audio_en_frame->nb_samples, NULL, 0);
+                    if (ret < 0) {
+                        LOGD("1 swr_convert() fail %d",ret);
+                        releaseSources();
+                        return;
+                    }
+                    int size = av_get_bytes_per_sample((enum AVSampleFormat)audio_en_frame->format);
+                    for (int ch=0; ch<audio_en_frame->channels; ch++) {
+                        for (int i = 0; i < ret && i+left_size < audio_en_frame->nb_samples; i++) {
+                            audio_en_frame->data[ch][(left_size + i)*size] = audio_buffer[ch][i*size];
+                            audio_en_frame->data[ch][(left_size + i)*size + 1] = audio_buffer[ch][i*size + 1];
+                            audio_en_frame->data[ch][(left_size + i)*size + 2] = audio_buffer[ch][i*size + 2];
+                            audio_en_frame->data[ch][(left_size + i)*size + 3] = audio_buffer[ch][i*size + 3];
+                        }
+                    }
+                    left_size += ret;
+                    if (left_size >= audio_en_frame->nb_samples) {
+                        left_size -= audio_en_frame->nb_samples;
+                        LOGD("多了一个编码");
+                        // 编码
+                        audio_en_frame->pts = av_rescale_q(audio_pts, (AVRational){1,audio_en_frame->sample_rate}, audio_en_ctx->time_base);
+                        audio_pts += audio_en_frame->nb_samples;
+                        doEncodeAudio(audio_en_frame);
+                    } else {
+                        break;
+                    }
+                }
             }
-            pts_num = ret;
+            
         } else {
             av_frame_copy(audio_en_frame, audio_de_frame);
             pts_num = audio_en_frame->nb_samples;
+            /** 遇到问题：得到的文件播放时音画不同步
+             *  分析原因：由于音频的AVFrame的pts没有设置对；pts是基于AVCodecContext的时间基的时间，所以pts的设置公式：
+             *  音频：pts  = (timebase.den/sample_rate)*nb_samples*index；  index为当前第几个音频AVFrame(索引从0开始)，nb_samples为每个AVFrame中的采样数
+             *  视频：pts = (timebase.den/fps)*index；
+             *  解决方案：按照如下代码方式设置AVFrame的pts
+            */
+            audio_en_frame->pts = audio_pts++;    // 造成了音画不同步的问题
+            audio_en_frame->pts = av_rescale_q(audio_pts, (AVRational){1,audio_en_frame->sample_rate}, audio_en_ctx->time_base);
+            audio_pts += pts_num;
+            doEncodeAudio(audio_en_frame);
         }
-        
-        
-        /** 遇到问题：得到的文件播放时音画不同步
-         *  分析原因：由于音频的AVFrame的pts没有设置对；pts是基于AVCodecContext的时间基的时间，所以pts的设置公式：
-         *  音频：pts  = (timebase.den/sample_rate)*nb_samples*index；  index为当前第几个音频AVFrame(索引从0开始)，nb_samples为每个AVFrame中的采样数
-         *  视频：pts = (timebase.den/fps)*index；
-         *  解决方案：按照如下代码方式设置AVFrame的pts
-        */
-//        audio_en_frame->pts = audio_pts++;    // 造成了音画不同步的问题
-        audio_en_frame->pts = av_rescale_q(audio_pts, (AVRational){1,audio_en_frame->sample_rate}, audio_de_ctx->time_base);
-        audio_pts += pts_num;
-        doEncodeAudio(audio_en_frame);
     }
 }
 
@@ -854,8 +925,9 @@ void Transcode::doEncodeAudio(AVFrame *frame)
 {
     int ret = 0;
     if ((ret = avcodec_send_frame(audio_en_ctx, frame)) < 0) {
-        LOGD("audio avcodec_send_frame fail %d",ret);
+        LOGD("audio avcodec_send_frame fail %s",av_err2str(ret));
         releaseSources();
+        return;
     }
     
     
@@ -930,21 +1002,24 @@ void Transcode::doWrite(AVPacket *packet,bool isVideo)
     }
     
     
+    AVRational tb;
+    AVStream *a_stream = ouFmtCtx->streams[audio_ou_stream_index];
+    AVStream *v_stream = ouFmtCtx->streams[video_ou_stream_index];
     if (a_pkt && v_pkt) {   // 两个都有 则进行时间的比较
-        AVStream *a_stream = ouFmtCtx->streams[audio_ou_stream_index];
-        AVStream *v_stream = ouFmtCtx->streams[video_ou_stream_index];
         if (av_compare_ts(last_audio_pts,a_stream->time_base,last_video_pts,v_stream->time_base) <= 0) { // 视频在后
             w_pkt = a_pkt;
             if (audioCache.size() > 0) {
                 vector<AVPacket*>::iterator begin = audioCache.begin();
                 audioCache.erase(begin);
             }
+            tb = a_stream->time_base;
         } else {
             w_pkt = v_pkt;
             if (videoCache.size() > 0) {
                 vector<AVPacket*>::iterator begin = videoCache.begin();
                 videoCache.erase(begin);
             }
+            tb = v_stream->time_base;
         }
         
     } else if (a_pkt) {
@@ -953,20 +1028,22 @@ void Transcode::doWrite(AVPacket *packet,bool isVideo)
             vector<AVPacket*>::iterator begin = audioCache.begin();
             audioCache.erase(begin);
         }
+        tb = a_stream->time_base;
     } else if (v_pkt) {
         w_pkt = v_pkt;
         if (videoCache.size() > 0) {
             vector<AVPacket*>::iterator begin = videoCache.begin();
             videoCache.erase(begin);
         }
+        tb = v_stream->time_base;
     }
     
     static int sum = 0;
     if (!isVideo) {
         sum++;
     }
-    LOGD("index %d pts %d dts %d du %d a_size %d v_size %d sum %d",w_pkt->stream_index,w_pkt->pts,w_pkt->dts,w_pkt->duration,audioCache.size(),videoCache.size(),sum);
-    if ((av_interleaved_write_frame(ouFmtCtx, w_pkt)) < 0) {
+    LOGD("%s pts %d(%s) dts %d du %d a_size %d v_size %d sum %d",w_pkt->stream_index == audio_ou_stream_index?"audio":"video",w_pkt->pts,av_ts2timestr(w_pkt->pts,&tb),w_pkt->dts,w_pkt->duration,audioCache.size(),videoCache.size(),sum);
+    if ((av_write_frame(ouFmtCtx, w_pkt)) < 0) {
         LOGD("av_write_frame fail");
     }
     
