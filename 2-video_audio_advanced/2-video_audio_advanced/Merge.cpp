@@ -36,6 +36,7 @@ Merge::Merge()
     in_indexes = vector<MediaIndex>();
     video_en_ctx = NULL;
     audio_en_ctx = NULL;
+    audio_buffer = NULL;
 }
 
 Merge::~Merge()
@@ -1065,5 +1066,72 @@ void Merge::addMusic()
 
 void Merge::releasesources()
 {
+    if (in_fmt1) {
+        avformat_close_input(&in_fmt1);
+        in_fmt1 = NULL;
+    }
     
+    if (in_fmt2) {
+        avformat_close_input(&in_fmt2);
+        in_fmt2 = NULL;
+    }
+    
+    if (ou_fmt) {
+        avformat_free_context(ou_fmt);
+        ou_fmt = NULL;
+    }
+    
+    for (int i=0; i<in_fmts.size(); i++) {
+        AVFormatContext *fmt = in_fmts[i];
+        avformat_close_input(&fmt);
+    }
+    
+    for (int i = 0; i<de_ctxs.size(); i++) {
+        DeCtx ctx = de_ctxs[i];
+        if (ctx.video_de_ctx) {
+            avcodec_free_context(&ctx.video_de_ctx);
+            ctx.video_de_ctx = NULL;
+        }
+        if (ctx.audio_de_ctx) {
+            avcodec_free_context(&ctx.audio_de_ctx);
+            ctx.audio_de_ctx = NULL;
+        }
+    }
+    
+    if (video_en_ctx) {
+        avcodec_free_context(&video_en_ctx);
+        video_en_ctx = NULL;
+    }
+    
+    if (audio_en_ctx) {
+        avcodec_free_context(&audio_en_ctx);
+        audio_en_ctx = NULL;
+    }
+    
+    if (swsctx) {
+        sws_freeContext(swsctx);
+        swsctx = NULL;
+    }
+    
+    if (swrctx) {
+        swr_free(&swrctx);
+        swrctx = NULL;
+    }
+    
+    if (video_de_frame) {
+        av_frame_free(&video_de_frame);
+    }
+    
+    if (audio_de_frame) {
+        av_frame_free(&audio_de_frame);
+    }
+    if (video_en_frame) {
+        av_frame_free(&video_en_frame);
+    }
+    if (audio_en_frame) {
+        av_frame_free(&audio_en_frame);
+    }
+    if (audio_buffer) {
+        av_freep(&audio_buffer[0]);
+    }
 }

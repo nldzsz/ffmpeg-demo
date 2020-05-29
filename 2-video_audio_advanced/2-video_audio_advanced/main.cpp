@@ -17,7 +17,7 @@
 
 int main(int argc, const char * argv[]) {
     
-    int test_use = 6;
+    int test_use = 8;
     if (test_use == 0) {
         Transcode codec;
         codec.doExtensionTranscode();
@@ -40,6 +40,14 @@ int main(int argc, const char * argv[]) {
     else if (test_use == 6) {
         Merge mObj;
         mObj.addMusic();
+    }
+    else if (test_use == 7) {
+        VideoJPG mObj;
+        mObj.doJpgGet();
+    }
+    else if (test_use == 8) {
+        VideoJPG mObj;
+        mObj.doJpgToVideo();
     }
     
     return 0;

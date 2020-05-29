@@ -10,7 +10,26 @@
 
 void Cut::releasesources()
 {
-    
+    if (in_fmtctx) {
+        avformat_close_input(&in_fmtctx);
+        in_fmtctx = NULL;
+    }
+    if (ou_fmtctx) {
+        avformat_free_context(ou_fmtctx);
+        ou_fmtctx = NULL;
+    }
+    if (video_en_frame) {
+        av_frame_unref(video_en_frame);
+        video_en_frame = NULL;
+    }
+    if (video_de_ctx) {
+        avcodec_free_context(&video_de_ctx);
+        video_de_ctx = NULL;
+    }
+    if (video_en_ctx) {
+        avcodec_free_context(&video_en_ctx);
+        video_de_ctx = NULL;
+    }
 }
 
 void Cut::doWrite(AVPacket *pkt)
