@@ -13,11 +13,12 @@
 #include "Cut.hpp"
 #include "Merge.hpp"
 #include "VideoJpg.hpp"
+#include "AudioVolume.hpp"
 
 
 int main(int argc, const char * argv[]) {
     
-    int test_use = 8;
+    int test_use = 9;
     if (test_use == 0) {
         Transcode codec;
         codec.doExtensionTranscode();
@@ -48,6 +49,10 @@ int main(int argc, const char * argv[]) {
     else if (test_use == 8) {
         VideoJPG mObj;
         mObj.doJpgToVideo();
+    }
+    else if (test_use == 9) {
+        AudioVolume mObj;
+        mObj.doChangeAudioVolume();
     }
     
     return 0;

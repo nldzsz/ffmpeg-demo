@@ -26,10 +26,12 @@
 		18740CB624619E99009B57A8 /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18740CAE24619E99009B57A8 /* libavutil.a */; };
 		18740CB724619E99009B57A8 /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18740CAF24619E99009B57A8 /* libswscale.a */; };
 		18740CB824619E99009B57A8 /* libx264.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18740CB024619E99009B57A8 /* libx264.a */; };
-		18740CB924619E99009B57A8 /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18740CB124619E99009B57A8 /* libavfilter.a */; };
 		18740CBA24619E99009B57A8 /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18740CB224619E99009B57A8 /* libavcodec.a */; };
 		18740CBB24619E99009B57A8 /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18740CB324619E99009B57A8 /* libavformat.a */; };
 		18740CC72461A097009B57A8 /* CLog.c in Sources */ = {isa = PBXBuildFile; fileRef = 18740CC52461A097009B57A8 /* CLog.c */; };
+		187B004C248242A600033220 /* AudioVolume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 187B004A248242A600033220 /* AudioVolume.cpp */; };
+		187B004E24824CD700033220 /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 187B004D24824CD600033220 /* libavfilter.a */; };
+		187B005124828E1C00033220 /* CodecUtil.c in Sources */ = {isa = PBXBuildFile; fileRef = 187B005024828E1C00033220 /* CodecUtil.c */; };
 		1887E58B2474FB7800AD6AA8 /* Merge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1887E5892474FB7800AD6AA8 /* Merge.cpp */; };
 		1887E5912474FBDC00AD6AA8 /* VideoJpg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1887E58F2474FBDC00AD6AA8 /* VideoJpg.cpp */; };
 		18B7757624725B5D00C334B3 /* Cut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18B7757424725B5D00C334B3 /* Cut.cpp */; };
@@ -70,11 +72,16 @@
 		18740CAE24619E99009B57A8 /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavutil.a; path = ../ffmpeglib/lib/libavutil.a; sourceTree = "<group>"; };
 		18740CAF24619E99009B57A8 /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswscale.a; path = ../ffmpeglib/lib/libswscale.a; sourceTree = "<group>"; };
 		18740CB024619E99009B57A8 /* libx264.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libx264.a; path = ../ffmpeglib/lib/libx264.a; sourceTree = "<group>"; };
-		18740CB124619E99009B57A8 /* libavfilter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavfilter.a; path = ../ffmpeglib/lib/libavfilter.a; sourceTree = "<group>"; };
 		18740CB224619E99009B57A8 /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavcodec.a; path = ../ffmpeglib/lib/libavcodec.a; sourceTree = "<group>"; };
 		18740CB324619E99009B57A8 /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavformat.a; path = ../ffmpeglib/lib/libavformat.a; sourceTree = "<group>"; };
 		18740CC52461A097009B57A8 /* CLog.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CLog.c; sourceTree = "<group>"; };
 		18740CC62461A097009B57A8 /* CLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLog.h; sourceTree = "<group>"; };
+		187B004A248242A600033220 /* AudioVolume.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioVolume.cpp; sourceTree = "<group>"; };
+		187B004B248242A600033220 /* AudioVolume.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AudioVolume.hpp; sourceTree = "<group>"; };
+		187B004D24824CD600033220 /* libavfilter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavfilter.a; path = ../ffmpeglib/lib/libavfilter.a; sourceTree = "<group>"; };
+		187B004F24828E1C00033220 /* CodecUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CodecUtil.h; sourceTree = "<group>"; };
+		187B005024828E1C00033220 /* CodecUtil.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = CodecUtil.c; sourceTree = "<group>"; };
+		187B005224828ED000033220 /* Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
 		1887E5892474FB7800AD6AA8 /* Merge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Merge.cpp; sourceTree = "<group>"; };
 		1887E58A2474FB7800AD6AA8 /* Merge.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Merge.hpp; sourceTree = "<group>"; };
 		1887E58F2474FBDC00AD6AA8 /* VideoJpg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VideoJpg.cpp; sourceTree = "<group>"; };
@@ -88,6 +95,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				187B004E24824CD700033220 /* libavfilter.a in Frameworks */,
 				1849FF6F245EBB5700B41581 /* AudioToolbox.framework in Frameworks */,
 				1849FF6D245EBB4D00B41581 /* CoreFoundation.framework in Frameworks */,
 				1849FF6B245EBB4000B41581 /* CoreMedia.framework in Frameworks */,
@@ -104,7 +112,6 @@
 				18740CB624619E99009B57A8 /* libavutil.a in Frameworks */,
 				18740CB724619E99009B57A8 /* libswscale.a in Frameworks */,
 				18740CB824619E99009B57A8 /* libx264.a in Frameworks */,
-				18740CB924619E99009B57A8 /* libavfilter.a in Frameworks */,
 				18740CBA24619E99009B57A8 /* libavcodec.a in Frameworks */,
 				18740CBB24619E99009B57A8 /* libavformat.a in Frameworks */,
 			);
@@ -145,6 +152,8 @@
 				1887E58A2474FB7800AD6AA8 /* Merge.hpp */,
 				1887E58F2474FBDC00AD6AA8 /* VideoJpg.cpp */,
 				1887E5902474FBDC00AD6AA8 /* VideoJpg.hpp */,
+				187B004A248242A600033220 /* AudioVolume.cpp */,
+				187B004B248242A600033220 /* AudioVolume.hpp */,
 			);
 			path = "2-video_audio_advanced";
 			sourceTree = "<group>";
@@ -152,8 +161,8 @@
 		1849FF49245EB9C400B41581 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				187B004D24824CD600033220 /* libavfilter.a */,
 				18740CB224619E99009B57A8 /* libavcodec.a */,
-				18740CB124619E99009B57A8 /* libavfilter.a */,
 				18740CB324619E99009B57A8 /* libavformat.a */,
 				18740CAE24619E99009B57A8 /* libavutil.a */,
 				18740CAC24619E99009B57A8 /* libmp3lame.a */,
@@ -178,8 +187,11 @@
 		18740CC42461A097009B57A8 /* cppcommon */ = {
 			isa = PBXGroup;
 			children = (
+				187B005224828ED000033220 /* Common.h */,
 				18740CC52461A097009B57A8 /* CLog.c */,
 				18740CC62461A097009B57A8 /* CLog.h */,
+				187B004F24828E1C00033220 /* CodecUtil.h */,
+				187B005024828E1C00033220 /* CodecUtil.c */,
 			);
 			name = cppcommon;
 			path = ../../cppcommon;
@@ -244,6 +256,8 @@
 			files = (
 				18740CC72461A097009B57A8 /* CLog.c in Sources */,
 				1849FF47245E453300B41581 /* transcode.cpp in Sources */,
+				187B005124828E1C00033220 /* CodecUtil.c in Sources */,
+				187B004C248242A600033220 /* AudioVolume.cpp in Sources */,
 				18B7757624725B5D00C334B3 /* Cut.cpp in Sources */,
 				1849FF3C245E443A00B41581 /* main.cpp in Sources */,
 				1887E5912474FBDC00AD6AA8 /* VideoJpg.cpp in Sources */,
