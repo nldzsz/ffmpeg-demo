@@ -384,8 +384,12 @@ void SoftEnDecoder::doEncode()
     frame->width = width;
     frame->height = height;
     frame->format = enc_ctx->pix_fmt;
-    // 为AVFrame分配内存
-    av_frame_get_buffer(frame, 0);
+    /** 遇到问题：编码后h264文件播放视频画面有绿条
+     *  分析原因：源yuv为480x640的yuv420p方式存储时，由于源yuv文件yuv数据存储时不是按字节对齐方式存储的，而这里创建的AVFrame又是按照
+     *  字节对齐的方式分配内存的即linesize的大小和480不对应，导致数据错乱。
+     *  解决方案：当从源yuv文件读取数据到AVFrame时linesize要和yuv的宽对应，所以这里要将av_frame_get_buffer()的第二个参数设置为1
+     */
+    av_frame_get_buffer(frame, 1);
     av_frame_make_writable(frame);
     int frame_size = width * height;
     int frame_count = 0;

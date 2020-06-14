@@ -57,7 +57,13 @@ static int64_t io_seek(void* opaque,int64_t offset,int whence)
  *  2、每次读取完数据后需要将读取指针后移
  *  3、如果外部数据读取完毕，则需要返回AVERROR_EOF错误
  *  4、读取成功，返回实际读取的字节数
+ *  5、如果没有数据直接 return 0; 那么将提示"Invalid return value 0 for stream protocol"，并且avformat_open_input()会初始化失败
  */
+/** 遇到问题：提示"Invalid return value 0 for stream protocol"
+ *  分析原因：avformat_open_input()函数内部在调用readFunc()读取输入流数据分析格式时，readFunc()由于没有数据直接return 0；导致avformat_open_input()解析
+ *  失败，所以要想正确的解析出输入源的码流格式，必须有足够的输入数据才可。
+ *  解决方案：给足够的数据用以成功解析
+*/
 static int io_read(void *opaque, uint8_t *buf, int buf_size)
 {
     static int total = 0;

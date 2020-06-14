@@ -48,9 +48,14 @@ void Muxer::doReMuxer()
         LOGD("can not find file");
         return;
     }
+    /** 遇到问题：当输入文件为.h264码流时，输出的mp4没有预览图
+     *  分析原因：因为ffmpeg编译时没有加入extract_extradata码流分析器，导致预览图解析不出来
+     *  解决方案：编译ffmpeg时加入--enable-bsf=extract_extradata即可
+     */
     string srcDir = curFile.substr(0,pos) + "filesources/";
-    string srcPath = srcDir + "test_1280x720_1.mp4";
-    string dstPath = "1-test_1280_720_1.MP4";
+//    string srcPath = srcDir + "test_1280x720_1.mp4";
+    string srcPath = srcDir + "2-test.h264";
+    string dstPath = srcDir + "1-test_1280_720_1.MP4";
     
     AVFormatContext *in_fmtCtx = NULL, *ou_fmtCtx = NULL;
     AVStream *ou_audio_stream = NULL,*ou_video_stream = NULL;
@@ -107,6 +112,10 @@ void Muxer::doReMuxer()
         return;
     }
     
+    av_dump_format(ou_fmtCtx, 0, dstPath.c_str(), 1);
+    
+    bool saw_fist_pkt = false;
+    int64_t video_next_dts = AV_NOPTS_VALUE;
     AVPacket *sPacket = av_packet_alloc();
     while (av_read_frame(in_fmtCtx, sPacket) >= 0) {
         LOGD("pts %d dts %d index %d",sPacket->pts,sPacket->dts,sPacket->stream_index);
@@ -122,8 +131,25 @@ void Muxer::doReMuxer()
             }
         } else if (sPacket->stream_index == in_video_index) {
             AVStream *stream = in_fmtCtx->streams[in_video_index];
-            sPacket->pts = av_rescale_q_rnd(sPacket->pts,stream->time_base,ou_video_stream->time_base,AV_ROUND_NEAR_INF);
-            sPacket->dts = av_rescale_q_rnd(sPacket->dts,stream->time_base,ou_video_stream->time_base,AV_ROUND_NEAR_INF);
+            AVRational src_tb = stream->time_base;
+            /** 遇到问题：当输入文件为h264的码流时，再封装时失败
+             *  分析原因：因为h264码流解析出来的AVPacket的dts和pts的值为AV_NOPTS_VALUE,如果不作处理，再封装就会出错
+             *  解决方案：按照如下的公式给dts和pts重新赋值
+             */
+            if (!saw_fist_pkt) {
+                video_next_dts = stream->avg_frame_rate.num ? - stream->codecpar->video_delay * AV_TIME_BASE / stream->avg_frame_rate.num : 0;
+                saw_fist_pkt = true;
+            }
+            if (sPacket->dts == AV_NOPTS_VALUE) {
+                sPacket->dts = video_next_dts;
+                sPacket->pts = sPacket->dts;
+                video_next_dts += av_rescale_q(sPacket->duration, stream->time_base, AV_TIME_BASE_Q);
+                src_tb = AV_TIME_BASE_Q;
+            }
+            if (sPacket->pts != AV_NOPTS_VALUE) {
+                 sPacket->pts = av_rescale_q_rnd(sPacket->pts,src_tb,ou_video_stream->time_base,AV_ROUND_NEAR_INF);
+            }
+            sPacket->dts = av_rescale_q_rnd(sPacket->dts,src_tb,ou_video_stream->time_base,AV_ROUND_NEAR_INF);
             sPacket->duration = av_rescale_q_rnd(sPacket->duration,stream->time_base,ou_video_stream->time_base,AV_ROUND_NEAR_INF);
             sPacket->stream_index = ou_video_stream->index;
             if (av_write_frame(ou_fmtCtx, sPacket) < 0) {
