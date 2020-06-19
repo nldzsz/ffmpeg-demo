@@ -11,8 +11,11 @@
 
 #include <stdio.h>
 #include <string>
+#include <vector>
 
 extern "C"{
+#include <pthread.h>
+#include <unistd.h>
 #include <libavformat/avformat.h>
 #include <libavutil/timestamp.h>
 #include "CLog.h"
@@ -32,6 +35,23 @@ public:
     void doReMuxer();
     // 将两个文件中音频和视频合并，如果两个文件时间不一致，则将较长的进行截断
     void doMuxerTwoFile();
+    
+    // 解析文件并原封不动在封装;模拟流格式(只考虑视频，音频类似处理)
+    void doReMuxerWithStream();
+private:
+
+    // 消费者线程
+    pthread_t       _consumThread;
+    pthread_mutex_t _mutex;
+    vector<AVPacket*> vpakcets;
+    vector<AVPacket*> apakcets;
+    string dstPath;
+    bool hasNoMoreData;
+    
+    // 消费者线程
+    static void* consum_thread(void* opaque);
+    // 用于读取视频流的回调函数
+    static int readVideoPacket(void *client,uint8_t* buf,int buflen);
 };
 
 #endif /* muxer_hpp */

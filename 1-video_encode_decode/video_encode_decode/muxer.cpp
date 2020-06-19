@@ -54,7 +54,7 @@ void Muxer::doReMuxer()
      */
     string srcDir = curFile.substr(0,pos) + "filesources/";
 //    string srcPath = srcDir + "test_1280x720_1.mp4";
-    string srcPath = srcDir + "2-test.h264";
+    string srcPath = srcDir + "abc-test.h264";
     string dstPath = srcDir + "1-test_1280_720_1.MP4";
     
     AVFormatContext *in_fmtCtx = NULL, *ou_fmtCtx = NULL;
@@ -118,7 +118,7 @@ void Muxer::doReMuxer()
     int64_t video_next_dts = AV_NOPTS_VALUE;
     AVPacket *sPacket = av_packet_alloc();
     while (av_read_frame(in_fmtCtx, sPacket) >= 0) {
-        LOGD("pts %d dts %d index %d",sPacket->pts,sPacket->dts,sPacket->stream_index);
+    
         if (sPacket->stream_index == in_audio_index) {
             AVStream *stream = in_fmtCtx->streams[in_audio_index];
             sPacket->pts = av_rescale_q_rnd(sPacket->pts,stream->time_base,ou_audio_stream->time_base,AV_ROUND_NEAR_INF);
@@ -152,6 +152,9 @@ void Muxer::doReMuxer()
             sPacket->dts = av_rescale_q_rnd(sPacket->dts,src_tb,ou_video_stream->time_base,AV_ROUND_NEAR_INF);
             sPacket->duration = av_rescale_q_rnd(sPacket->duration,stream->time_base,ou_video_stream->time_base,AV_ROUND_NEAR_INF);
             sPacket->stream_index = ou_video_stream->index;
+            static int sum = 0;
+            sum++;
+            LOGD("video sum(%d) size(%d) pts %d(%s) dts%d(%s) index %d",sum,sPacket->size,sPacket->pts,av_ts2timestr(sPacket->pts,&ou_video_stream->time_base),sPacket->dts,av_ts2timestr(sPacket->dts,&ou_video_stream->time_base),sPacket->stream_index);
             if (av_write_frame(ou_fmtCtx, sPacket) < 0) {
                 LOGD("av_write_frame 2 fial");
                 break;
@@ -165,6 +168,249 @@ void Muxer::doReMuxer()
     // 写入尾部信息
     ret = av_write_trailer(ou_fmtCtx);
     releaseResource(&in_fmtCtx, NULL, &ou_fmtCtx);
+    
+}
+
+void Muxer::doReMuxerWithStream()
+{
+    string curFile(__FILE__);
+    unsigned long pos = curFile.find("1-video_encode_decode");
+    if (pos == string::npos) {
+        LOGD("can not find file");
+        return;
+    }
+    /** 遇到问题：当输入文件为.h264码流时，输出的mp4没有预览图
+     *  分析原因：因为ffmpeg编译时没有加入extract_extradata码流分析器，导致预览图解析不出来
+     *  解决方案：编译ffmpeg时加入--enable-bsf=extract_extradata即可
+     */
+    string srcDir = curFile.substr(0,pos) + "filesources/";
+    string srcPath = srcDir + "abc-test.h264";
+    dstPath = srcDir + "2-test_1280_720_1.MP4";
+    
+    AVFormatContext *in_fmtCtx = NULL;
+    int in_video_index = -1;
+    int ret = 0;
+    if ((ret = avformat_open_input(&in_fmtCtx,srcPath.c_str(),NULL,NULL)) < 0) {
+        LOGD("avformat_open_input fail %d",ret);
+        return;
+    }
+    if (avformat_find_stream_info(in_fmtCtx ,NULL) < 0) {
+        LOGD("avformat_find_stream_info() fail");
+        releaseResource(&in_fmtCtx, NULL, NULL);
+        return;
+    }
+    for(int i=0;i<in_fmtCtx->nb_streams;i++) {
+        AVStream *stream = in_fmtCtx->streams[i];
+        if (in_video_index == -1 && stream->codecpar->codec_type == AVMEDIA_TYPE_VIDEO) {
+            in_video_index = i;
+        }
+    }
+    
+    // 初始化锁
+    pthread_mutex_init(&_mutex, NULL);
+    // 初始化线程
+    if(pthread_create(&_consumThread, NULL, &consum_thread, this) != 0) {
+        LOGD("pthread_create fail");
+        return;
+    }
+    
+    // 读取码流数据
+    while (true) {
+        AVPacket *sPacket = av_packet_alloc();
+        if(av_read_frame(in_fmtCtx, sPacket) < 0) {
+            hasNoMoreData = true;
+            break;
+        }
+        
+        if (sPacket->stream_index == in_video_index) {  // 暂时只考虑视频
+            static int sum = 0;
+            sum++;
+            LOGD("video sum(%d) size(%d) pts %d dts %d index %d",sum,sPacket->size,sPacket->pts,sPacket->dts,sPacket->stream_index);
+            
+            pthread_mutex_lock(&_mutex);
+            vpakcets.push_back(sPacket);
+            pthread_mutex_unlock(&_mutex);
+        }
+        
+        usleep(1000);
+    }
+    
+    // 销毁线程
+    void *retr;
+    if(pthread_join(_consumThread, &retr) != 0){
+        LOGD("pthread_join fail");
+        return;
+    }
+    LOGD("结束了");
+}
+
+void* Muxer::consum_thread(void *opaque)
+{
+    Muxer *myThis = (Muxer*)opaque;
+    
+    int io_buf_size = 1024*1024;
+    uint8_t *iobuf = (uint8_t*)av_mallocz(io_buf_size);
+    if (!iobuf) {
+        return NULL;
+    }
+    /** AVIOContext它是一个输入输出的缓冲区。作为输入缓冲区，当调用avformat_open_input()、avformat_find_stream_info()、av_read_frame()函数
+     *  的时候会从该缓冲区中读取数据，然后该缓冲区会不停的从读取回调函数readFunc()中获取数据readFunc()回调函数和av_read_frame()在同一个线程
+     */
+    AVIOContext *ioctx = avio_alloc_context(iobuf, io_buf_size, 0, opaque, readVideoPacket, NULL, NULL);
+    if (!ioctx) {
+        LOGD("io create fail");
+        av_freep(&iobuf);
+        return NULL;
+    }
+    /** 遇到问题：生成的mp4用ffplay播放提示"error while decoding MB 14 34, bytestream -33"等类似错误，而且生成的mp4文件比实际源文件小
+     *  分析原因：在ffmpeg的源aviobuf.c文件的static void fill_buffer(AVIOContext *s)中，int max_buffer_size = s->max_packet_size ?
+     s->max_packet_size : IO_BUFFER_SIZE;代表了默认每次通过readVideoPacket()读取的最大字节数为32768个大小，而readVideoPacket的实现中如果有AVPacket包的大小超过了32768
+     *  多余的数据丢弃，导致写入mp4文件中的视频数据丢失了
+     *  解决方案：将max_packet_size的值设置到足够大。(正确的做法应该是再创建一个缓冲区，存储所有的视频数据，readVideoPacket依次读取数据保证一个数据不漏掉)
+     */
+    ioctx->max_packet_size = 1024*1024;
+    AVFormatContext *in_fmtCtx = avformat_alloc_context();
+    int in_video_index = -1;
+    in_fmtCtx->pb = ioctx;
+    
+    // 由于是通过回调函数来读数据进行解封装，所以第二个参数为NULL
+    int ret = avformat_open_input(&in_fmtCtx, NULL, NULL, NULL);
+    if (ret < 0) {
+        avformat_close_input(&in_fmtCtx);
+        LOGD("avformat_open_input fail");
+        return NULL;
+    }
+    ret = avformat_find_stream_info(in_fmtCtx, NULL);
+    if (ret < 0) {
+        LOGD("avformat_find_stream_info fail");
+        avformat_close_input(&in_fmtCtx);
+        return NULL;
+    }
+    for(int i=0;i<in_fmtCtx->nb_streams;i++) {
+        AVStream *stream = in_fmtCtx->streams[i];
+        if (in_video_index == -1 && stream->codecpar->codec_type == AVMEDIA_TYPE_VIDEO) {
+            in_video_index = i;
+        }
+    }
+    
+    LOGD("找到了输入格式");
+    av_dump_format(in_fmtCtx, 0, NULL, 0);
+    
+    // 创建上下文
+    AVFormatContext *pOutFmt = NULL;
+    if (avformat_alloc_output_context2(&pOutFmt,NULL,NULL,myThis->dstPath.c_str()) < 0){
+        LOGD("avformat_alloc_output_context2 fail");
+        releaseResource(&in_fmtCtx, NULL, NULL);
+        return NULL;
+    }
+    
+    // 添加流
+    if (in_video_index != -1) {
+        AVStream *ou_video_stream = avformat_new_stream(pOutFmt,NULL);
+        avcodec_parameters_copy(ou_video_stream->codecpar,in_fmtCtx->streams[in_video_index]->codecpar);
+    }
+    
+    // 打开AVIOContext缓冲区
+    if (!(pOutFmt->flags & AVFMT_NOFILE)) {
+        if (avio_open(&pOutFmt->pb,myThis->dstPath.c_str(),AVIO_FLAG_WRITE) < 0) {
+            LOGD("avio_open fail");
+            releaseResource(&in_fmtCtx, NULL, &pOutFmt);
+            return NULL;
+        }
+    }
+    
+    // 写入头部信息
+    if (avformat_write_header(pOutFmt, NULL) < 0) {
+        LOGD("avformat_write_header fail");
+        return NULL;
+    }
+    
+    LOGD("输出格式");
+    av_dump_format(pOutFmt, 0, myThis->dstPath.c_str(), 1);
+    
+    
+    AVStream *ou_video_stream = pOutFmt->streams[0];
+    bool saw_fist_pkt = false;
+    int64_t video_next_dts = AV_NOPTS_VALUE;
+    AVPacket *sPacket = av_packet_alloc();
+    while (av_read_frame(in_fmtCtx, sPacket) >= 0) {
+        
+        AVStream *stream = in_fmtCtx->streams[0];
+        AVRational src_tb = stream->time_base;
+        /** 遇到问题：当输入文件为h264的码流时，再封装时失败
+         *  分析原因：因为h264码流解析出来的AVPacket的dts和pts的值为AV_NOPTS_VALUE,如果不作处理，再封装就会出错
+         *  解决方案：按照如下的公式给dts和pts重新赋值
+         */
+        if (!saw_fist_pkt) {
+            video_next_dts = stream->avg_frame_rate.num ? - stream->codecpar->video_delay * AV_TIME_BASE / stream->avg_frame_rate.num : 0;
+            saw_fist_pkt = true;
+        }
+        if (sPacket->dts == AV_NOPTS_VALUE) {
+            sPacket->dts = video_next_dts;
+            sPacket->pts = sPacket->dts;
+            video_next_dts += av_rescale_q(sPacket->duration, stream->time_base, AV_TIME_BASE_Q);
+            src_tb = AV_TIME_BASE_Q;
+        }
+        if (sPacket->pts != AV_NOPTS_VALUE) {
+             sPacket->pts = av_rescale_q_rnd(sPacket->pts,src_tb,ou_video_stream->time_base,AV_ROUND_NEAR_INF);
+        }
+        sPacket->dts = av_rescale_q_rnd(sPacket->dts,src_tb,ou_video_stream->time_base,AV_ROUND_NEAR_INF);
+        sPacket->duration = av_rescale_q_rnd(sPacket->duration,stream->time_base,ou_video_stream->time_base,AV_ROUND_NEAR_INF);
+        sPacket->stream_index = ou_video_stream->index;
+        static int sum = 0;
+        sum++;
+        LOGD("video sum(%d) size(%ld) pts %d(%s) dts%d(%s) index %d",sum,sPacket->size,sPacket->pts,av_ts2timestr(sPacket->pts,&ou_video_stream->time_base),sPacket->dts,av_ts2timestr(sPacket->dts,&ou_video_stream->time_base),sPacket->stream_index);
+        if (av_write_frame(pOutFmt, sPacket) < 0) {
+            LOGD("av_write_frame 2 fial");
+            break;
+        }
+        
+        av_packet_unref(sPacket);
+    }
+    
+    LOGD("写入完毕");
+    // 写入尾部信息
+    ret = av_write_trailer(pOutFmt);
+    
+    return (void*) 1;
+}
+
+int Muxer::readVideoPacket(void *client,uint8_t* buf,int buflen)
+{
+    Muxer *myself = (Muxer*)client;
+    AVPacket *pkt = NULL;
+    pthread_mutex_lock(&myself->_mutex);
+    if (myself->vpakcets.size() > 0) {
+        vector<AVPacket*>::iterator begin = myself->vpakcets.begin();
+        pkt = *begin;
+        myself->vpakcets.erase(begin);
+    }
+    pthread_mutex_unlock(&myself->_mutex);
+    if (pkt != NULL) {
+        static int i = 0;
+        i++;
+        LOGD("consum video pkt %ld size %d",i,pkt->size);
+        if (pkt->size > buflen) {
+            LOGD("buf is too small");
+        }
+        int size = FFMIN(pkt->size,buflen);
+        memcpy(buf, pkt->data, size);
+        free(pkt->data);
+        pkt->data = NULL;
+        pkt = NULL;
+        return size;
+    }
+    
+    if (myself->hasNoMoreData) {
+        LOGD("AVERROR_EOF");
+        /** 遇到问题：执行 avformat_find_streaminfo()提示"Invalid return value 0 for stream protocol"
+         *  分析原因：如果解析到了数据或者输入的数据读取完毕了，应该返回AVERROR_EOF而不是0
+         *  解决方案：返回AVERROR_EOF
+         */
+        return AVERROR_EOF;
+    }
+    
+    return 0; //  没有数据则等待
     
 }
 

@@ -14,11 +14,12 @@
 #include "Merge.hpp"
 #include "VideoJpg.hpp"
 #include "AudioVolume.hpp"
+#include "VideoScale.hpp"
 
 
 int main(int argc, const char * argv[]) {
     
-    int test_use = 9;
+    int test_use = 11;
     if (test_use == 0) {
         Transcode codec;
         codec.doExtensionTranscode();
@@ -53,6 +54,14 @@ int main(int argc, const char * argv[]) {
     else if (test_use == 9) {
         AudioVolume mObj;
         mObj.doChangeAudioVolume();
+    }
+    else if (test_use == 10) {
+        AudioVolume mObj;
+        mObj.doChangeAudioVolume2();
+    }
+    else if (test_use == 11) {
+        VideoScale mObj;
+        mObj.doVideoScale();
     }
     
     return 0;

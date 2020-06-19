@@ -15,7 +15,7 @@
 
 int main(int argc, const char * argv[]) {
     
-    int test_use = 8;
+    int test_use = 9;
     if (test_use == 0) {
         // 视频像素格式转换示例
         VideoScale scale;
@@ -44,6 +44,9 @@ int main(int argc, const char * argv[]) {
     } else if (test_use == 8) {
         HardEnDecoder decoder;
         decoder.doEncode();
+    } else if (test_use == 9) {
+       Muxer demuxer;
+       demuxer.doReMuxerWithStream();
     }
     
     return 0;

@@ -249,7 +249,7 @@
  * The directory listing API makes it possible to list files on remote servers.
  *
  * Some of possible use cases:
- * - a&n "open file" dialog to choose files from a remote location,
+ * - an "open file" dialog to choose files from a remote location,
  * - a recursive media finder providing a player with an ability to play all
  * files from a given directory.
  *

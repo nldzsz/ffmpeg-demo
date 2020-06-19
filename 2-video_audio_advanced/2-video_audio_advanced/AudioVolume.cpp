@@ -359,6 +359,8 @@ void AudioVolume::doChangeAudioVolume()
      *  2、创建各个滤镜(其中输入滤镜，输出滤镜是必须的滤镜)，每个滤镜的创建为固定的流程(创建滤镜，创建滤镜上下文，设置滤镜参数并初始化上下文)
      *  3、连接各个滤镜(其中输入滤镜一定要放在第一个，输出滤镜一定要放到最后一个)
      *  4、初始化滤镜管道
+     *  5、av_buffersrc_add_frame()函数添加要进行滤镜处理的数据
+     *  6、av_buffersink_get_frame()函数获取处理好了的音频数据
      */
     AVPacket *in_pkt = av_packet_alloc();
     while (av_read_frame(in_fmt, in_pkt) == 0) {
@@ -402,7 +404,11 @@ void AudioVolume::doDecode(AVPacket *packt)
     avcodec_send_packet(de_ctx, packt);
     while (true) {
         int ret = avcodec_receive_frame(de_ctx, de_frame);
-        if (ret < 0) {
+        if (ret == AVERROR_EOF) {
+            // 清空编码缓冲区
+            doEncode(NULL);
+            break;
+        } else if(ret < 0) {
             break;
         }
         
@@ -423,7 +429,6 @@ void AudioVolume::doDecode(AVPacket *packt)
             }
             
             // 重新编码
-//            av_frame_copy(en_frame, de_frame);
             AVStream *stream = ou_fmt->streams[0];
             en_frame->pts = stream->time_base.den/stream->codecpar->sample_rate*next_audio_pts;
             next_audio_pts += en_frame->nb_samples;
@@ -452,5 +457,206 @@ void AudioVolume::doEncode(AVFrame *frame)
         }
         
     }
+}
+
+
+/** 滤镜管道的初始化方式二使用方式。前面滤镜的使用流程为常规化的使用方式，总结起来使用步骤为：
+ *  1、创建滤镜管道
+ *  2、创建各个滤镜(其中输入滤镜，输出滤镜是必须的滤镜)，每个滤镜的创建为固定的流程(创建滤镜，创建滤镜上下文，设置滤镜参数并初始化上下文)
+ *  3、连接各个滤镜(其中输入滤镜一定要放在第一个，输出滤镜一定要放到最后一个)
+ *  4、初始化滤镜管道
+ *  5、av_buffersrc_add_frame()函数添加要进行滤镜处理的数据
+ *  6、av_buffersink_get_frame()函数获取处理好了的音频数据
+ *  其中2、3步骤每一个滤镜的处理步骤都一样，只是参数不同而已。ffmpeg针对性的提出了另外一种初始化每个滤镜的简化的处理方式。它通过给定格式的滤镜字符串来解析出
+ *  并初始化每个滤镜，同时自动添加到滤镜管道中。滤镜字符串的格式如下：
+ *  filter_name1=par_name1=par_val1,filter_name2=par_name1=par_val1
+ *  如果滤镜只需要一个参数，可以简化为filter_name=par_val；如果滤镜有多个参数，则多个参数用":"分隔filter_name=par_name1=par_val1:par_name2=par_val2:
+ *  多个滤镜之间则用","分隔
+ *  如：
+ *  aresample=44100,aformat=sample_fmts=s32:channel_layouts=mono
+ */
+void AudioVolume::doChangeAudioVolume2()
+{
+    string curFile(__FILE__);
+    unsigned long pos = curFile.find("2-video_audio_advanced");
+    if (pos == string::npos) {
+        LOGD("not find file");
+        return;
+    }
+    
+    string srcDic = curFile.substr(0,pos) + "filesources/";
+    string srcpath = srcDic + "test-mp3-1.mp3";
+    string dstpath = srcDic + "1-audiovolume-2.mp3";
+    int dst_sample_rate = 48000;
+    enum AVSampleFormat dst_sample_fmt = AV_SAMPLE_FMT_S32;
+    int64_t dst_ch_layout=  AV_CH_LAYOUT_MONO;
+    
+    if (avformat_open_input(&in_fmt, srcpath.c_str(), NULL, NULL) < 0) {
+        LOGD("avformat_open_input fail");
+        return;
+    }
+    if (avformat_find_stream_info(in_fmt, NULL) < 0) {
+        LOGD("avformat_find_stream_info() fail");
+        releasesources();
+        return;
+    }
+    AVStream *in_stream = in_fmt->streams[0];
+    AVCodecID codecId = in_stream->codecpar->codec_id;
+    AVCodec *de_codec = avcodec_find_decoder(codecId);
+    if (!de_codec) {
+        LOGD("not find codec %s",avcodec_get_name(codecId));
+        releasesources();
+    }
+    de_ctx = avcodec_alloc_context3(de_codec);
+    // 设置解码器参数
+    avcodec_parameters_to_context(de_ctx, in_stream->codecpar);
+    // 必须设置，否则会提示"Could not update timestamps for skipped samples."并且在调用av_buffersrc_add_frame_flag()函数时会崩溃
+    de_ctx->pkt_timebase = in_stream->time_base;
+    // 初始化解码器
+    if (avcodec_open2(de_ctx, de_codec, NULL) < 0) {
+        LOGD("de_ctx init fail()");
+        releasesources();
+        return;
+    }
+    
+    // 创建编码器以及封装器
+    if (avformat_alloc_output_context2(&ou_fmt, NULL, NULL, dstpath.c_str()) < 0) {
+        LOGD("avformat_alloc_output_context2() fail");
+        releasesources();
+        return;
+    }
+    AVStream *stream = avformat_new_stream(ou_fmt, NULL);
+    AVCodec *en_codec = avcodec_find_encoder(codecId);
+    if (!en_codec) {
+        LOGD("encodec not find %s",avcodec_get_name(codecId));
+        releasesources();
+        return;
+    }
+    en_ctx = avcodec_alloc_context3(en_codec);
+    if (!en_ctx) {
+        LOGD("en_codec context fail");
+        releasesources();
+        return;
+    }
+    // 设置编码参数;这里和源文件一样
+    en_ctx->sample_rate = select_sample_rate(en_codec, dst_sample_rate);
+    en_ctx->sample_fmt = select_sample_format(en_codec, dst_sample_fmt);
+    en_ctx->channel_layout = select_channel_layout(en_codec, dst_ch_layout);
+    en_ctx->time_base = in_stream->time_base;
+    en_ctx->bit_rate = in_stream->codecpar->bit_rate;
+    if (ou_fmt->oformat->flags & AVFMT_GLOBALHEADER) {
+        en_ctx->flags = AV_CODEC_FLAG_GLOBAL_HEADER;
+    }
+    // 初始化编码器
+    if (avcodec_open2(en_ctx, en_codec, NULL) < 0) {
+        LOGD("avcodec_open2() fail");
+        releasesources();
+        return;
+    }
+    
+    // 设置封装器流参数;从编码器拷贝
+    avcodec_parameters_from_context(stream->codecpar, en_ctx);
+    
+    if (!(ou_fmt->oformat->flags & AVFMT_NOFILE)) {
+        if (avio_open2(&ou_fmt->pb, dstpath.c_str(), AVIO_FLAG_WRITE, NULL, NULL) < 0) {
+            LOGD("avio_open2() fail");
+            releasesources();
+            return;
+        }
+    }
+    
+    // 写入文件头
+    if (avformat_write_header(ou_fmt, NULL) < 0) {
+        LOGD("avformat_write_header()");
+        releasesources();
+        return;
+    }
+    
+    // 1、创建滤镜管道
+    AVFilterGraph *graph = avfilter_graph_alloc();
+    
+    // 2、创建源滤镜，用于接收要处理的AVFrame
+    const AVFilter *src_filter = avfilter_get_by_name("abuffer");
+    char src_args[200] = {0};
+    sprintf(src_args, "time_base=%d/%d:sample_rate=%d:sample_fmt=%s:channel_layout=0x%" PRIX64,
+            in_stream->time_base.num,in_stream->time_base.den,in_stream->codecpar->sample_rate,av_get_sample_fmt_name((enum AVSampleFormat)in_stream->codecpar->format),(uint64_t)in_stream->codecpar->channel_layout);
+    int ret = avfilter_graph_create_filter(&src_flt_ctx, src_filter, NULL, src_args, NULL, graph);
+    if (ret < 0) {
+        LOGD("avfilter_graph_create_filter fail");
+        releasesources();
+        return;
+    }
+    
+    // 3、创建输出滤镜，向外输出滤镜处理过的AVFrame
+    const AVFilter *sink_filter = avfilter_get_by_name("abuffersink");
+    if (!sink_filter) {
+        LOGD("abuffersink not find");
+        releasesources();
+        return;
+    }
+    ret = avfilter_graph_create_filter(&sink_flt_ctx, sink_filter, NULL, NULL, NULL, graph);
+    if (ret < 0) {
+        LOGD("avfilter_graph_create_filter fail");
+        releasesources();
+        return;
+    }
+    /** 4、创建处理音频数据的各个滤镜(通过滤镜描述符)
+     *  关于AVFilterInOut：
+     *  1、它是一个链表，通过它可以用来将所有的滤镜串联起来，方便进行管理。开始于abuffer滤镜，结束于abuffersink滤镜;
+     *  2、它就是为通过滤镜描述符创建滤镜来服务的，滤镜描述符按照指定的格式描述了一个个滤镜，而一个AVFilterInout代表了一个滤镜和滤镜上下文;
+     *  4、需要单独释放，通过avfilter_inout_free()
+     */
+    AVFilterInOut *inputs = avfilter_inout_alloc();
+    AVFilterInOut *outputs = avfilter_inout_alloc();
+    char filter_desc[200] = {0};
+    sprintf(filter_desc, "aresample=%d,aformat=sample_fmts=%s:channel_layouts=%s",en_ctx->sample_rate,
+            av_get_sample_fmt_name(en_ctx->sample_fmt),av_get_channel_name(en_ctx->channel_layout));
+    // 设置outputs的相关参数;outputs代表向滤镜描述符的第一个滤镜的输入端口输出数据，由于第一个滤镜的input label标签默认为"in"，
+    // 所以这里outputs的name也设置为"in"
+    outputs->name = av_strdup("in");
+    outputs->filter_ctx = src_flt_ctx;
+    outputs->pad_idx = 0;
+    outputs->next = NULL;
+    
+    // 设置inputs相关参数；inputs代表接受滤镜描述符的最后一个滤镜的输出端口输出的数据，由于最后一个滤镜的output label标签默认为"out"，
+    // 所以这里inputs的name也设置为"out"
+    inputs->name = av_strdup("out");
+    inputs->filter_ctx = sink_flt_ctx;
+    inputs->pad_idx = 0;
+    inputs->next = NULL;
+    
+    // 5、通过滤镜描述符创建并初始化各个滤镜并且按照滤镜描述符的顺序连接到一起
+    if ((ret = avfilter_graph_parse_ptr(graph, filter_desc, &inputs, &outputs, NULL)) < 0) {
+        LOGD("avfilter_graph_parse_ptr() fail");
+        releasesources();
+        return;
+    }
+    // 设置abuffersink输出AVFrame的nbsamples与编码器需要的frame_size大小一致
+    if (!(en_codec->capabilities & AV_CODEC_CAP_VARIABLE_FRAME_SIZE)) {
+        av_buffersink_set_frame_size(sink_flt_ctx, en_ctx->frame_size);
+    }
+    
+    // 6、配置滤镜管道(初始化滤镜)
+    if (avfilter_graph_config(graph, NULL) < 0) {
+        LOGD("avfilter_graph_config() fail");
+        releasesources();
+        return;
+    }
+    
+    AVPacket *pkt = av_packet_alloc();
+    while (av_read_frame(in_fmt, pkt) == 0) {
+        doDecode(pkt);
+        av_packet_unref(pkt);
+    }
+    
+    doDecode(NULL);
+    LOGD("结束了。。。。");
+    
+    av_write_trailer(ou_fmt);
+    
+    // 释放资源
+    releasesources();
+    avfilter_inout_free(&inputs);
+    avfilter_inout_free(&outputs);
 }
 

@@ -34,6 +34,7 @@
 		187B005124828E1C00033220 /* CodecUtil.c in Sources */ = {isa = PBXBuildFile; fileRef = 187B005024828E1C00033220 /* CodecUtil.c */; };
 		1887E58B2474FB7800AD6AA8 /* Merge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1887E5892474FB7800AD6AA8 /* Merge.cpp */; };
 		1887E5912474FBDC00AD6AA8 /* VideoJpg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1887E58F2474FBDC00AD6AA8 /* VideoJpg.cpp */; };
+		189105EC249068BB00A18CFD /* VideoScale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 189105EA249068BB00A18CFD /* VideoScale.cpp */; };
 		18B7757624725B5D00C334B3 /* Cut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18B7757424725B5D00C334B3 /* Cut.cpp */; };
 /* End PBXBuildFile section */
 
@@ -86,6 +87,8 @@
 		1887E58A2474FB7800AD6AA8 /* Merge.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Merge.hpp; sourceTree = "<group>"; };
 		1887E58F2474FBDC00AD6AA8 /* VideoJpg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VideoJpg.cpp; sourceTree = "<group>"; };
 		1887E5902474FBDC00AD6AA8 /* VideoJpg.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VideoJpg.hpp; sourceTree = "<group>"; };
+		189105EA249068BB00A18CFD /* VideoScale.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VideoScale.cpp; sourceTree = "<group>"; };
+		189105EB249068BB00A18CFD /* VideoScale.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VideoScale.hpp; sourceTree = "<group>"; };
 		18B7757424725B5D00C334B3 /* Cut.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Cut.cpp; sourceTree = "<group>"; };
 		18B7757524725B5D00C334B3 /* Cut.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Cut.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -154,6 +157,8 @@
 				1887E5902474FBDC00AD6AA8 /* VideoJpg.hpp */,
 				187B004A248242A600033220 /* AudioVolume.cpp */,
 				187B004B248242A600033220 /* AudioVolume.hpp */,
+				189105EA249068BB00A18CFD /* VideoScale.cpp */,
+				189105EB249068BB00A18CFD /* VideoScale.hpp */,
 			);
 			path = "2-video_audio_advanced";
 			sourceTree = "<group>";
@@ -262,6 +267,7 @@
 				1849FF3C245E443A00B41581 /* main.cpp in Sources */,
 				1887E5912474FBDC00AD6AA8 /* VideoJpg.cpp in Sources */,
 				1887E58B2474FB7800AD6AA8 /* Merge.cpp in Sources */,
+				189105EC249068BB00A18CFD /* VideoScale.cpp in Sources */,
 				18473D1F2468217B0058A9FB /* encodeMuxer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
