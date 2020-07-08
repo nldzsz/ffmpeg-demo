@@ -113,8 +113,13 @@ void LOGE(const char* format,...)
 char* getTimeFormatForDebug()
 {
     struct timeval tv;
+    struct tm * tm_local = NULL;
     gettimeofday(&tv,NULL);
-    struct tm * tm_local = localtime(&tv.tv_sec);
+#if __ANDROID__
+    tm_local = gettimeofday(&tv.tv_sec,NULL);
+#else
+    tm_local = localtime(&tv.tv_sec);
+#endif
     char str_f_t [30];
     strftime(str_f_t, sizeof(str_f_t), "%G-%m-%d %H:%M:%S", tm_local);
     char *returnStr = (char *)malloc(40);
