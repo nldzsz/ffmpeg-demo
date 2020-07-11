@@ -3,12 +3,12 @@ exec_prefix=${prefix}
 libdir=/Users/apple/devoloper/mine/ffmpeg/ffmpeg-demo/demo-mac/ffmpeglib/lib
 includedir=/Users/apple/devoloper/mine/ffmpeg/ffmpeg-demo/demo-mac/ffmpeglib/include
 
-Name: libswscale
-Description: FFmpeg image rescaling library
-Version: 5.5.100
-Requires: libavutil >= 56.31.100
+Name: libavfilter
+Description: FFmpeg audio/video filtering library
+Version: 7.57.100
+Requires: libswscale >= 5.5.100, libswresample >= 3.5.100, libavutil >= 56.31.100
 Requires.private: 
 Conflicts:
-Libs: -L${libdir}  -lswscale -lm
+Libs: -L${libdir}  -lavfilter -pthread -lm
 Libs.private: 
 Cflags: -I${includedir}

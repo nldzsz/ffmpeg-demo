@@ -8,11 +8,13 @@
 #include <stdio.h>
 #include <memory.h>
 #include <string>
+#include <stdarg.h>
 
 // for log
 extern "C" {
 #include "Common.h"
 #include "libavcodec/avcodec.h"
+#include "libavcodec/jni.h"
 }
 #include "audio_resample.hpp"
 #include "audio_encode.hpp"
@@ -29,6 +31,29 @@ extern "C" {
 #include "AudioVolume.hpp"
 #include "VideoScale.hpp"
 
+extern "C" jint JNI_OnLoad(JavaVM *vm, void *reserved) {
+    JNIEnv *env = NULL;
+    jint result = -1;
+    if (vm->GetEnv((void **) &env, JNI_VERSION_1_6) != JNI_OK) {
+        LOGD("JNI version not supported.");
+        return JNI_ERR;
+    }
+
+    av_jni_set_java_vm(vm,reserved);
+
+    return JNI_VERSION_1_6;
+}
+
+static void custom_log_callback(void *ptr,int level, const char* format,va_list val)
+{
+    if (level > av_log_get_level()) {
+        return;
+    }
+    char out[200] = {0};
+    int prefixe = 0;
+    av_log_format_line2(ptr,level,format,val,out,200,&prefixe);
+    LOGD("%s",out);
+}
 extern "C" JNIEXPORT void JNICALL Java_com_example_demo_FFmpegTest_FFmpegTest_testFFmpeg(JNIEnv *env, jobject instance)
 {
     AVCodec *codec = avcodec_find_encoder_by_name("libx264");
@@ -52,6 +77,9 @@ extern "C" JNIEXPORT void JNICALL Java_com_example_demo_FFmpegTest_FFmpegTest_te
         LOGD("yes found libfdk_aac");
     }
 
+    // 打印ffmpeg日志
+    av_log_set_level(AV_LOG_DEBUG);
+    av_log_set_callback(custom_log_callback);
 }
 std::string jstring2string(JNIEnv *env, jstring jStr){
     const char *cstr = env->GetStringUTFChars(jStr, NULL);
@@ -141,7 +169,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_example_demo_FFmpegTest_FFmpegTest_do
     string pcmpath = jstring2string(env,srcpath);
 
     HardEnDecoder decoder;
-    decoder.doDecode(pcmpath);
+    decoder.doDecode(pcmpath,HardTypeMediaCodec);
 }
 extern "C" JNIEXPORT void JNICALL Java_com_example_demo_FFmpegTest_FFmpegTest_doHardEncode(JNIEnv *env, jobject instance,jstring srcpath,jstring dstpath)
 {
@@ -149,7 +177,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_example_demo_FFmpegTest_FFmpegTest_do
     string dpath = jstring2string(env,dstpath);
 
     HardEnDecoder decoder;
-    decoder.doEncode(pcmpath,dpath);
+    decoder.doEncode(pcmpath,dpath,HardTypeMediaCodec);
 }
 extern "C" JNIEXPORT void JNICALL Java_com_example_demo_FFmpegTest_FFmpegTest_doReMuxerWithStream(JNIEnv *env, jobject instance,jstring srcpath,jstring dstpath)
 {

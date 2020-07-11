@@ -22,7 +22,7 @@ HardEnDecoder::~HardEnDecoder()
     
 }
 
-enum AVPixelFormat hw_device_pixel;
+enum AVPixelFormat hw_device_pixel = AV_PIX_FMT_NONE;
 enum AVPixelFormat hw_get_format(AVCodecContext *ctx,const enum AVPixelFormat *fmts)
 {
     const enum AVPixelFormat *p;
@@ -42,11 +42,15 @@ static void decode(AVCodecContext *ctx,AVPacket *packet)
     AVFrame *tmp_frame = NULL;
     int ret = 0;
     static int sum = 0;
-    if ((ret = avcodec_send_packet(ctx, packet))<0) {
-        LOGD("avcodec_send_packet");
+    /** 遇到问题：安卓平台返回的错误类型为-11(EAGAIN)(备注：Mac平台EAGAIN的值为-35，不同的平台EAGAIN的值不一样)
+     *  分析原因：当解码器输入缓冲区没有空间后就会返回EAGAIN的错误，这时候就需要调用avcodec_receive_frame()去读取数据，否则会一直返回-11的错误
+     * */
+    ret = avcodec_send_packet(ctx, packet);
+    if (ret < 0 && ret != AVERROR(EAGAIN)) {
+        LOGD("avcodec_send_packet %d",ret);
         return;
     }
-    
+
     while (true) {
         ret = avcodec_receive_frame(ctx, hw_frame);
         if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) {
@@ -71,15 +75,15 @@ static void decode(AVCodecContext *ctx,AVPacket *packet)
             tmp_frame = hw_frame;
         }
 #else
-            
+
         LOGD("这里3333 解码成功 %d",sum);
 #endif
         sum++;
     }
-    
+
 }
 
-void HardEnDecoder::doDecode(string srcPath)
+void HardEnDecoder::doDecode(string srcPath,HardType htype)
 {
     AVCodecContext *decoder_Ctx = NULL;
     AVFormatContext *in_fmtCtx = NULL;
@@ -90,12 +94,6 @@ void HardEnDecoder::doDecode(string srcPath)
     enum AVHWDeviceType print_type = AV_HWDEVICE_TYPE_NONE;
     AVBufferRef *hw_device_ctx = NULL;
     
-    type = av_hwdevice_find_type_by_name("videotoolbox");
-    // 遍历出设备支持的硬件类型；对于MAC来说就是AV_HWDEVICE_TYPE_VIDEOTOOLBOX
-    while ((print_type = av_hwdevice_iterate_types(print_type)) != AV_HWDEVICE_TYPE_NONE) {
-        LOGD("suport devices %s",av_hwdevice_get_type_name(print_type));
-    }
-    
     if ((ret = avformat_open_input(&in_fmtCtx,srcPath.c_str(),NULL,NULL)) < 0) {
         LOGD("avformat_open_input fail %d",ret);
         return;
@@ -104,62 +102,99 @@ void HardEnDecoder::doDecode(string srcPath)
         LOGD("avformat_find_stream_info fail %d",ret);
         return;
     }
-    
-    // 最后一个参数目前未定义，填写0 即可
-    // 找到指定流类型的流信息，并且初始化codec(如果codec没有值)
-    if ((ret = av_find_best_stream(in_fmtCtx,AVMEDIA_TYPE_VIDEO,-1,-1,&decoder,0)) < 0) {
-        LOGD("av_find_best_stream fail %d",ret);
-        return;
-    }
-    video_stream_index = ret;
-    
-    // 根据解码器获取支持此解码方式的硬件加速计
-    /** 所有支持的硬件解码器保存在AVCodec的hw_configs变量中。对于硬件编码器来说又是单独的AVCodec
-     */
-    for (int i=0;; i++) {
-        const AVCodecHWConfig *hwcodec = avcodec_get_hw_config(decoder, i);
-        if (hwcodec == NULL) break;
-        
-        // 可能一个解码器对应着多个硬件加速方式，所以这里将其挑选出来
-        if (hwcodec->methods & AV_CODEC_HW_CONFIG_METHOD_HW_DEVICE_CTX && hwcodec->device_type == type) {
-            hw_device_pixel = hwcodec->pix_fmt;
+
+    if (htype == HardTypeVideoToolbox) {
+        // 最后一个参数目前未定义，填写0 即可
+        // 找到指定流类型的流信息，并且初始化codec(如果codec没有值)
+        if ((ret = av_find_best_stream(in_fmtCtx,AVMEDIA_TYPE_VIDEO,-1,-1,&decoder,0)) < 0) {
+            LOGD("av_find_best_stream fail %d",ret);
+            return;
+        }
+        video_stream_index = ret;
+    } else {
+        if ((ret = av_find_best_stream(in_fmtCtx,AVMEDIA_TYPE_VIDEO,-1,-1,NULL,0)) < 0) {
+            LOGD("av_find_best_stream fail %d",ret);
+            return;
+        }
+        video_stream_index = ret;
+        /** android平台 ffmpeg只封装了硬解码；硬编码未封装
+         */
+        decoder = avcodec_find_decoder_by_name("h264_mediacodec");
+        if (!decoder) {
+            LOGD("please recompile ffmpeg with --enable-decoder=h264_mediacodec");
+            return;
         }
     }
     
+
+#if USE_HARD_DEVICE
+    const AVCodecHWConfig *hwcodec = NULL;
+    if (htype == HardTypeVideoToolbox) {
+        // 根据解码器获取支持此解码方式的硬件加速计
+        /** 所有支持的硬件解码器保存在AVCodec的hw_configs变量中。对于硬件编码器来说又是单独的AVCodec
+         */
+        type = av_hwdevice_find_type_by_name("videotoolbox");
+        if (type == AV_HWDEVICE_TYPE_NONE) {
+            LOGD("not suport type videotoolbox");
+            return;
+        }
+
+        // 遍历出设备支持的硬件类型；对于MAC来说就是AV_HWDEVICE_TYPE_VIDEOTOOLBOX
+        while ((print_type = av_hwdevice_iterate_types(print_type)) != AV_HWDEVICE_TYPE_NONE) {
+            LOGD("suport devices %s",av_hwdevice_get_type_name(print_type));
+        }
+        for (int i=0;; i++) {
+            hwcodec = avcodec_get_hw_config(decoder, i);
+            if (hwcodec == NULL) break;
+            
+            // 可能一个解码器对应着多个硬件加速方式，所以这里将其挑选出来
+            if (hwcodec->methods & AV_CODEC_HW_CONFIG_METHOD_HW_DEVICE_CTX && hwcodec->device_type == type) {
+                hw_device_pixel = hwcodec->pix_fmt;
+            }
+            // 找到了则跳出循环
+            if (hw_device_pixel != AV_PIX_FMT_NONE) {
+                break;
+            }
+        }
+    }
+#endif
     if ((decoder_Ctx = avcodec_alloc_context3(decoder)) == NULL) {
         LOGD("avcodec_alloc_context3 fail");
         return;
     }
-    
     AVStream *video_stream = in_fmtCtx->streams[video_stream_index];
     // 给解码器赋值解码相关参数
     if (avcodec_parameters_to_context(decoder_Ctx,video_stream->codecpar) < 0) {
         LOGD("avcodec_parameters_to_context fail");
         return;
     }
-    
 #if USE_HARD_DEVICE
-    // 配置获取硬件加速器像素格式的函数；该函数实际上就是将AVCodec中AVHWCodecConfig中的pix_fmt返回
-    decoder_Ctx->get_format = hw_get_format;
-    // 创建硬件加速器的缓冲区
-    if (av_hwdevice_ctx_create(&hw_device_ctx,type,NULL,NULL,0) < 0) {
-        LOGD("av_hwdevice_ctx_create fail");
-        return;
+    if (htype == HardTypeVideoToolbox) {
+        if (hwcodec == NULL) {
+            LOGD("please recompie ffmpeg with --enable-hwaccel=h264_videotoolbox");
+            return;
+        }
+        // 配置获取硬件加速器像素格式的函数；该函数实际上就是将AVCodec中AVHWCodecConfig中的pix_fmt返回
+        decoder_Ctx->get_format = hw_get_format;
+        // 创建硬件加速器的缓冲区
+        if (av_hwdevice_ctx_create(&hw_device_ctx,type,NULL,NULL,0) < 0) {
+            LOGD("av_hwdevice_ctx_create fail");
+            return;
+        }
+        /** 如果使用软解码则默认有一个软解码的缓冲区(获取AVFrame的)，而硬解码则需要额外创建硬件解码的缓冲区
+         *  这个缓冲区变量为hw_frames_ctx，不手动创建，则在调用avcodec_send_packet()函数内部自动创建一个
+         *  但是必须手动赋值硬件解码缓冲区引用hw_device_ctx(它是一个AVBufferRef变量)
+         */
+        // 即hw_device_ctx有值则使用硬件解码
+        decoder_Ctx->hw_device_ctx = av_buffer_ref(hw_device_ctx);
     }
-    /** 如果使用软解码则默认有一个软解码的缓冲区(获取AVFrame的)，而硬解码则需要额外创建硬件解码的缓冲区
-     *  这个缓冲区变量为hw_frames_ctx，不手动创建，则在调用avcodec_send_packet()函数内部自动创建一个
-     *  但是必须手动赋值硬件解码缓冲区引用hw_device_ctx(它是一个AVBufferRef变量)
-     */
-    // 即hw_device_ctx有值则使用硬件解码
-    decoder_Ctx->hw_device_ctx = av_buffer_ref(hw_device_ctx);
 #endif
     // 初始化并打开解码器上下文
-    if (avcodec_open2(decoder_Ctx, decoder, NULL) < 0) {
-        LOGD("avcodec_open2 fail");
+    if ((ret = avcodec_open2(decoder_Ctx, decoder, NULL)) < 0) {
+        LOGD("avcodec_open2 fail %s",av_err2str(ret));
         return;
     }
-    
-    
+
     /** 记录耗时
      *  1、使用硬件解码四次，耗时如下：10.65 s,10.66s,10.75s,10.68s
      *  2、使用软件解码四次，耗时如下：8.21s,8.02s,10.33s,8.00s
@@ -216,8 +251,13 @@ static void encode(AVCodecContext *codecCtx,AVFrame* frame,FILE *ouFile)
 /** 实现yuv420P编码为h264；分别用h264_videotoolbox,libx264实现
  *  从代码上可以看到 采用videotoolbox进行硬件编码和采用libx264软件编码代码是一样的
  */
-void HardEnDecoder::doEncode(string srcPath,string dstPath)
+void HardEnDecoder::doEncode(string srcPath,string dstPath,HardType ttype)
 {
+    if (ttype == HardTypeMediaCodec) {
+        LOGD("ffmpeg not suport hard encoder for android");
+        return;
+    }
+    
     // ===这些参数要与srcPath中的视频数据对应上===//
     int width = 640,height = 360,fps = 50;
     enum AVPixelFormat  sw_pix_format = AV_PIX_FMT_YUV420P;
@@ -230,7 +270,11 @@ void HardEnDecoder::doEncode(string srcPath,string dstPath)
      *  分析原因：对于编码器来说，要先使用硬件加速，则需要将对应的库加进去，就跟编译进libx264一样
      *  解决方案：编译ffmpeg时添加--enable_encoder=h264_videotoolbox;
     */
-    codec = avcodec_find_encoder_by_name("h264_videotoolbox");
+    string typestr = "h264_videotoolbox";
+    if (ttype == HardTypeMediaCodec) {
+        typestr = "mediacodec";
+    }
+    codec = avcodec_find_encoder_by_name(typestr.c_str());
 #else
     codec = avcodec_find_encoder_by_name("libx264");
 #endif

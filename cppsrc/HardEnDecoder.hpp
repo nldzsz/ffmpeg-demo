@@ -23,14 +23,18 @@ extern "C"
 }
 using namespace::std;
 
+enum HardType{
+    HardTypeVideoToolbox,
+    HardTypeMediaCodec,
+};
 class HardEnDecoder
 {
 public:
     HardEnDecoder();
     ~HardEnDecoder();
     
-    void doDecode(string srcPath);
-    void doEncode(string srcPath,string dstPath);
+    void doDecode(string srcPath,HardType type=HardTypeVideoToolbox);
+    void doEncode(string srcPath,string dstPath,HardType type=HardTypeVideoToolbox);
 };
 
 #endif /* hardDecoder_hpp */

@@ -30,7 +30,7 @@ int main(int argc, const char * argv[]) {
     }
     string resourceDir = curFile.substr(0,pos)+"filesources/";
     
-    int test_use = 4;
+    int test_use = 10;
     if (test_use == 0) {
         string pcmpath = resourceDir+"test_441_f32le_2.pcm";
         string dstpath = resourceDir+"test_441_f32le_2.aac";
