@@ -29,9 +29,9 @@ using namespace std;
 class Cut
 {
 public:
-    /** 实现时间的精准裁剪
+    /** 实现时间的精准裁剪;start为起始时间格式类似"00:00:15",du为要截取的时间，单位秒
      */
-    void doCut(string spath,string dpath);
+    void doCut(string spath,string dpath,string start,int du);
 private:
     
     int64_t start_pos;

@@ -113,7 +113,9 @@ void AudioResample::doResample(string srcpath,string dstpath)
             LOGD("swr_convert fail %d",result);
             break;
         }
-        LOGD("read_size %d dst_nb_samples %d src_nb_samples %d result %d",read_size,dst_nb_samples,src_nb_samples,result);
+        static int sum=0;
+        sum++;
+        LOGD("read_size %d dst_nb_samples %d src_nb_samples %d result %d sum %d",read_size,dst_nb_samples,src_nb_samples,result,sum);
         // 将音频数据写入pcm文件
         if (av_sample_fmt_is_planar(dst_sample_fmt)) {  // planner方式，而pcm文件写入时一般都是packet方式，所以这里要注意转换一下
             int size = av_get_bytes_per_sample(dst_sample_fmt);
@@ -243,7 +245,7 @@ void AudioResample::doResampleAVFrame(string srcpath,string dstpath)
     size_t read_size = 0;
     // 这里必须传递srcFrame->data[0]这个地址，而不能传递srcFrame->data
     while ((read_size = fread(srcFrame->data[0],1,require_size,srcFile)) > 0) {
-        
+
         /** 当转换后的采样率大于转换前的转换率时，内部会有缓冲，所以预计转换后的目标采样数会一直变化 所以这里目标音频内存大小也要跟着动态调整；当然也可以不做调整
          */
         dst_nb_samples = av_rescale_rnd(swr_get_delay(swr_ctx,src_sample_rate)+src_nb_samples,dst_sample_rate,src_sample_rate,AV_ROUND_UP);
@@ -282,13 +284,15 @@ void AudioResample::doResampleAVFrame(string srcpath,string dstpath)
         real_convert_nb_samples = swr_convert(swr_ctx,outdata,(int)dst_nb_samples,srcdata,(int)src_nb_samples);
         LOGD("swr_convert nb_samples %d",real_convert_nb_samples);
 #else
+        static int sum=0;
+        sum++;
         ret = swr_convert_frame(swr_ctx,dstFrame,srcFrame);
         if (ret < 0) {
             LOGD("swr_convert_frame fail %d",ret);
             continue;
         }
         real_convert_nb_samples = dstFrame->nb_samples;
-        LOGD("swr_convert_frame nb_samples %d",real_convert_nb_samples);
+        LOGD("swr_convert_frame nb_samples %d sum %d",real_convert_nb_samples,sum);
 #endif
 
         // 5、存储;由于文件是planner格式，所以对于planner格式的存储要注意下
@@ -336,7 +340,8 @@ void AudioResample::doResampleAVFrame(string srcpath,string dstpath)
             fwrite(dstFrame->data[0],1,size,dstFile);
         }
     }
-    
+
+    LOGD("over finish");
     swr_free(&swr_ctx);
     av_frame_unref(srcFrame);
     av_frame_unref(dstFrame);

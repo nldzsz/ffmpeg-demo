@@ -89,8 +89,7 @@ void Cut::doWrite(AVPacket *pkt)
         av_packet_rescale_ts(pkt, in_fmtctx->streams[audio_in_stream_index]->time_base, ou_fmtctx->streams[audio_ou_stream_index]->time_base);
     }
     
-    
-//    LOGD("%s pts %d(%s)",pkt->stream_index == video_ou_tream_index?"vi":"au",pkt->pts,av_ts2timestr(pkt->pts, &ou_fmtctx->streams[pkt->stream_index]->time_base));
+    LOGD("%s pts %ld(%s)",pkt->stream_index == video_ou_tream_index?"vi":"au",pkt->pts,av_ts2timestr(pkt->pts, &ou_fmtctx->streams[pkt->stream_index]->time_base));
     if((ret = av_write_frame(ou_fmtctx, pkt)) < 0) {
         LOGD("av_write_frame fail %d",ret);
         releasesources();
@@ -193,7 +192,9 @@ void Cut::doDecode(AVPacket *inpkt)
     // 进行解码
     int ret = 0;
     ret = avcodec_send_packet(decodec_ctx, inpkt);
-//    LOGD("inpkt pts %d(%s)",inpkt->pts,av_ts2timestr(inpkt->pts,&stream->time_base));
+//    if (inpkt) {
+//        LOGD("inpkt pts %d(%s)",inpkt->pts,av_ts2timestr(inpkt->pts,&stream->time_base));
+//    }
     while (true) {
         
         ret = avcodec_receive_frame(decodec_ctx, video_de_frame);
@@ -249,32 +250,32 @@ void Cut::doEncode(AVFrame *enfram)
         }
         
         // 编码成功;写入文件
-        LOGD("encode pts %d(%s)",pkt->pts,av_ts2timestr(pkt->pts, &(in_fmtctx->streams[video_in_stream_index]->time_base)));
+        LOGD("encode pts %ld(%s)",pkt->pts,av_ts2timestr(pkt->pts, &(in_fmtctx->streams[video_in_stream_index]->time_base)));
         pkt->stream_index = video_ou_tream_index;
         doWrite(pkt);
     }
     
 }
 
-void Cut::doCut(string spath,string dpath)
+void Cut::doCut(string spath,string dpath,string start,int du)
 {
-    string curFile(__FILE__);
-    unsigned long pos = curFile.find("2-video_audio_advanced");
-    if (pos == string::npos) {
-        LOGD("can not find file");
-        return;
-    }
-    
     // 只考虑同一种容器的内容剪切
-    string srcDic = curFile.substr(0,pos) + "filesources/";
     srcPath = spath;
     dstPath = dpath;
     
     // 截取起始时间 格式 hh:mm:ss
-    string start = "00:00:15";
+    if (start.length() < 8) {
+        start = "00:00:15";
+    }
+    duration = du;
+    if (du <= 0) {
+        duration = 5;        // 时长 单位秒
+    }
+    start_pos = 0;
+    video_next_pts = 0;
     video_start_pts = 0;
     audio_start_pts = 0;
-    duration = 5;        // 时长 单位秒
+    
     
     // 那么最终截取的文件长度将从start处开始之后的duration秒;
     start_pos += stoi(start.substr(0,2))*3600;

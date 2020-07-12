@@ -115,7 +115,7 @@ void Transcode::doExtensionTranscode(string srcPath,string dstPath)
         if (in_packet->stream_index != video_in_stream_index && in_packet->stream_index != audio_in_stream_index) {
             continue;
         }
-//        LOGD("write packet index %d size %d",in_packet->stream_index,in_packet->size);
+        LOGD("write packet index %d size %d",in_packet->stream_index,in_packet->size);
         AVStream *in_stream = in_fmtCtx->streams[in_packet->stream_index];
         AVStream *ou_stream = NULL;
         if (in_stream->index == video_in_stream_index) {
@@ -148,7 +148,7 @@ void Transcode::doExtensionTranscode(string srcPath,string dstPath)
         
         av_packet_unref(in_packet);
     }
-    
+    LOGD("over finish");
     av_write_trailer(ou_fmtCtx);
     avformat_close_input(&in_fmtCtx);
     avformat_free_context(ou_fmtCtx);

@@ -44,7 +44,7 @@ static void decode(AVCodecContext *codecCtx,AVPacket *packet,AVFrame *frame,stri
         // 解码器上下文会有一个解码缓冲区，送入的packet并不是立马能够解码的，如果返回EAGAIN
         // 则代表正在解码中，需要继续送入packet即可。
         if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) {
-            LOGD("%s avcodec_receive_frame %d",str.c_str(),ret);
+//            LOGD("%s avcodec_receive_frame %d",str.c_str(),ret);
             return;
         } else if (ret < 0) {
             LOGD("%s decodec %d fail",str.c_str(),packet->stream_index,ret);
@@ -52,7 +52,9 @@ static void decode(AVCodecContext *codecCtx,AVPacket *packet,AVFrame *frame,stri
         }
         
         // 解码成功
-        LOGD("%s decode sucess",str.c_str());
+        static int sum=0;
+        sum++;
+        LOGD("%s decode sucess sum %d",str.c_str(),sum);
     }
 }
 
@@ -138,6 +140,9 @@ void SoftEnDecoder::doDecode(string srcPath)
     AVPacket    *packet = av_packet_alloc();
     // av_read_frame()函数每次调用时内部都会为AVPacket分配内存用于存储未压缩音视频数据，所以AVPacket用完
     // 后要释放掉相应内存
+    struct timeval btime;
+    struct timeval etime;
+    gettimeofday(&btime, NULL);
     while (av_read_frame(in_fmtCtx,packet) >= 0) {
         
         
@@ -148,6 +153,8 @@ void SoftEnDecoder::doDecode(string srcPath)
         if (packet->stream_index == a_stream_index) {
             codecCtx = a_decoderCtx;
             frame = aframe;
+            // 只是开启视频的解码
+            continue;
         } else if (packet->stream_index == v_stream_index) {
             codecCtx = v_decoderCtx;
             frame = vframe;
@@ -164,7 +171,9 @@ void SoftEnDecoder::doDecode(string srcPath)
     // 刷新缓冲区
     decode(a_decoderCtx,NULL,aframe,"audio");
     decode(v_decoderCtx,NULL,vframe,"video");
-    
+    gettimeofday(&etime, NULL);
+    LOGD("解码耗时 %.2f s",(etime.tv_sec - btime.tv_sec)+(etime.tv_usec - btime.tv_usec)/1000000.0f);
+
     releaseSources(&in_fmtCtx, &a_decoderCtx, &v_decoderCtx);
 }
 
@@ -277,8 +286,10 @@ static void encode_frame(AVCodecContext *ctx,AVFrame *frame,FILE *ouFile)
     while (true) {
         ret = avcodec_receive_packet(ctx, pkt);
         if (ret < 0) break;
-        
-        LOGD("pkt size %d",pkt->size);
+        static int sum = 0;
+        // tips：对于不同的平台，x264编码后每个packet的size大小不一定一样，但总数是一样的
+        sum++;
+        LOGD("pkt size %d sum %d",pkt->size,sum);
         fwrite(pkt->data, 1, pkt->size, ouFile);
         av_packet_unref(pkt);
     }

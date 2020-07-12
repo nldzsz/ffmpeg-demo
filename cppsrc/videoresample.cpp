@@ -215,7 +215,9 @@ void VideoScale::doScale(string srcpath,string dstpath)
         */
         int size = sws_scale(swsCtx,src_buffer,src_linesize,0,src_h,
                   dst_buffer,dst_linesize);
-        LOGD("size == %d",size);
+        static int sum=0;
+        sum++;
+        LOGD("size == %d sum %d",size,sum);
         
         if (dst_pix_fmt == AV_PIX_FMT_YUV420P) {
             fwrite(dst_buffer[0],1,dst_w*dst_h,dstFile);

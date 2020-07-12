@@ -161,6 +161,19 @@ public class FFmpegActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case 6:
                 new Thread(()->{
+//                    String pcmname = "test_1280x720_1.mp4";
+                    String pcmname = "abc-test.h264";
+                    String pcmpath = resourceDir+pcmname;
+                    String dstpath = resourceDir+"test_1280x720_1.mp4";
+                    PathTool.copyAssetsToDst(FFmpegActivity.this,pcmname,pcmpath);
+
+                    FFmpegTest.doReMuxer(pcmpath,dstpath);
+                    isProcessing = false;
+                    processFinish();
+                }).start();
+                break;
+            case 7:
+                new Thread(()->{
                     String pcmname = "test_1280x720_3.mp4";
                     String pcmpath = resourceDir+pcmname;
                     PathTool.copyAssetsToDst(FFmpegActivity.this,pcmname,pcmpath);
@@ -170,7 +183,7 @@ public class FFmpegActivity extends AppCompatActivity implements View.OnClickLis
                     processFinish();
                 }).start();
                 break;
-            case 7:
+            case 8:
                 new Thread(()->{
                     String pcmname = "test_441_f32le_2.aac";
                     String pcmpath = resourceDir+pcmname;
@@ -181,11 +194,11 @@ public class FFmpegActivity extends AppCompatActivity implements View.OnClickLis
                     processFinish();
                 }).start();
                 break;
-            case 8:
+            case 9:
                 new Thread(()->{
                     String pcmname = "test_640x360_yuv420p.yuv";
                     String pcmpath = resourceDir+pcmname;
-                    String dstpath = resourceDir+"test_240_s32le_2.pcm";
+                    String dstpath = resourceDir+"1-abc-test.h264";
                     PathTool.copyAssetsToDst(FFmpegActivity.this,pcmname,pcmpath);
 
                     FFmpegTest.doSoftEncode(pcmpath,dstpath);
@@ -193,7 +206,8 @@ public class FFmpegActivity extends AppCompatActivity implements View.OnClickLis
                     processFinish();
                 }).start();
                 break;
-            case 9:
+            case 10:
+                // 测试手机 三星-C9000，1280x720 12.6M 时长1:11，硬解码耗时46.21 ss，软解码耗时46.98 s，时间差不多
                 new Thread(()->{
                     String pcmname = "test_1280x720_3.mp4";
                     String pcmpath = resourceDir+pcmname;
@@ -204,7 +218,7 @@ public class FFmpegActivity extends AppCompatActivity implements View.OnClickLis
                     processFinish();
                 }).start();
                 break;
-            case 10:
+            case 11:
                 new Thread(()->{
                     String pcmname = "test_640x360_yuv420p.yuv";
                     String pcmpath = resourceDir+pcmname;
@@ -216,11 +230,11 @@ public class FFmpegActivity extends AppCompatActivity implements View.OnClickLis
                     processFinish();
                 }).start();
                 break;
-            case 11:
+            case 12:
                 new Thread(()->{
                     String pcmname = "abc-test.h264";
                     String pcmpath = resourceDir+pcmname;
-                    String dstpath = resourceDir+"test_240_s32le_2.pcm";
+                    String dstpath = resourceDir+"2-test_1280_720_1.MP4";
                     PathTool.copyAssetsToDst(FFmpegActivity.this,pcmname,pcmpath);
 
                     FFmpegTest.doReMuxerWithStream(pcmpath,dstpath);
@@ -228,7 +242,7 @@ public class FFmpegActivity extends AppCompatActivity implements View.OnClickLis
                     processFinish();
                 }).start();
                 break;
-            case 12:
+            case 13:
                 new Thread(()->{
                     String pcmname = "test_1280x720_3.mp4";
                     String pcmpath = resourceDir+pcmname;
@@ -240,7 +254,7 @@ public class FFmpegActivity extends AppCompatActivity implements View.OnClickLis
                     processFinish();
                 }).start();
                 break;
-            case 13:
+            case 14:
                 new Thread(()->{
                     String pcmname = "test_1280x720_3.mp4";
                     String pcmpath = resourceDir+pcmname;
@@ -252,7 +266,7 @@ public class FFmpegActivity extends AppCompatActivity implements View.OnClickLis
                     processFinish();
                 }).start();
                 break;
-            case 14:
+            case 15:
                 new Thread(()->{
                     String pcmname = "11-test.mp4";
                     String pcmpath = resourceDir+pcmname;
@@ -263,30 +277,31 @@ public class FFmpegActivity extends AppCompatActivity implements View.OnClickLis
                     processFinish();
                 }).start();
                 break;
-            case 15:
+            case 16:
                 new Thread(()->{
                     String pcmname = "test_1280x720_3.mp4";
                     String pcmpath = resourceDir+pcmname;
-                    String dstpath = resourceDir+"test_240_s32le_2.pcm";
+                    String dstpath = resourceDir+"1-cut-test_1280x720_3.mp4";
                     PathTool.copyAssetsToDst(FFmpegActivity.this,pcmname,pcmpath);
-
-                    FFmpegTest.doCut(pcmpath,dstpath);
+                    String start = "00:00:15";
+                    int duration = 5;
+                    FFmpegTest.doCut(pcmpath,dstpath,start,duration);
                     isProcessing = false;
                     processFinish();
                 }).start();
                 break;
-            case 16:
+            case 17:
                 new Thread(()->{
-                    String pcmname1 = "ll.mpg";
-                    String pcmname2 = "ll.mpg";
-                    String pcmpath1 = resourceDir+pcmname1;
-                    String pcmpath2 = resourceDir+pcmname2;
-                    String dstpath = resourceDir+"1-merge_1.mpg";
-//                    String pcmname1 = "test_1280x720_3.mp4";
-//                    String pcmname2 = "test_1280x720_5.mp4";
+//                    String pcmname1 = "ll.mpg";
+//                    String pcmname2 = "ll.mpg";
 //                    String pcmpath1 = resourceDir+pcmname1;
 //                    String pcmpath2 = resourceDir+pcmname2;
-//                    String dstpath = resourceDir+"1-merge_1.mp4";
+//                    String dstpath = resourceDir+"1-merge_1.mpg";
+                    String pcmname1 = "test_1280x720_1.mp4";
+                    String pcmname2 = "test_1280x720_4.mp4";
+                    String pcmpath1 = resourceDir+pcmname1;
+                    String pcmpath2 = resourceDir+pcmname2;
+                    String dstpath = resourceDir+"1-merge_1.mp4";
                     PathTool.copyAssetsToDst(FFmpegActivity.this,pcmname1,pcmpath1);
                     PathTool.copyAssetsToDst(FFmpegActivity.this,pcmname2,pcmpath2);
 
@@ -295,7 +310,7 @@ public class FFmpegActivity extends AppCompatActivity implements View.OnClickLis
                     processFinish();
                 }).start();
                 break;
-            case 17:
+            case 18:
                 new Thread(()->{
                     String pcmname1 = "test_1280x720_1.mp4";
                     String pcmname2 = "test_1280x720_3.mp4";
@@ -310,9 +325,9 @@ public class FFmpegActivity extends AppCompatActivity implements View.OnClickLis
                     processFinish();
                 }).start();
                 break;
-            case 18:
+            case 19:
                 new Thread(()->{
-                    String pcmname1 = "est_1280x720_4.mp4";
+                    String pcmname1 = "test_1280x720_4.mp4";
                     String pcmname2 = "test_441_f32le_2.aac";   //test-mp3-1.mp3
                     String pcmpath1 = resourceDir+pcmname1;
                     String pcmpath2 = resourceDir+pcmname2;
@@ -320,24 +335,25 @@ public class FFmpegActivity extends AppCompatActivity implements View.OnClickLis
                     PathTool.copyAssetsToDst(FFmpegActivity.this,pcmname1,pcmpath1);
                     PathTool.copyAssetsToDst(FFmpegActivity.this,pcmname2,pcmpath2);
 
-                    FFmpegTest.addMusic(pcmpath1,pcmpath2,dstpath);
-                    isProcessing = false;
-                    processFinish();
-                }).start();
-                break;
-            case 19:
-                new Thread(()->{
-                    String pcmname = "test_1280x720_3.mp4";
-                    String pcmpath = resourceDir+pcmname;
-                    String dstpath = resourceDir+"1-doJpg_get%3d.jpg";//"1-doJpg_get.jpg";
-                    PathTool.copyAssetsToDst(FFmpegActivity.this,pcmname,pcmpath);
-
-                    FFmpegTest.doJpgGet(pcmpath,dstpath,true,1);
+                    String start = "00:00:05";
+                    FFmpegTest.addMusic(pcmpath1,pcmpath2,dstpath,start);
                     isProcessing = false;
                     processFinish();
                 }).start();
                 break;
             case 20:
+                new Thread(()->{
+                    String pcmname = "test_1280x720_3.mp4";
+                    String pcmpath = resourceDir+pcmname;
+                    String dstpath = resourceDir+"1-doJpg_get%3d.jpg";//"1-doJpg_get.jpg";
+                    PathTool.copyAssetsToDst(FFmpegActivity.this,pcmname,pcmpath);
+                    String start = "00:00:05";
+                    FFmpegTest.doJpgGet(pcmpath,dstpath,start,true,5);
+                    isProcessing = false;
+                    processFinish();
+                }).start();
+                break;
+            case 21:
                 new Thread(()->{
                     String pcmname = "1-doJpg_get%3d.jpg";
                     String pcmpath = resourceDir+pcmname;
@@ -349,7 +365,7 @@ public class FFmpegActivity extends AppCompatActivity implements View.OnClickLis
                     processFinish();
                 }).start();
                 break;
-            case 21:
+            case 22:
                 new Thread(()->{
                     String pcmname = "test-mp3-1.mp3";
                     String pcmpath = resourceDir+pcmname;
@@ -361,7 +377,7 @@ public class FFmpegActivity extends AppCompatActivity implements View.OnClickLis
                     processFinish();
                 }).start();
                 break;
-            case 22:
+            case 23:
                 new Thread(()->{
                     String pcmname = "test-mp3-1.mp3";
                     String pcmpath = resourceDir+pcmname;
@@ -373,7 +389,7 @@ public class FFmpegActivity extends AppCompatActivity implements View.OnClickLis
                     processFinish();
                 }).start();
                 break;
-            case 23:
+            case 24:
                 new Thread(()->{
                     String pcmname = "test_1280x720_3.mp4";
                     String pcmpath = resourceDir+pcmname;

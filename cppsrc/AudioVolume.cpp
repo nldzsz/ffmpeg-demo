@@ -554,7 +554,7 @@ void AudioVolume::doChangeAudioVolume2(string srcpath,string dstpath)
     }
     
     // 1、创建滤镜管道
-    AVFilterGraph *graph = avfilter_graph_alloc();
+    graph = avfilter_graph_alloc();
     
     // 2、创建源滤镜，用于接收要处理的AVFrame
     const AVFilter *src_filter = avfilter_get_by_name("abuffer");

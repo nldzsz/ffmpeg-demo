@@ -78,7 +78,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_example_demo_FFmpegTest_FFmpegTest_te
     }
 
     // 打印ffmpeg日志
-    av_log_set_level(AV_LOG_DEBUG);
+    av_log_set_level(AV_LOG_QUIET);
     av_log_set_callback(custom_log_callback);
 }
 std::string jstring2string(JNIEnv *env, jstring jStr){
@@ -210,13 +210,14 @@ extern "C" JNIEXPORT void JNICALL Java_com_example_demo_FFmpegTest_FFmpegTest_do
     EncodeMuxer muxer;
     muxer.doEncodeMuxer(dpath);
 }
-extern "C" JNIEXPORT void JNICALL Java_com_example_demo_FFmpegTest_FFmpegTest_doCut(JNIEnv *env, jobject instance,jstring srcpath,jstring dstpath)
+extern "C" JNIEXPORT void JNICALL Java_com_example_demo_FFmpegTest_FFmpegTest_doCut(JNIEnv *env, jobject instance,jstring srcpath,jstring dstpath,jstring start,jint du)
 {
     string pcmpath = jstring2string(env,srcpath);
     string dpath = jstring2string(env,dstpath);
+    string st = jstring2string(env,start);
 
     Cut cutObj;
-    cutObj.doCut(pcmpath,dpath);
+    cutObj.doCut(pcmpath,dpath,st,du);
 }
 extern "C" JNIEXPORT void JNICALL Java_com_example_demo_FFmpegTest_FFmpegTest_MergeTwo(JNIEnv *env, jobject instance,jstring srcpath1,jstring srcpath2,jstring dstpath)
 {
@@ -235,22 +236,24 @@ extern "C" JNIEXPORT void JNICALL Java_com_example_demo_FFmpegTest_FFmpegTest_Me
     Merge mObj;
     mObj.MergeFiles(pcmpath1,pcmpath2,dpath);
 }
-extern "C" JNIEXPORT void JNICALL Java_com_example_demo_FFmpegTest_FFmpegTest_addMusic(JNIEnv *env, jobject instance,jstring vpath,jstring apath,jstring dstpath)
+extern "C" JNIEXPORT void JNICALL Java_com_example_demo_FFmpegTest_FFmpegTest_addMusic(JNIEnv *env, jobject instance,jstring vpath,jstring apath,jstring dstpath,jstring st)
 {
     string pcmpath1 = jstring2string(env,vpath);
     string pcmpath2 = jstring2string(env,apath);
     string dpath = jstring2string(env,dstpath);
+    string start = jstring2string(env,st);
 
     Merge mObj;
-    mObj.addMusic(pcmpath1,pcmpath2,dpath);
+    mObj.addMusic(pcmpath1,pcmpath2,dpath,start);
 }
-extern "C" JNIEXPORT void JNICALL Java_com_example_demo_FFmpegTest_FFmpegTest_doJpgGet(JNIEnv *env, jobject instance,jstring spath,jstring dpath,jboolean getmore,jint num)
+extern "C" JNIEXPORT void JNICALL Java_com_example_demo_FFmpegTest_FFmpegTest_doJpgGet(JNIEnv *env, jobject instance,jstring spath,jstring dpath,jstring start,jboolean getmore,jint num)
 {
     string pcmpath1 = jstring2string(env,spath);
     string dstpath = jstring2string(env,dpath);
+    string st = jstring2string(env,start);
 
     VideoJPG mObj;
-    mObj.doJpgGet(pcmpath1,dstpath,getmore==JNI_TRUE,num);
+    mObj.doJpgGet(pcmpath1,dstpath,st,getmore==JNI_TRUE,num);
 }
 extern "C" JNIEXPORT void JNICALL Java_com_example_demo_FFmpegTest_FFmpegTest_doJpgToVideo(JNIEnv *env, jobject instance,jstring srcpath,jstring dstpath)
 {

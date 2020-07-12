@@ -813,8 +813,9 @@ void Merge::doConvert(AVFrame **dst, AVFrame *src,bool isVideo)
          *  分析原因：因为每个音频文件的采样率，而合并是按照第一个文件的采样率作为time_base的，没有转换过来
          *  解决方案：合并时pts要和每个合并前音频的采样率对应上
          */
-        src->pts = next_audio_pts + audio_en_ctx->time_base.den/curIndex.sample_rate * src->nb_samples;
-        next_audio_pts += audio_en_ctx->time_base.den/curIndex.sample_rate * src->nb_samples;
+        src->pts = next_audio_pts;
+        next_audio_pts = src->pts + audio_en_ctx->time_base.den/curIndex.sample_rate * src->nb_samples;
+        LOGD("next_audio_pts %d",next_audio_pts);
         doEncode(src,src->width > 0);
     }
 }
@@ -866,9 +867,9 @@ void Merge::doEncode(AVFrame *frame,bool isVideo)
         AVStream *stream = ou_fmt->streams[index];
         av_packet_rescale_ts(pkt, ctx->time_base, stream->time_base);
         pkt->stream_index = index;
-        LOGD("%s pts %d(%s)",pkt->stream_index == video_ou_index ? "video":"audio",pkt->pts,av_ts2timestr(pkt->pts,&stream->time_base));
+        LOGD("%s pts %d(%s) dts %d(%s)",pkt->stream_index == video_ou_index ? "video":"audio",pkt->pts,av_ts2timestr(pkt->pts,&stream->time_base),pkt->pts,av_ts2timestr(pkt->dts,&stream->time_base));
         if ((ret = av_write_frame(ou_fmt, pkt)) < 0) {
-            LOGD("%d av_write_frame fail %d",ret);
+            LOGD("av_write_frame fail %d",ret);
             releasesources();
             return;
         }
@@ -876,14 +877,17 @@ void Merge::doEncode(AVFrame *frame,bool isVideo)
     }
 }
 
-void Merge::addMusic(string srcpath,string srcpath2,string dstpath)
+void Merge::addMusic(string srcpath,string srcpath2,string dstpath,string st)
 {
     /** 遇到问题：如果添加的音频文件为Mp3文件，则使用苹果的内置播放器及苹果手机没有声音。如果添加的是aac音频 则没有问题
      *  分析原因：暂时未知
      *  解决方案：暂时未知
      */
-    
-    string start = "00:00:05";
+    string start = st;
+    if (st.length() <= 8) {
+        start = "00:00:05";
+    }
+    start_pos = 0;
     start_pos += stoi(start.substr(0,2))*3600;
     start_pos += stoi(start.substr(3,2))*60;
     start_pos += stoi(start.substr(6,2));

@@ -23,11 +23,11 @@ public class FFmpegTest {
     public native static void doExtensionTranscode(String src,String dst);
     public native static void doTranscode(String src,String dst);
     public native static void doEncodeMuxer(String dst);
-    public native static void doCut(String src,String dst);
+    public native static void doCut(String src,String dst,String start,int du);
     public native static void MergeTwo(String src1,String src2,String dst);
     public native static void MergeFiles(String src1,String src2,String dst);
-    public native static void addMusic(String src1,String src2,String dst);
-    public native static void doJpgGet(String src,String dst,boolean getmore,int num);
+    public native static void addMusic(String src1,String src2,String dst,String start);
+    public native static void doJpgGet(String src,String dst,String start,boolean getmore,int num);
     public native static void doJpgToVideo(String src,String dst);
     public native static void doChangeAudioVolume(String src,String dst);
     public native static void doChangeAudioVolume2(String src,String dst);

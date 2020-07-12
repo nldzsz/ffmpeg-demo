@@ -53,7 +53,7 @@ public:
      *  2、以视频时间轴为参考，若音频时间最终超过则截断
      *  目的：合并后的文件能正确播放视频以及音频
      */
-    void addMusic(string srcpath,string srcpath2,string dstpath);
+    void addMusic(string srcpath,string srcpath2,string dstpath,string st);
     
 private:
     

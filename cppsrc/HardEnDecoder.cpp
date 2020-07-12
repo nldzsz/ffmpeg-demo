@@ -7,6 +7,7 @@
 //
 
 #include "HardEnDecoder.hpp"
+#include <unistd.h>
 
 #define USE_HARD_DEVICE 1
 // for ios/mac
@@ -35,26 +36,18 @@ enum AVPixelFormat hw_get_format(AVCodecContext *ctx,const enum AVPixelFormat *f
     return AV_PIX_FMT_NONE;
 }
 
-static void decode(AVCodecContext *ctx,AVPacket *packet)
+static void decode(AVCodecContext *ctx)
 {
     AVFrame *hw_frame = av_frame_alloc();
     AVFrame *sw_Frame = av_frame_alloc();
     AVFrame *tmp_frame = NULL;
     int ret = 0;
     static int sum = 0;
-    /** 遇到问题：安卓平台返回的错误类型为-11(EAGAIN)(备注：Mac平台EAGAIN的值为-35，不同的平台EAGAIN的值不一样)
-     *  分析原因：当解码器输入缓冲区没有空间后就会返回EAGAIN的错误，这时候就需要调用avcodec_receive_frame()去读取数据，否则会一直返回-11的错误
-     * */
-    ret = avcodec_send_packet(ctx, packet);
-    if (ret < 0 && ret != AVERROR(EAGAIN)) {
-        LOGD("avcodec_send_packet %d",ret);
-        return;
-    }
 
     while (true) {
         ret = avcodec_receive_frame(ctx, hw_frame);
         if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) {
-            LOGD("need more packet");
+//            LOGD("need more packet");
             av_frame_free(&hw_frame);
             return;
         } else if (ret < 0){
@@ -68,10 +61,10 @@ static void decode(AVCodecContext *ctx,AVPacket *packet)
                 LOGD("av_hwframe_transfer_data fail %d",ret);
                 return;
             }
-            LOGD("这里2222 解码成功 %d",sum);
+            LOGD("这里2222 解码成功 sum %d",sum);
             tmp_frame = sw_Frame;
         } else {
-            LOGD("这里1111 解码成功 %d",sum);
+            LOGD("这里1111 解码成功 y %d u %d sum %d",hw_frame->linesize[0],hw_frame->linesize[1],sum);
             tmp_frame = hw_frame;
         }
 #else
@@ -204,18 +197,55 @@ void HardEnDecoder::doDecode(string srcPath,HardType htype)
     struct timeval etime;
     gettimeofday(&btime, NULL);
     AVPacket *packet = av_packet_alloc();
-    while (av_read_frame(in_fmtCtx, packet) >= 0) {
-        
+    bool read_pkt = true;
+    while (true) {
+        if (read_pkt) {
+            if(av_read_frame(in_fmtCtx, packet) < 0) {
+                break;
+            }
+        }
+
         if (video_stream_index == packet->stream_index) {
             
             // 开始解码
-            decode(decoder_Ctx,packet);
+            static int sum=0;
+            sum++;
+            LOGD("read pkt sum %d",sum);
+            /** 遇到问题：安卓平台返回的错误类型为-11(EAGAIN)(备注：Mac平台EAGAIN的值为-35，不同的平台EAGAIN的值不一样)
+             *  分析原因：当解码器输入缓冲区没有空间后就会返回EAGAIN的错误，这时候就需要调用avcodec_receive_frame()去读取数据，否则会一直返回-11的错误
+             * */
+            /** 遇到问题：安卓平台硬解码出现解码成功的总帧数小于解码前压缩的总帧数不一致(即解码出现丢帧现象)
+             *  分析原因：在AVCodecContext的内部有一个AVCodecInternal对象，它filter.bsfs[0]->nternal->buffer_pkt为不为空说明解码输入缓冲区已经满了，即
+             *  avcodec_send_packet()返回AVERROR(EAGAIN)，而调用avcodec_receive_frame()又没有输出，如果此时继续往输入缓冲区送入数据，这部分数据将被丢弃。
+             *  这是造成丢帧的根本原因
+             *  解决方案：当检测到返回AVERROR(EAGAIN)时，说明可能是解码器的输出缓冲区中没有数据，那么就等待输入缓冲区有空间了在送入数据，避免被丢掉
+             * */
+            ret = avcodec_send_packet(decoder_Ctx, packet);
+//            LOGD(" send_packt %d(%s)",ret,av_err2str(ret));
+            if (ret == AVERROR(EAGAIN)) {
+                LOGD("wait for");
+                read_pkt = false;
+                // 对于安卓平台来说，解码线程和ffmpeg的 avcodec_xxx()方法调用不在同一个线程，所以这里可以让当前线程休眠一下。去掉此语句也可以正常运行
+                usleep(30000);
+                decode(decoder_Ctx);
+                sum--;
+            } else if (ret < 0) {
+                LOGD("avcodec_send_packet %d",ret);
+                return;
+            } else {
+                decode(decoder_Ctx);
+                av_packet_unref(packet);
+                read_pkt = true;
+            }
+        } else {
+            read_pkt = true;
+            av_packet_unref(packet);
         }
-        
-        av_packet_unref(packet);
     }
-    
-    decode(decoder_Ctx,NULL);
+
+    LOGD("刷新解码缓冲区");
+    avcodec_send_packet(decoder_Ctx, NULL);
+    decode(decoder_Ctx);
     gettimeofday(&etime, NULL);
     LOGD("解码耗时 %.2f s",(etime.tv_sec - btime.tv_sec)+(etime.tv_usec - btime.tv_usec)/1000000.0f);
     

@@ -30,7 +30,7 @@ int main(int argc, const char * argv[]) {
     }
     string resourceDir = curFile.substr(0,pos)+"filesources/";
     
-    int test_use = 10;
+    int test_use = 24;
     if (test_use == 0) {
         string pcmpath = resourceDir+"test_441_f32le_2.pcm";
         string dstpath = resourceDir+"test_441_f32le_2.aac";
@@ -67,7 +67,7 @@ int main(int argc, const char * argv[]) {
         Muxer muxer;
         muxer.doMuxerTwoFile(aduio_srcPath,video_srcPath,dstPath);
     } else if (test_use == 6) {
-//        string srcPath = srcDir + "test_1280x720_1.mp4";
+//        string srcPath = resourceDir + "test_1280x720_1.mp4";
         string srcPath = resourceDir + "abc-test.h264";
         string dstPath = resourceDir + "1-test_1280_720_1.MP4";
         Muxer muxer;
@@ -82,7 +82,7 @@ int main(int argc, const char * argv[]) {
         decoder.doDecode2(srcPath);
     } else if (test_use == 9) {
         string srcPath = resourceDir + "test_640x360_yuv420p.yuv";
-        string dstPath = resourceDir+ "2-test.h264";
+        string dstPath = resourceDir+ "1-abc-test.h264";
         SoftEnDecoder decoder;
         decoder.doEncode(srcPath,dstPath);
     } else if (test_use == 10) {
@@ -116,15 +116,17 @@ int main(int argc, const char * argv[]) {
     } else if (test_use == 16) {
         string srcPath = resourceDir + "test_1280x720_3.mp4";
         string dstPath = resourceDir + "1-cut-test_1280x720_3.mp4";
+        string start = "00:00:15";
+        int duration = 5;
         Cut cutObj;
-        cutObj.doCut(srcPath,dstPath);
+        cutObj.doCut(srcPath,dstPath,start,duration);
     } else if (test_use == 17) {
-        string srcPath1 = resourceDir + "ll.mpg";
-        string srcPath2 = resourceDir + "lr.mpg";
-        string dstPath  = resourceDir + "1-merge_1.mpg";
-        //    string srcPath1 = resourceDir + "test_1280x720_3.mp4";
-        //    string srcPath2 = resourceDir + "test_1280x720_5.mp4";
-        //    string dstPath  = resourceDir + "1-merge_1.mp4";
+//        string srcPath1 = resourceDir + "ll.mpg";
+//        string srcPath2 = resourceDir + "lr.mpg";
+//        string dstPath  = resourceDir + "1-merge_1.mpg";
+        string srcPath1 = resourceDir + "test_1280x720_1.mp4";
+        string srcPath2 = resourceDir + "test_1280x720_4.mp4";
+        string dstPath  = resourceDir + "1-merge_1.mp4";
         Merge mObj;
         mObj.MergeTwo(srcPath1,srcPath2,dstPath);
     } else if (test_use == 18) {
@@ -139,15 +141,17 @@ int main(int argc, const char * argv[]) {
         //    string srcpath2 = srcDic + "test-mp3-1.mp3";
         string srcpath2 = resourceDir + "test_441_f32le_2.aac";
         string dstpath = resourceDir + "11_add_music.mp4";
+        string start = "00:00:05";
         Merge mObj;
-        mObj.addMusic(srcpath,srcpath2,dstpath);
+        mObj.addMusic(srcpath,srcpath2,dstpath,start);
     }
     else if (test_use == 20) {
         string srcPath = resourceDir + "test_1280x720_3.mp4";
-//        string dstPath = resourceDir + "1-doJpg_get%3d.jpg";
-        string dstPath = resourceDir + "1-doJpg_get.jpg";
+        string dstPath = resourceDir + "1-doJpg_get%3d.jpg";
+//        string dstPath = resourceDir + "1-doJpg_get.jpg";
+        string start = "00:00:05";
         VideoJPG mObj;
-        mObj.doJpgGet(srcPath,dstPath,false,5);
+        mObj.doJpgGet(srcPath,dstPath,start,true,5);
     }
     else if (test_use == 21) {
         string srcPath = resourceDir + "1-doJpg_get%3d.jpg";

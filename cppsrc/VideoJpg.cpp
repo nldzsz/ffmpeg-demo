@@ -65,7 +65,7 @@ void VideoJPG::releaseSources()
  *  3、jpg对应的封装器为ff_image2_muxer，对应的编码器为ff_mjpeg_encoder
  */
 #define Get_More 1      // 1代表使用模式匹配，一次可以写入多张jpg图片。0代表一次写入1张图片
-void VideoJPG::doJpgGet(string srcPath,string dstPath,bool getMore,int num)
+void VideoJPG::doJpgGet(string srcPath,string dstPath,string start,bool getMore,int num)
 {
     if (!getMore) {
         num = 1;
@@ -73,7 +73,6 @@ void VideoJPG::doJpgGet(string srcPath,string dstPath,bool getMore,int num)
     int video_index = -1;
     
     // 要截取的时刻
-    string start = "00:00:05";
     int64_t start_pts = stoi(start.substr(0,2));
     start_pts += stoi(start.substr(3,2));
     start_pts += stoi(start.substr(6,2));
@@ -257,7 +256,7 @@ void VideoJPG::doJpgGet(string srcPath,string dstPath,bool getMore,int num)
             // 取多帧视频并写入到文件
             static int i=0;
             delt = delt*num;
-            // 去一帧帧视频并写入到文件
+            // 取一帧帧视频并写入到文件
             if (abs(de_frame->pts - start_pts) < delt) {
                 LOGD("找到了这一帧");
                 
@@ -273,9 +272,10 @@ void VideoJPG::doJpgGet(string srcPath,string dstPath,bool getMore,int num)
                 if (getMore) {
                     // 重新编码
                     en_frame->pts = i;
+                    i++;
                     avcodec_send_frame(en_ctx, en_frame);
                     // 拿到指定数目的AVPacket后再清空缓冲区
-                    if (i > num) {
+                    if (i+1 > num) {
                         avcodec_send_frame(en_ctx, NULL);
                     }
                 } else {
@@ -301,7 +301,7 @@ void VideoJPG::doJpgGet(string srcPath,string dstPath,bool getMore,int num)
                 }
                 
                 if (getMore) {
-                    if (i>num) {
+                    if (i+1>num) {
                         found = true;
                     }
                 } else {

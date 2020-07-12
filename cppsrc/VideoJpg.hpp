@@ -33,7 +33,7 @@ public:
      *  如果一次性获取多张，则getMore传递true，最后一个参数num代表要保存的图片张数，当getMore为True时，最后一个参数num才有效
      *  获取多张时保存文件格式为类似1-doJpg_get%3d.jpg；
      */
-    void doJpgGet(string srcPath,string dstPath,bool getMore=false,int num=5);
+    void doJpgGet(string srcPath,string dstPath,string start,bool getMore=false,int num=5);
     
     
     /** 功能：将多张JPG照片合并成一段视频

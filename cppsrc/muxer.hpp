@@ -32,9 +32,9 @@ public:
     Muxer();
     ~Muxer();
     // 解析文件并原封不动在封装
-    void doReMuxer(string srcPath,string dstPath);
+    void doReMuxer(string srcPath,string dPath);
     // 将两个文件中音频和视频合并，如果两个文件时间不一致，则将较长的进行截断
-    void doMuxerTwoFile(string aduio_srcPath,string video_srcPath,string dstpath);
+    void doMuxerTwoFile(string aduio_srcPath,string video_srcPath,string dpath);
     
     // 解析文件并原封不动在封装;模拟流格式(只考虑视频，音频类似处理)
     void doReMuxerWithStream(string srcPath,string dPath);

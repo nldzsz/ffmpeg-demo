@@ -40,7 +40,7 @@ static void releaseResource(AVFormatContext **in_fmt1,AVFormatContext **in_fmt2,
     }
 }
 
-void Muxer::doReMuxer(string srcPath,string dstPath)
+void Muxer::doReMuxer(string srcPath,string dPath)
 {
     /** 遇到问题：当输入文件为.h264码流时，输出的mp4没有预览图
      *  分析原因：因为ffmpeg编译时没有加入extract_extradata码流分析器，导致预览图解析不出来
@@ -70,7 +70,7 @@ void Muxer::doReMuxer(string srcPath,string dstPath)
     }
     
     // 创建上下文
-    if (avformat_alloc_output_context2(&ou_fmtCtx,NULL,NULL,dstPath.c_str()) < 0){
+    if (avformat_alloc_output_context2(&ou_fmtCtx,NULL,NULL,dPath.c_str()) < 0){
         LOGD("avformat_alloc_output_context2 fail");
         releaseResource(&in_fmtCtx, NULL, NULL);
         return;
@@ -88,7 +88,7 @@ void Muxer::doReMuxer(string srcPath,string dstPath)
     
     // 打开AVIOContext缓冲区
     if (!(ou_fmtCtx->flags & AVFMT_NOFILE)) {
-        if (avio_open(&ou_fmtCtx->pb,dstPath.c_str(),AVIO_FLAG_WRITE) < 0) {
+        if (avio_open(&ou_fmtCtx->pb,dPath.c_str(),AVIO_FLAG_WRITE) < 0) {
             LOGD("avio_open fail");
             releaseResource(&in_fmtCtx, NULL, &ou_fmtCtx);
             return;
@@ -101,7 +101,7 @@ void Muxer::doReMuxer(string srcPath,string dstPath)
         return;
     }
     
-    av_dump_format(ou_fmtCtx, 0, dstPath.c_str(), 1);
+    av_dump_format(ou_fmtCtx, 0, dPath.c_str(), 1);
     
     bool saw_fist_pkt = false;
     int64_t video_next_dts = AV_NOPTS_VALUE;
@@ -397,7 +397,7 @@ int Muxer::readVideoPacket(void *client,uint8_t* buf,int buflen)
 
 /** 将一个mp3音频文件和一个MP4无音频视频文件合并为一个MP4文件
  */
-void Muxer::doMuxerTwoFile(string aduio_srcPath,string video_srcPath,string dstpath)
+void Muxer::doMuxerTwoFile(string aduio_srcPath,string video_srcPath,string dpath)
 {
     /** 遇到问题：当输入文件为mp3时，最终合成的MP4文件 在苹果系产品(mac iOS下默认播放器无声音)，提示"DecoderConfigDescr::DeserializeMPEG1Or2AudioDecoderSpecificPayload: the DecoderSpecificInfo tag is incorrect"
      *  但是VLC及ffplay播放正常。在安卓/windows下默认播放器正常;ffmpeg命令合成的也是一样。苹果系统对MP4音频采用MP3编码的解析bug？
@@ -461,7 +461,7 @@ void Muxer::doMuxerTwoFile(string aduio_srcPath,string video_srcPath,string dstp
     }
     
     // 创建封装上下文，用于封装到MP4文件中
-    ret = avformat_alloc_output_context2(&out_fmtCtx,NULL,NULL,dstPath.c_str());
+    ret = avformat_alloc_output_context2(&out_fmtCtx,NULL,NULL,dpath.c_str());
     if (ret < 0) {
         LOGD("avformat_alloc_output_context2 fail %d",ret);
         releaseResource(&audio_fmtCtx, &video_fmtCtx, NULL);
@@ -486,7 +486,7 @@ void Muxer::doMuxerTwoFile(string aduio_srcPath,string video_srcPath,string dstp
     
     // 创建AVFormatContext的AVIOContext(参数采用系统默认)，用于封装时缓冲区
     if (!(out_fmtCtx->flags & AVFMT_NOFILE)) {
-        if (avio_open(&out_fmtCtx->pb,dstPath.c_str(),AVIO_FLAG_WRITE) < 0) {
+        if (avio_open(&out_fmtCtx->pb,dpath.c_str(),AVIO_FLAG_WRITE) < 0) {
             LOGD("avio_open fail");
             return;
         }
@@ -564,11 +564,13 @@ void Muxer::doMuxerTwoFile(string aduio_srcPath,string video_srcPath,string dstp
                 vSPacket->duration = av_rescale_q_rnd(vSPacket->duration, video_in_stream->time_base, video_ou_stream->time_base, AV_ROUND_INF);
                 
                 AVRational tb = video_in_stream->time_base;
-                LOGD("video pts:%s dts:%s duration %s size %d key:%d finish %d",
+                static int sum=0;
+                sum++;
+                LOGD("video pts:%s dts:%s duration %s size %d key:%d finish %d sum %d",
                      av_ts2timestr(vSPacket->pts,&tb),
                      av_ts2timestr(vSPacket->dts,&tb),
                      av_ts2timestr(vSPacket->duration,&tb),
-                     vSPacket->size,vSPacket->flags&AV_PKT_FLAG_KEY,video_finish);
+                     vSPacket->size,vSPacket->flags&AV_PKT_FLAG_KEY,video_finish,sum);
             }
         }
         
