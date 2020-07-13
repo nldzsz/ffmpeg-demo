@@ -334,6 +334,8 @@ void FilterVideoScale::doVideoDecodec(AVPacket *pkt)
             
             // 取得了数据
             doVideoEncode(en_frame);
+            // 必须释放，不然会造成内存泄露
+            av_frame_unref(en_frame);
         }
     }
 }

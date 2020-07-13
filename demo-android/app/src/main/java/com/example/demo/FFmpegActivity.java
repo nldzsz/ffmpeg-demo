@@ -270,7 +270,6 @@ public class FFmpegActivity extends AppCompatActivity implements View.OnClickLis
                 new Thread(()->{
                     String pcmname = "11-test.mp4";
                     String pcmpath = resourceDir+pcmname;
-                    PathTool.copyAssetsToDst(FFmpegActivity.this,pcmname,pcmpath);
 
                     FFmpegTest.doEncodeMuxer(pcmpath);
                     isProcessing = false;

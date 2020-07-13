@@ -279,7 +279,7 @@
         break;
         case 15:
         {
-            NSString *pcmpath = [[NSBundle mainBundle] pathForResource:@"11-test.mp4" ofType:nil];
+            NSString *pcmpath = [path stringByAppendingPathComponent:@"11-test.mp4"];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 [BridgeFFMpeg doEncodeMuxer:pcmpath];
                 self->isProcessing = false;
