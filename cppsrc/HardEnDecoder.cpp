@@ -38,19 +38,19 @@ enum AVPixelFormat hw_get_format(AVCodecContext *ctx,const enum AVPixelFormat *f
 
 static void decode(AVCodecContext *ctx)
 {
-    AVFrame *hw_frame = av_frame_alloc();
-    AVFrame *sw_Frame = av_frame_alloc();
-    AVFrame *tmp_frame = NULL;
-    int ret = 0;
-    static int sum = 0;
-
     while (true) {
+        AVFrame *hw_frame = av_frame_alloc();
+        AVFrame *sw_Frame = av_frame_alloc();
+        AVFrame *tmp_frame = NULL;
+        int ret = 0;
+        static int sum = 0;
         ret = avcodec_receive_frame(ctx, hw_frame);
         if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) {
 //            LOGD("need more packet");
             av_frame_free(&hw_frame);
             return;
         } else if (ret < 0){
+            av_frame_free(&hw_frame);
             return;
         }
 #if USE_HARD_DEVICE
@@ -72,6 +72,9 @@ static void decode(AVCodecContext *ctx)
         LOGD("这里3333 解码成功 %d",sum);
 #endif
         sum++;
+        // 内存泄露
+        av_frame_free(&hw_frame);
+        av_frame_free(&sw_Frame);
     }
 
 }
