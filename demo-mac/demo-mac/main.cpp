@@ -21,6 +21,7 @@
 #include "VideoJpg.hpp"
 #include "AudioVolume.hpp"
 #include "VideoScale.hpp"
+#include "audio_acrossfade.hpp"
 
 int main(int argc, const char * argv[]) {
     string curFile(__FILE__);
@@ -30,7 +31,7 @@ int main(int argc, const char * argv[]) {
     }
     string resourceDir = curFile.substr(0,pos)+"filesources/";
     
-    int test_use = 24;
+    int test_use = 25;
     if (test_use == 0) {
         string pcmpath = resourceDir+"test_441_f32le_2.pcm";
         string dstpath = resourceDir+"test_441_f32le_2.aac";
@@ -176,6 +177,13 @@ int main(int argc, const char * argv[]) {
         string dstpath = resourceDir + "1-videoscale_1.mp4";
         FilterVideoScale mObj;
         mObj.doVideoScale(srcpath,dstpath);
+    }
+    else if (test_use == 25) {
+        string apath1 = resourceDir + "test_mp3_1.mp3";
+        string apath2 = resourceDir + "test_mp3_2.mp3";
+        string dstpath = resourceDir + "1-output.mp3";
+        AudioAcrossfade mObj;
+        mObj.doAcrossfade(apath1, apath2, dstpath,10);
     }
     
     return 0;

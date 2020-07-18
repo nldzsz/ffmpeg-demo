@@ -9,6 +9,6 @@
 #ifndef Common_h
 #define Common_h
 
-#include "Clog.h"
+#include "CLog.h"
 #include "CodecUtil.h"
 #endif /* Common_h */

@@ -43,6 +43,7 @@
 		188978BB24B5458F00ABE3E2 /* Cut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 188978AB24B5458F00ABE3E2 /* Cut.cpp */; };
 		188978BC24B5458F00ABE3E2 /* transcode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 188978B024B5458F00ABE3E2 /* transcode.cpp */; };
 		188978BD24B5458F00ABE3E2 /* demuxer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 188978B124B5458F00ABE3E2 /* demuxer.cpp */; };
+		18E1B6DD24BEDFDF0049F95D /* audio_acrossfade.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18E1B6DB24BEDFDF0049F95D /* audio_acrossfade.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -112,6 +113,8 @@
 		188978AF24B5458F00ABE3E2 /* HardEnDecoder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HardEnDecoder.hpp; sourceTree = "<group>"; };
 		188978B024B5458F00ABE3E2 /* transcode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = transcode.cpp; sourceTree = "<group>"; };
 		188978B124B5458F00ABE3E2 /* demuxer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = demuxer.cpp; sourceTree = "<group>"; };
+		18E1B6DB24BEDFDF0049F95D /* audio_acrossfade.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = audio_acrossfade.cpp; sourceTree = "<group>"; };
+		18E1B6DC24BEDFDF0049F95D /* audio_acrossfade.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = audio_acrossfade.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -241,6 +244,8 @@
 				1888BCFE24B4A55200C8C817 /* audio_encode.cpp */,
 				1888BD0124B4A55200C8C817 /* audio_resample.hpp */,
 				1888BCFF24B4A55200C8C817 /* audio_resample.cpp */,
+				18E1B6DC24BEDFDF0049F95D /* audio_acrossfade.hpp */,
+				18E1B6DB24BEDFDF0049F95D /* audio_acrossfade.cpp */,
 			);
 			name = cppsrc;
 			path = ../cppsrc;
@@ -314,6 +319,7 @@
 				1888BD0524B4A55300C8C817 /* audio_resample.cpp in Sources */,
 				1888BD0224B4A55300C8C817 /* CodecUtil.c in Sources */,
 				188978B924B5458F00ABE3E2 /* videoresample.cpp in Sources */,
+				18E1B6DD24BEDFDF0049F95D /* audio_acrossfade.cpp in Sources */,
 				188978BD24B5458F00ABE3E2 /* demuxer.cpp in Sources */,
 				1888BCA924B496DB00C8C817 /* main.cpp in Sources */,
 				188978B524B5458F00ABE3E2 /* Merge.cpp in Sources */,

@@ -586,6 +586,8 @@ void AudioVolume::doChangeAudioVolume2(string srcpath,string dstpath)
      *  1、它是一个链表，通过它可以用来将所有的滤镜串联起来，方便进行管理。开始于abuffer滤镜，结束于abuffersink滤镜;
      *  2、它就是为通过滤镜描述符创建滤镜来服务的，滤镜描述符按照指定的格式描述了一个个滤镜，而一个AVFilterInout代表了一个滤镜和滤镜上下文;
      *  4、需要单独释放，通过avfilter_inout_free()
+     *
+     *  tips：这里滤镜链描述符的语法格式和ffmpeg命令的滤镜语法格式一样
      */
     AVFilterInOut *inputs = avfilter_inout_alloc();
     AVFilterInOut *outputs = avfilter_inout_alloc();
@@ -596,15 +598,15 @@ void AudioVolume::doChangeAudioVolume2(string srcpath,string dstpath)
     // 所以这里outputs的name也设置为"in"
     outputs->name = av_strdup("in");
     outputs->filter_ctx = src_flt_ctx;
-    outputs->pad_idx = 0;
-    outputs->next = NULL;
+    outputs->pad_idx = 0;   // 对应滤镜上下文的端口索引号，单滤镜设为0即可
+    outputs->next = NULL;   // 为NULL 代表单滤镜链
     
     // 设置inputs相关参数；inputs代表接受滤镜描述符的最后一个滤镜的输出端口输出的数据，由于最后一个滤镜的output label标签默认为"out"，
     // 所以这里inputs的name也设置为"out"
     inputs->name = av_strdup("out");
     inputs->filter_ctx = sink_flt_ctx;
-    inputs->pad_idx = 0;
-    inputs->next = NULL;
+    inputs->pad_idx = 0;    // 对应滤镜上下文的端口索引号，单滤镜设为0即可
+    inputs->next = NULL;    // 为NULL 代表单滤镜链
     
     // 5、通过滤镜描述符创建并初始化各个滤镜并且按照滤镜描述符的顺序连接到一起
     if ((ret = avfilter_graph_parse_ptr(graph, filter_desc, &inputs, &outputs, NULL)) < 0) {

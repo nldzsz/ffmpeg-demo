@@ -334,7 +334,10 @@ void FilterVideoScale::doVideoDecodec(AVPacket *pkt)
             
             // 取得了数据
             doVideoEncode(en_frame);
-            // 必须释放，不然会造成内存泄露
+            /** 必须释放，不然会造成内存泄露
+             *  av_buffersink_get_frame()函数就跟avcodec_receive_frame()函数一样，不需提前为AVFrame分配内存，每次调用它内部都会
+             *  重新分配新的AVFrame的内存，所以使用完毕后必须手动释放这个AVFrame的内存
+             */
             av_frame_unref(en_frame);
         }
     }

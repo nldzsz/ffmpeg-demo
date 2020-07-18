@@ -124,10 +124,10 @@ void Merge::MergeTwo(string srcPath1,string srcPath2,string dstPath)
                 return;
             }
             
-            // codec_id和code_tag共同决定了一种编码方式在容器里面的码流格式，所以如果源文件与目的文件的码流格式不一致，那么就需要将目的文件
+            // codec_id和codec_tag共同决定了一种编码方式在容器里面的码流格式，所以如果源文件与目的文件的码流格式不一致，那么就需要将目的文件
             // 的code_tag 设置为0，当调用avformat_write_header()函数后会自动将两者保持一致
             unsigned int src_tag = srcstream->codecpar->codec_tag;
-            if (av_codec_get_id(ou_fmt->oformat->codec_tag, src_tag) != stream->codecpar->codec_tag) {
+            if (av_codec_get_id(ou_fmt->oformat->codec_tag, src_tag) != stream->codecpar->codec_id) {
                 stream->codecpar->codec_tag = 0;
             }
             break;
@@ -145,7 +145,7 @@ void Merge::MergeTwo(string srcPath1,string srcPath2,string dstPath)
             }
             
             unsigned int src_tag = srcstream->codecpar->codec_tag;
-            if (av_codec_get_id(ou_fmt->oformat->codec_tag,src_tag) != stream->codecpar->codec_tag) {
+            if (av_codec_get_id(ou_fmt->oformat->codec_tag,src_tag) != stream->codecpar->codec_id) {
                 stream->codecpar->codec_tag = 0;
             }
         }
