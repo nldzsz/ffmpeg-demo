@@ -32,4 +32,5 @@ public class FFmpegTest {
     public native static void doChangeAudioVolume(String src,String dst);
     public native static void doChangeAudioVolume2(String src,String dst);
     public native static void doVideoScale(String src,String dst);
+    public native static void doAudioAcrossfade(String src1,String src2,String dst,int duration);
 }

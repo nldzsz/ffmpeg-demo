@@ -400,6 +400,21 @@ public class FFmpegActivity extends AppCompatActivity implements View.OnClickLis
                     processFinish();
                 }).start();
                 break;
+            case 25:
+                new Thread(()->{
+                    String pcmname1 = "test_mp3_1.mp3";
+                    String pcmname2 = "ttest_mp3_1.mp3";
+                    String pcmpath1 = resourceDir+pcmname1;
+                    String pcmpath2 = resourceDir+pcmname2;
+                    String dstpath = resourceDir+"1-videoscale_1.mp4";
+                    PathTool.copyAssetsToDst(FFmpegActivity.this,pcmname1,pcmpath1);
+                    PathTool.copyAssetsToDst(FFmpegActivity.this,pcmname2,pcmpath2);
+
+                    FFmpegTest.doAudioAcrossfade(pcmpath1,pcmpath2,dstpath,10);
+                    isProcessing = false;
+                    processFinish();
+                }).start();
+                break;
         }
 
     }

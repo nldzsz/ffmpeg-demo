@@ -29,6 +29,7 @@ extern "C" {
 #include "VideoJpg.hpp"
 #include "AudioVolume.hpp"
 #include "VideoScale.hpp"
+#include "audio_acrossfade.hpp"
 
 @implementation BridgeFFMpeg
 static void custom_log_callback(void *ptr,int level, const char* format,va_list val)
@@ -267,12 +268,13 @@ std::string jstring2string(NSString*jStr)
     AudioVolume mObj;
     mObj.doChangeAudioVolume2(pcmpath,dpath);
 }
-+(void)doVideoScale:(NSString*)src dst:(NSString*) dst
++(void)doAcrossfade:(NSString*)src1 src2:(NSString*)src2 dst:(NSString*) dst duration:(int)duration
 {
-    string pcmpath = jstring2string(src);
+    string pcmpath1 = jstring2string(src1);
+    string pcmpath2 = jstring2string(src2);
     string dpath = jstring2string(dst);
 
-    FilterVideoScale mObj;
-    mObj.doVideoScale(pcmpath,dpath);
+    AudioAcrossfade mObj;
+    mObj.doAcrossfade(pcmpath1, pcmpath2, dpath,duration);
 }
 @end

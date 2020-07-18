@@ -377,7 +377,10 @@ bool AudioAcrossfade::initFilterGraph(int duration)
         return false;
     }
     
-    // 连接abuffer滤镜和abuffersink滤镜
+    /** 遇到问题：滤镜管道没有正常组织
+     *  分析原因：刚开始将abuffer滤镜和abuffersink滤镜也加入前面的滤镜描述符中了，这是错误的，因为滤镜描述符中不能包括abuffer滤镜和abuffersink滤镜。
+     *  解决方案：abuffer滤镜和abuffersink要单独和滤镜描述符进行连接
+     */
     AVFilterInOut *p = inputs;
     inputs = inputs->next;
     p->next = NULL;
@@ -406,6 +409,10 @@ bool AudioAcrossfade::initFilterGraph(int duration)
         return false;
     }
     
+    /** 遇到问题：接收到的AVFrame的nbsamples大于了enc_ctx的frame_size的大小
+     *  分析原因：因为acrossfade滤镜处理两个输入流进行淡入淡出算法的处理，所以会缓冲数据，当处理完成后调用av_buffersink_get_frame()时就一次性返回给AVFrame了，这个问题就产生了。
+     *  解决方案：设置每次调用av_buffersink_get_frame()的AVFrame的大小
+     */
     av_buffersink_set_frame_size(sink_filter_ctx, en_ctx->frame_size);
     
     return true;

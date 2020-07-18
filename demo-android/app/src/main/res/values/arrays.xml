@@ -27,6 +27,7 @@
         <item name="doChangeAudioVolume">doChangeAudioVolume 22</item>
         <item name="doChangeAudioVolume2">doChangeAudioVolume2 23</item>
         <item name="doVideoScale">doVideoScale 24</item>
+        <item name="doAudioAcrossfade">doAudioAcrossfade 25</item>
     </string-array>
 
 </resources>

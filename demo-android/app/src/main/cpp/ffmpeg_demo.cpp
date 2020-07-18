@@ -30,6 +30,7 @@ extern "C" {
 #include "VideoJpg.hpp"
 #include "AudioVolume.hpp"
 #include "VideoScale.hpp"
+#include "audio_acrossfade.hpp"
 
 extern "C" jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     JNIEnv *env = NULL;
@@ -286,4 +287,13 @@ extern "C" JNIEXPORT void JNICALL Java_com_example_demo_FFmpegTest_FFmpegTest_do
 
     FilterVideoScale mObj;
     mObj.doVideoScale(pcmpath,dpath);
+}
+extern "C" JNIEXPORT void JNICALL Java_com_example_demo_FFmpegTest_FFmpegTest_doAudioAcrossfade(JNIEnv *env, jobject instance,jstring srcpath1,jstring srcpath2,jstring dstpath,jint du)
+{
+    string pcmpath1 = jstring2string(env,srcpath1);
+    string pcmpath2 = jstring2string(env,srcpath2);
+    string dpath = jstring2string(env,dstpath);
+
+    AudioAcrossfade mObj;
+    mObj.doAcrossfade(pcmpath1,pcmpath2,dpath,du);
 }

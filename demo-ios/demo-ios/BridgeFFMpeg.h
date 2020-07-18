@@ -37,6 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 +(void)doChangeAudioVolume:(NSString*)src dst:(NSString*) dst;
 +(void)doChangeAudioVolume2:(NSString*)src dst:(NSString*) dst;
 +(void)doVideoScale:(NSString*)src dst:(NSString*) dst;
++(void)doAcrossfade:(NSString*)src1 src2:(NSString*)src2 dst:(NSString*) dst duration:(int)duration;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -48,7 +48,8 @@
         @"doJpgToVideo 21",
         @"doChangeAudioVolume 22",
         @"doChangeAudioVolume2 23",
-        @"doVideoScale 24"
+        @"doVideoScale 24",
+        @"doAudioacrossfade 25"
     ];
     return dic;
 }
@@ -388,6 +389,18 @@
             NSString *dstpath = [path stringByAppendingPathComponent:@"1-videoscale_1.mp4"];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 [BridgeFFMpeg doVideoScale:pcmpath1 dst:dstpath];
+                self->isProcessing = false;
+                [self processFinish];
+            });
+        }
+        break;
+        case 25:
+        {
+            NSString *pcmpath1 = [[NSBundle mainBundle] pathForResource:@"test_mp3_1.mp3" ofType:nil];
+            NSString *pcmpath2 = [[NSBundle mainBundle] pathForResource:@"test_mp3_2.mp3" ofType:nil];
+            NSString *dstpath = [path stringByAppendingPathComponent:@"1-output.mp3"];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [BridgeFFMpeg doAcrossfade:pcmpath1 src2:pcmpath2 dst:dstpath duration:10];
                 self->isProcessing = false;
                 [self processFinish];
             });
