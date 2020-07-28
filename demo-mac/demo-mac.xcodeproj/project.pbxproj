@@ -23,14 +23,6 @@
 		1888BD0324B4A55300C8C817 /* CLog.c in Sources */ = {isa = PBXBuildFile; fileRef = 1888BCF924B4A55200C8C817 /* CLog.c */; };
 		1888BD0424B4A55300C8C817 /* audio_encode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1888BCFE24B4A55200C8C817 /* audio_encode.cpp */; };
 		1888BD0524B4A55300C8C817 /* audio_resample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1888BCFF24B4A55200C8C817 /* audio_resample.cpp */; };
-		1888BD0624B4A59700C8C817 /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1888BCD724B4A26000C8C817 /* libavcodec.a */; };
-		1888BD0724B4A59700C8C817 /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1888BCDA24B4A26000C8C817 /* libavfilter.a */; };
-		1888BD0824B4A59700C8C817 /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1888BCDC24B4A26100C8C817 /* libavformat.a */; };
-		1888BD0924B4A59700C8C817 /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1888BCDB24B4A26000C8C817 /* libavutil.a */; };
-		1888BD0A24B4A59700C8C817 /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1888BCD524B4A26000C8C817 /* libmp3lame.a */; };
-		1888BD0B24B4A59700C8C817 /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1888BCD824B4A26000C8C817 /* libswresample.a */; };
-		1888BD0C24B4A59700C8C817 /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1888BCD624B4A26000C8C817 /* libswscale.a */; };
-		1888BD0D24B4A59700C8C817 /* libx264.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1888BCD924B4A26000C8C817 /* libx264.a */; };
 		188978B224B5458F00ABE3E2 /* VideoScale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1889789B24B5458E00ABE3E2 /* VideoScale.cpp */; };
 		188978B324B5458F00ABE3E2 /* muxer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1889789C24B5458E00ABE3E2 /* muxer.cpp */; };
 		188978B424B5458F00ABE3E2 /* SoftEnDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1889789D24B5458E00ABE3E2 /* SoftEnDecoder.cpp */; };
@@ -43,6 +35,21 @@
 		188978BB24B5458F00ABE3E2 /* Cut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 188978AB24B5458F00ABE3E2 /* Cut.cpp */; };
 		188978BC24B5458F00ABE3E2 /* transcode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 188978B024B5458F00ABE3E2 /* transcode.cpp */; };
 		188978BD24B5458F00ABE3E2 /* demuxer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 188978B124B5458F00ABE3E2 /* demuxer.cpp */; };
+		1892E57924C7CCD500E162ED /* Subtitles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1892E57724C7CCD500E162ED /* Subtitles.cpp */; };
+		1896F9BB24CC669200A62253 /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1888BCD724B4A26000C8C817 /* libavcodec.a */; };
+		1896F9BC24CC669200A62253 /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1888BCDA24B4A26000C8C817 /* libavfilter.a */; };
+		1896F9BD24CC669200A62253 /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1888BCDC24B4A26100C8C817 /* libavformat.a */; };
+		1896F9BE24CC669200A62253 /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1888BCDB24B4A26000C8C817 /* libavutil.a */; };
+		1896F9BF24CC669200A62253 /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1888BCD524B4A26000C8C817 /* libmp3lame.a */; };
+		1896F9C024CC669200A62253 /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1888BCD824B4A26000C8C817 /* libswresample.a */; };
+		1896F9C124CC669300A62253 /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1888BCD624B4A26000C8C817 /* libswscale.a */; };
+		1896F9C224CC669300A62253 /* libx264.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1888BCD924B4A26000C8C817 /* libx264.a */; };
+		1896F9C724CC675400A62253 /* libass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1896F9C624CC669300A62253 /* libass.a */; };
+		1896F9C824CC675400A62253 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1896F9C324CC669300A62253 /* libfreetype.a */; };
+		1896F9C924CC675400A62253 /* libfribidi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1896F9C424CC669300A62253 /* libfribidi.a */; };
+		1896F9CD24CD043300A62253 /* libfdk-aac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1896F9CC24CD041200A62253 /* libfdk-aac.a */; };
+		1896F9CF24CD16C500A62253 /* libpng16.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1896F9CE24CD16C100A62253 /* libpng16.a */; };
+		1896F9D124CD20B700A62253 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1896F9D024CD20B700A62253 /* CoreText.framework */; };
 		18E1B6DD24BEDFDF0049F95D /* audio_acrossfade.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18E1B6DB24BEDFDF0049F95D /* audio_acrossfade.cpp */; };
 /* End PBXBuildFile section */
 
@@ -113,6 +120,14 @@
 		188978AF24B5458F00ABE3E2 /* HardEnDecoder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HardEnDecoder.hpp; sourceTree = "<group>"; };
 		188978B024B5458F00ABE3E2 /* transcode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = transcode.cpp; sourceTree = "<group>"; };
 		188978B124B5458F00ABE3E2 /* demuxer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = demuxer.cpp; sourceTree = "<group>"; };
+		1892E57724C7CCD500E162ED /* Subtitles.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Subtitles.cpp; sourceTree = "<group>"; };
+		1892E57824C7CCD500E162ED /* Subtitles.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Subtitles.hpp; sourceTree = "<group>"; };
+		1896F9C324CC669300A62253 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = ffmpeglib/lib/libfreetype.a; sourceTree = "<group>"; };
+		1896F9C424CC669300A62253 /* libfribidi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfribidi.a; path = ffmpeglib/lib/libfribidi.a; sourceTree = "<group>"; };
+		1896F9C624CC669300A62253 /* libass.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libass.a; path = ffmpeglib/lib/libass.a; sourceTree = "<group>"; };
+		1896F9CC24CD041200A62253 /* libfdk-aac.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libfdk-aac.a"; path = "ffmpeglib/lib/libfdk-aac.a"; sourceTree = "<group>"; };
+		1896F9CE24CD16C100A62253 /* libpng16.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng16.a; path = ffmpeglib/lib/libpng16.a; sourceTree = "<group>"; };
+		1896F9D024CD20B700A62253 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		18E1B6DB24BEDFDF0049F95D /* audio_acrossfade.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = audio_acrossfade.cpp; sourceTree = "<group>"; };
 		18E1B6DC24BEDFDF0049F95D /* audio_acrossfade.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = audio_acrossfade.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -122,25 +137,31 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1888BD0924B4A59700C8C817 /* libavutil.a in Frameworks */,
-				1888BD0A24B4A59700C8C817 /* libmp3lame.a in Frameworks */,
+				1896F9BE24CC669200A62253 /* libavutil.a in Frameworks */,
+				1896F9C724CC675400A62253 /* libass.a in Frameworks */,
+				1896F9BF24CC669200A62253 /* libmp3lame.a in Frameworks */,
 				1888BCE824B4A2D800C8C817 /* libiconv.tbd in Frameworks */,
 				1888BCEC24B4A2FA00C8C817 /* libz.tbd in Frameworks */,
-				1888BD0D24B4A59700C8C817 /* libx264.a in Frameworks */,
-				1888BD0724B4A59700C8C817 /* libavfilter.a in Frameworks */,
+				1896F9C224CC669300A62253 /* libx264.a in Frameworks */,
+				1896F9BC24CC669200A62253 /* libavfilter.a in Frameworks */,
+				1896F9D124CD20B700A62253 /* CoreText.framework in Frameworks */,
 				1888BCEA24B4A2EB00C8C817 /* liblzma.tbd in Frameworks */,
-				1888BD0C24B4A59700C8C817 /* libswscale.a in Frameworks */,
+				1896F9C124CC669300A62253 /* libswscale.a in Frameworks */,
+				1896F9C924CC675400A62253 /* libfribidi.a in Frameworks */,
 				1888BCF224B4A31300C8C817 /* VideoToolbox.framework in Frameworks */,
 				1888BCE224B4A29400C8C817 /* CoreMedia.framework in Frameworks */,
+				1896F9C824CC675400A62253 /* libfreetype.a in Frameworks */,
 				1888BCF024B4A30C00C8C817 /* VideoDecodeAcceleration.framework in Frameworks */,
 				1888BCE624B4A2C800C8C817 /* libbz2.tbd in Frameworks */,
 				1888BCE024B4A28C00C8C817 /* CoreFoundation.framework in Frameworks */,
-				1888BD0B24B4A59700C8C817 /* libswresample.a in Frameworks */,
-				1888BD0824B4A59700C8C817 /* libavformat.a in Frameworks */,
+				1896F9C024CC669200A62253 /* libswresample.a in Frameworks */,
+				1896F9BD24CC669200A62253 /* libavformat.a in Frameworks */,
 				1888BCDE24B4A28100C8C817 /* AudioToolbox.framework in Frameworks */,
 				1888BCEE24B4A30400C8C817 /* Security.framework in Frameworks */,
+				1896F9CF24CD16C500A62253 /* libpng16.a in Frameworks */,
 				1888BCE424B4A29C00C8C817 /* CoreVideo.framework in Frameworks */,
-				1888BD0624B4A59700C8C817 /* libavcodec.a in Frameworks */,
+				1896F9CD24CD043300A62253 /* libfdk-aac.a in Frameworks */,
+				1896F9BB24CC669200A62253 /* libavcodec.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -177,6 +198,12 @@
 		1888BCD424B4A26000C8C817 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1896F9D024CD20B700A62253 /* CoreText.framework */,
+				1896F9CE24CD16C100A62253 /* libpng16.a */,
+				1896F9CC24CD041200A62253 /* libfdk-aac.a */,
+				1896F9C624CC669300A62253 /* libass.a */,
+				1896F9C324CC669300A62253 /* libfreetype.a */,
+				1896F9C424CC669300A62253 /* libfribidi.a */,
 				1888BCF124B4A31300C8C817 /* VideoToolbox.framework */,
 				1888BCEF24B4A30C00C8C817 /* VideoDecodeAcceleration.framework */,
 				1888BCED24B4A30400C8C817 /* Security.framework */,
@@ -246,6 +273,8 @@
 				1888BCFF24B4A55200C8C817 /* audio_resample.cpp */,
 				18E1B6DC24BEDFDF0049F95D /* audio_acrossfade.hpp */,
 				18E1B6DB24BEDFDF0049F95D /* audio_acrossfade.cpp */,
+				1892E57724C7CCD500E162ED /* Subtitles.cpp */,
+				1892E57824C7CCD500E162ED /* Subtitles.hpp */,
 			);
 			name = cppsrc;
 			path = ../cppsrc;
@@ -315,6 +344,7 @@
 				188978B824B5458F00ABE3E2 /* AudioVolume.cpp in Sources */,
 				188978B724B5458F00ABE3E2 /* HardEnDecoder.cpp in Sources */,
 				188978B324B5458F00ABE3E2 /* muxer.cpp in Sources */,
+				1892E57924C7CCD500E162ED /* Subtitles.cpp in Sources */,
 				1888BD0324B4A55300C8C817 /* CLog.c in Sources */,
 				1888BD0524B4A55300C8C817 /* audio_resample.cpp in Sources */,
 				1888BD0224B4A55300C8C817 /* CodecUtil.c in Sources */,

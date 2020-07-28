@@ -22,6 +22,7 @@
 #include "AudioVolume.hpp"
 #include "VideoScale.hpp"
 #include "audio_acrossfade.hpp"
+#include "Subtitles.hpp"
 
 int main(int argc, const char * argv[]) {
     string curFile(__FILE__);
@@ -31,7 +32,7 @@ int main(int argc, const char * argv[]) {
     }
     string resourceDir = curFile.substr(0,pos)+"filesources/";
     
-    int test_use = 25;
+    int test_use = 26;
     if (test_use == 0) {
         string pcmpath = resourceDir+"test_441_f32le_2.pcm";
         string dstpath = resourceDir+"test_441_f32le_2.aac";
@@ -161,7 +162,7 @@ int main(int argc, const char * argv[]) {
         mObj.doJpgToVideo(srcPath,dstPath);
     }
     else if (test_use == 22) {
-        string srcpath = resourceDir + "test-mp3-1.mp3";
+        string srcpath = resourceDir + "low_battery.mp3";
         string dstpath = resourceDir + "1-addaudiovolome-1.mp3";
         AudioVolume mObj;
         mObj.doChangeAudioVolume(srcpath,dstpath);
@@ -184,6 +185,13 @@ int main(int argc, const char * argv[]) {
         string dstpath = resourceDir + "1-output.mp3";
         AudioAcrossfade mObj;
         mObj.doAcrossfade(apath1, apath2, dstpath,10);
+    }
+    else if (test_use == 26) {
+        string apath1 = resourceDir + "test_1280x720_3.mp4";
+        string apath2 = resourceDir + "test_1280x720_3.srt";    // test_1280x720_3.ass
+        string dstpath = resourceDir + "1-subtitles-out.mkv";
+        Subtitles mObj;
+        mObj.addSubtitleStream(apath1, apath2, dstpath);
     }
     
     return 0;
