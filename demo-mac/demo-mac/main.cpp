@@ -32,7 +32,7 @@ int main(int argc, const char * argv[]) {
     }
     string resourceDir = curFile.substr(0,pos)+"filesources/";
     
-    int test_use = 26;
+    int test_use = 27;
     if (test_use == 0) {
         string pcmpath = resourceDir+"test_441_f32le_2.pcm";
         string dstpath = resourceDir+"test_441_f32le_2.aac";
@@ -108,7 +108,7 @@ int main(int argc, const char * argv[]) {
         codec.doExtensionTranscode(srcPath,dstPath);
     } else if (test_use == 14) {
         string srcPath = resourceDir + "test_1280x720_3.mp4";
-        string dstPath = resourceDir + "1-test_1280x720_3.mov";
+        string dstPath = resourceDir + "1-test_1280x720_3.mp4";
         Transcode codec;
         codec.doTranscode(srcPath,dstPath);
     } else if (test_use == 15) {
@@ -192,6 +192,18 @@ int main(int argc, const char * argv[]) {
         string dstpath = resourceDir + "1-subtitles-out.mkv";
         Subtitles mObj;
         mObj.addSubtitleStream(apath1, apath2, dstpath);
+    }
+    else if (test_use == 27) {
+        /** 遇到问题：提示"Undefined symbols _libintl_dgettext"
+         *  分析原因：mac下编译的fontconfig依赖库libintl，而此库未加入
+         *  解决方案：xcodec中加入libintl库即可，该库通过brew install getext方式安装，导入路径为"/usr/local/Cellar/gettext/0.21/lib/libintl.8.dylib"
+         */
+        string apath1 = resourceDir + "test_1280x720_4.mp4";
+        string apath2 = resourceDir + "test_1280x720_3.srt";    // test_1280x720_3.ass
+        string dstpath = resourceDir + "2-subtitles-out.mp4";
+        string confpath = resourceDir + "mac_fonts.conf";
+        Subtitles mObj;
+        mObj.addSubtitlesForVideo(apath1, apath2,dstpath,confpath);
     }
     
     return 0;

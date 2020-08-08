@@ -38,6 +38,9 @@ NS_ASSUME_NONNULL_BEGIN
 +(void)doChangeAudioVolume2:(NSString*)src dst:(NSString*) dst;
 +(void)doVideoScale:(NSString*)src dst:(NSString*) dst;
 +(void)doAcrossfade:(NSString*)src1 src2:(NSString*)src2 dst:(NSString*) dst duration:(int)duration;
++(void)addSubtitleStream:(NSString*)vpath src2:(NSString*)spath dst:(NSString*)dst;
++(void)configConfpath:(NSString*)confpath fontsPath:(NSString*)fontspath withFonts:(NSDictionary*)fontsDic;
++(void)addSubtitlesForVideo:(NSString*)vpath src2:(NSString*)spath dst:(NSString*)dst confdpath:(NSString*)confdpath;
 @end
 
 NS_ASSUME_NONNULL_END

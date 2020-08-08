@@ -7,6 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1873519324DBFEF0006B9EBC /* libass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1873519024DBFEE1006B9EBC /* libass.a */; };
+		1873519424DBFEF0006B9EBC /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1873518824DBFEE1006B9EBC /* libavcodec.a */; };
+		1873519524DBFEF0006B9EBC /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1873519124DBFEE2006B9EBC /* libavfilter.a */; };
+		1873519624DBFEF0006B9EBC /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1873518E24DBFEE1006B9EBC /* libavformat.a */; };
+		1873519724DBFEF0006B9EBC /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1873518D24DBFEE1006B9EBC /* libavutil.a */; };
+		1873519824DBFEF0006B9EBC /* libfdk-aac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1873518B24DBFEE1006B9EBC /* libfdk-aac.a */; };
+		1873519924DBFEF0006B9EBC /* libfontconfig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1873518924DBFEE1006B9EBC /* libfontconfig.a */; };
+		1873519A24DBFEF0006B9EBC /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1873519224DBFEE2006B9EBC /* libfreetype.a */; };
+		1873519B24DBFEF0006B9EBC /* libfribidi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1873518F24DBFEE1006B9EBC /* libfribidi.a */; };
+		1873519C24DBFEF0006B9EBC /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1873518A24DBFEE1006B9EBC /* libmp3lame.a */; };
+		1873519D24DBFEF0006B9EBC /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1873518624DBFEE1006B9EBC /* libswresample.a */; };
+		1873519E24DBFEF0006B9EBC /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1873518C24DBFEE1006B9EBC /* libswscale.a */; };
+		1873519F24DBFEF0006B9EBC /* libx264.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1873518724DBFEE1006B9EBC /* libx264.a */; };
+		187351A324DC0601006B9EBC /* libintl.8.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 187351A224DC0601006B9EBC /* libintl.8.dylib */; };
+		187351A424DC0601006B9EBC /* libintl.8.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 187351A224DC0601006B9EBC /* libintl.8.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		187351C624DC0BBC006B9EBC /* libexpat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 187351C524DC0BBC006B9EBC /* libexpat.a */; };
+		187351C724DC0BC6006B9EBC /* libexpat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 187351C524DC0BBC006B9EBC /* libexpat.a */; };
 		1888BCA924B496DB00C8C817 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1888BCA824B496DB00C8C817 /* main.cpp */; };
 		1888BCDE24B4A28100C8C817 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1888BCDD24B4A28100C8C817 /* AudioToolbox.framework */; };
 		1888BCE024B4A28C00C8C817 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1888BCDF24B4A28C00C8C817 /* CoreFoundation.framework */; };
@@ -36,24 +53,22 @@
 		188978BC24B5458F00ABE3E2 /* transcode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 188978B024B5458F00ABE3E2 /* transcode.cpp */; };
 		188978BD24B5458F00ABE3E2 /* demuxer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 188978B124B5458F00ABE3E2 /* demuxer.cpp */; };
 		1892E57924C7CCD500E162ED /* Subtitles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1892E57724C7CCD500E162ED /* Subtitles.cpp */; };
-		1896F9BB24CC669200A62253 /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1888BCD724B4A26000C8C817 /* libavcodec.a */; };
-		1896F9BC24CC669200A62253 /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1888BCDA24B4A26000C8C817 /* libavfilter.a */; };
-		1896F9BD24CC669200A62253 /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1888BCDC24B4A26100C8C817 /* libavformat.a */; };
-		1896F9BE24CC669200A62253 /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1888BCDB24B4A26000C8C817 /* libavutil.a */; };
-		1896F9BF24CC669200A62253 /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1888BCD524B4A26000C8C817 /* libmp3lame.a */; };
-		1896F9C024CC669200A62253 /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1888BCD824B4A26000C8C817 /* libswresample.a */; };
-		1896F9C124CC669300A62253 /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1888BCD624B4A26000C8C817 /* libswscale.a */; };
-		1896F9C224CC669300A62253 /* libx264.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1888BCD924B4A26000C8C817 /* libx264.a */; };
-		1896F9C724CC675400A62253 /* libass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1896F9C624CC669300A62253 /* libass.a */; };
-		1896F9C824CC675400A62253 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1896F9C324CC669300A62253 /* libfreetype.a */; };
-		1896F9C924CC675400A62253 /* libfribidi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1896F9C424CC669300A62253 /* libfribidi.a */; };
-		1896F9CD24CD043300A62253 /* libfdk-aac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1896F9CC24CD041200A62253 /* libfdk-aac.a */; };
-		1896F9CF24CD16C500A62253 /* libpng16.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1896F9CE24CD16C100A62253 /* libpng16.a */; };
 		1896F9D124CD20B700A62253 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1896F9D024CD20B700A62253 /* CoreText.framework */; };
 		18E1B6DD24BEDFDF0049F95D /* audio_acrossfade.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18E1B6DB24BEDFDF0049F95D /* audio_acrossfade.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		187351A524DC0602006B9EBC /* Embed Libraries */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				187351A424DC0601006B9EBC /* libintl.8.dylib in Embed Libraries */,
+			);
+			name = "Embed Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1888BCA324B496DB00C8C817 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -66,16 +81,23 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1873518624DBFEE1006B9EBC /* libswresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswresample.a; path = ffmpeglib/lib/libswresample.a; sourceTree = "<group>"; };
+		1873518724DBFEE1006B9EBC /* libx264.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libx264.a; path = ffmpeglib/lib/libx264.a; sourceTree = "<group>"; };
+		1873518824DBFEE1006B9EBC /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavcodec.a; path = ffmpeglib/lib/libavcodec.a; sourceTree = "<group>"; };
+		1873518924DBFEE1006B9EBC /* libfontconfig.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfontconfig.a; path = ffmpeglib/lib/libfontconfig.a; sourceTree = "<group>"; };
+		1873518A24DBFEE1006B9EBC /* libmp3lame.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmp3lame.a; path = ffmpeglib/lib/libmp3lame.a; sourceTree = "<group>"; };
+		1873518B24DBFEE1006B9EBC /* libfdk-aac.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libfdk-aac.a"; path = "ffmpeglib/lib/libfdk-aac.a"; sourceTree = "<group>"; };
+		1873518C24DBFEE1006B9EBC /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswscale.a; path = ffmpeglib/lib/libswscale.a; sourceTree = "<group>"; };
+		1873518D24DBFEE1006B9EBC /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavutil.a; path = ffmpeglib/lib/libavutil.a; sourceTree = "<group>"; };
+		1873518E24DBFEE1006B9EBC /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavformat.a; path = ffmpeglib/lib/libavformat.a; sourceTree = "<group>"; };
+		1873518F24DBFEE1006B9EBC /* libfribidi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfribidi.a; path = ffmpeglib/lib/libfribidi.a; sourceTree = "<group>"; };
+		1873519024DBFEE1006B9EBC /* libass.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libass.a; path = ffmpeglib/lib/libass.a; sourceTree = "<group>"; };
+		1873519124DBFEE2006B9EBC /* libavfilter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavfilter.a; path = ffmpeglib/lib/libavfilter.a; sourceTree = "<group>"; };
+		1873519224DBFEE2006B9EBC /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = ffmpeglib/lib/libfreetype.a; sourceTree = "<group>"; };
+		187351A224DC0601006B9EBC /* libintl.8.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libintl.8.dylib; path = ../../../../../../../usr/local/Cellar/gettext/0.21/lib/libintl.8.dylib; sourceTree = "<group>"; };
+		187351C524DC0BBC006B9EBC /* libexpat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libexpat.a; path = ffmpeglib/lib/libexpat.a; sourceTree = "<group>"; };
 		1888BCA524B496DB00C8C817 /* demo-mac */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "demo-mac"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1888BCA824B496DB00C8C817 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		1888BCD524B4A26000C8C817 /* libmp3lame.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmp3lame.a; path = ffmpeglib/lib/libmp3lame.a; sourceTree = "<group>"; };
-		1888BCD624B4A26000C8C817 /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswscale.a; path = ffmpeglib/lib/libswscale.a; sourceTree = "<group>"; };
-		1888BCD724B4A26000C8C817 /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavcodec.a; path = ffmpeglib/lib/libavcodec.a; sourceTree = "<group>"; };
-		1888BCD824B4A26000C8C817 /* libswresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswresample.a; path = ffmpeglib/lib/libswresample.a; sourceTree = "<group>"; };
-		1888BCD924B4A26000C8C817 /* libx264.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libx264.a; path = ffmpeglib/lib/libx264.a; sourceTree = "<group>"; };
-		1888BCDA24B4A26000C8C817 /* libavfilter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavfilter.a; path = ffmpeglib/lib/libavfilter.a; sourceTree = "<group>"; };
-		1888BCDB24B4A26000C8C817 /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavutil.a; path = ffmpeglib/lib/libavutil.a; sourceTree = "<group>"; };
-		1888BCDC24B4A26100C8C817 /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavformat.a; path = ffmpeglib/lib/libavformat.a; sourceTree = "<group>"; };
 		1888BCDD24B4A28100C8C817 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		1888BCDF24B4A28C00C8C817 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		1888BCE124B4A29400C8C817 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
@@ -122,11 +144,6 @@
 		188978B124B5458F00ABE3E2 /* demuxer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = demuxer.cpp; sourceTree = "<group>"; };
 		1892E57724C7CCD500E162ED /* Subtitles.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Subtitles.cpp; sourceTree = "<group>"; };
 		1892E57824C7CCD500E162ED /* Subtitles.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Subtitles.hpp; sourceTree = "<group>"; };
-		1896F9C324CC669300A62253 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = ffmpeglib/lib/libfreetype.a; sourceTree = "<group>"; };
-		1896F9C424CC669300A62253 /* libfribidi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfribidi.a; path = ffmpeglib/lib/libfribidi.a; sourceTree = "<group>"; };
-		1896F9C624CC669300A62253 /* libass.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libass.a; path = ffmpeglib/lib/libass.a; sourceTree = "<group>"; };
-		1896F9CC24CD041200A62253 /* libfdk-aac.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libfdk-aac.a"; path = "ffmpeglib/lib/libfdk-aac.a"; sourceTree = "<group>"; };
-		1896F9CE24CD16C100A62253 /* libpng16.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng16.a; path = ffmpeglib/lib/libpng16.a; sourceTree = "<group>"; };
 		1896F9D024CD20B700A62253 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		18E1B6DB24BEDFDF0049F95D /* audio_acrossfade.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = audio_acrossfade.cpp; sourceTree = "<group>"; };
 		18E1B6DC24BEDFDF0049F95D /* audio_acrossfade.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = audio_acrossfade.hpp; sourceTree = "<group>"; };
@@ -137,31 +154,34 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1896F9BE24CC669200A62253 /* libavutil.a in Frameworks */,
-				1896F9C724CC675400A62253 /* libass.a in Frameworks */,
-				1896F9BF24CC669200A62253 /* libmp3lame.a in Frameworks */,
 				1888BCE824B4A2D800C8C817 /* libiconv.tbd in Frameworks */,
 				1888BCEC24B4A2FA00C8C817 /* libz.tbd in Frameworks */,
-				1896F9C224CC669300A62253 /* libx264.a in Frameworks */,
-				1896F9BC24CC669200A62253 /* libavfilter.a in Frameworks */,
 				1896F9D124CD20B700A62253 /* CoreText.framework in Frameworks */,
 				1888BCEA24B4A2EB00C8C817 /* liblzma.tbd in Frameworks */,
-				1896F9C124CC669300A62253 /* libswscale.a in Frameworks */,
-				1896F9C924CC675400A62253 /* libfribidi.a in Frameworks */,
 				1888BCF224B4A31300C8C817 /* VideoToolbox.framework in Frameworks */,
 				1888BCE224B4A29400C8C817 /* CoreMedia.framework in Frameworks */,
-				1896F9C824CC675400A62253 /* libfreetype.a in Frameworks */,
+				187351C724DC0BC6006B9EBC /* libexpat.a in Frameworks */,
 				1888BCF024B4A30C00C8C817 /* VideoDecodeAcceleration.framework in Frameworks */,
 				1888BCE624B4A2C800C8C817 /* libbz2.tbd in Frameworks */,
 				1888BCE024B4A28C00C8C817 /* CoreFoundation.framework in Frameworks */,
-				1896F9C024CC669200A62253 /* libswresample.a in Frameworks */,
-				1896F9BD24CC669200A62253 /* libavformat.a in Frameworks */,
 				1888BCDE24B4A28100C8C817 /* AudioToolbox.framework in Frameworks */,
 				1888BCEE24B4A30400C8C817 /* Security.framework in Frameworks */,
-				1896F9CF24CD16C500A62253 /* libpng16.a in Frameworks */,
 				1888BCE424B4A29C00C8C817 /* CoreVideo.framework in Frameworks */,
-				1896F9CD24CD043300A62253 /* libfdk-aac.a in Frameworks */,
-				1896F9BB24CC669200A62253 /* libavcodec.a in Frameworks */,
+				1873519324DBFEF0006B9EBC /* libass.a in Frameworks */,
+				1873519424DBFEF0006B9EBC /* libavcodec.a in Frameworks */,
+				1873519524DBFEF0006B9EBC /* libavfilter.a in Frameworks */,
+				1873519624DBFEF0006B9EBC /* libavformat.a in Frameworks */,
+				1873519724DBFEF0006B9EBC /* libavutil.a in Frameworks */,
+				187351A324DC0601006B9EBC /* libintl.8.dylib in Frameworks */,
+				1873519824DBFEF0006B9EBC /* libfdk-aac.a in Frameworks */,
+				1873519924DBFEF0006B9EBC /* libfontconfig.a in Frameworks */,
+				1873519A24DBFEF0006B9EBC /* libfreetype.a in Frameworks */,
+				1873519B24DBFEF0006B9EBC /* libfribidi.a in Frameworks */,
+				1873519C24DBFEF0006B9EBC /* libmp3lame.a in Frameworks */,
+				1873519D24DBFEF0006B9EBC /* libswresample.a in Frameworks */,
+				1873519E24DBFEF0006B9EBC /* libswscale.a in Frameworks */,
+				1873519F24DBFEF0006B9EBC /* libx264.a in Frameworks */,
+				187351C624DC0BBC006B9EBC /* libexpat.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,12 +218,22 @@
 		1888BCD424B4A26000C8C817 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				187351C524DC0BBC006B9EBC /* libexpat.a */,
+				187351A224DC0601006B9EBC /* libintl.8.dylib */,
+				1873519024DBFEE1006B9EBC /* libass.a */,
+				1873518824DBFEE1006B9EBC /* libavcodec.a */,
+				1873519124DBFEE2006B9EBC /* libavfilter.a */,
+				1873518E24DBFEE1006B9EBC /* libavformat.a */,
+				1873518D24DBFEE1006B9EBC /* libavutil.a */,
+				1873518B24DBFEE1006B9EBC /* libfdk-aac.a */,
+				1873518924DBFEE1006B9EBC /* libfontconfig.a */,
+				1873519224DBFEE2006B9EBC /* libfreetype.a */,
+				1873518F24DBFEE1006B9EBC /* libfribidi.a */,
+				1873518A24DBFEE1006B9EBC /* libmp3lame.a */,
+				1873518624DBFEE1006B9EBC /* libswresample.a */,
+				1873518C24DBFEE1006B9EBC /* libswscale.a */,
+				1873518724DBFEE1006B9EBC /* libx264.a */,
 				1896F9D024CD20B700A62253 /* CoreText.framework */,
-				1896F9CE24CD16C100A62253 /* libpng16.a */,
-				1896F9CC24CD041200A62253 /* libfdk-aac.a */,
-				1896F9C624CC669300A62253 /* libass.a */,
-				1896F9C324CC669300A62253 /* libfreetype.a */,
-				1896F9C424CC669300A62253 /* libfribidi.a */,
 				1888BCF124B4A31300C8C817 /* VideoToolbox.framework */,
 				1888BCEF24B4A30C00C8C817 /* VideoDecodeAcceleration.framework */,
 				1888BCED24B4A30400C8C817 /* Security.framework */,
@@ -215,14 +245,6 @@
 				1888BCE124B4A29400C8C817 /* CoreMedia.framework */,
 				1888BCDF24B4A28C00C8C817 /* CoreFoundation.framework */,
 				1888BCDD24B4A28100C8C817 /* AudioToolbox.framework */,
-				1888BCD724B4A26000C8C817 /* libavcodec.a */,
-				1888BCDA24B4A26000C8C817 /* libavfilter.a */,
-				1888BCDC24B4A26100C8C817 /* libavformat.a */,
-				1888BCDB24B4A26000C8C817 /* libavutil.a */,
-				1888BCD524B4A26000C8C817 /* libmp3lame.a */,
-				1888BCD824B4A26000C8C817 /* libswresample.a */,
-				1888BCD624B4A26000C8C817 /* libswscale.a */,
-				1888BCD924B4A26000C8C817 /* libx264.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -290,6 +312,7 @@
 				1888BCA124B496DB00C8C817 /* Sources */,
 				1888BCA224B496DB00C8C817 /* Frameworks */,
 				1888BCA324B496DB00C8C817 /* CopyFiles */,
+				187351A524DC0602006B9EBC /* Embed Libraries */,
 			);
 			buildRules = (
 			);
@@ -485,6 +508,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"${SRCROOT}/ffmpeglib/lib",
 					"$(PROJECT_DIR)/ffmpeglib/lib",
+					/usr/local/Cellar/gettext/0.21/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -504,6 +528,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"${SRCROOT}/ffmpeglib/lib",
 					"$(PROJECT_DIR)/ffmpeglib/lib",
+					/usr/local/Cellar/gettext/0.21/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

@@ -31,6 +31,7 @@ extern "C" {
 #include "AudioVolume.hpp"
 #include "VideoScale.hpp"
 #include "audio_acrossfade.hpp"
+#include "Subtitles.hpp"
 
 extern "C" jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     JNIEnv *env = NULL;
@@ -296,4 +297,23 @@ extern "C" JNIEXPORT void JNICALL Java_com_example_demo_FFmpegTest_FFmpegTest_do
 
     AudioAcrossfade mObj;
     mObj.doAcrossfade(pcmpath1,pcmpath2,dpath,du);
+}
+extern "C" JNIEXPORT void JNICALL Java_com_example_demo_FFmpegTest_FFmpegTest_addSubtitleStream(JNIEnv *env, jobject instance,jstring mkvpath,jstring subpath,jstring dstpath)
+{
+    string pcmpath1 = jstring2string(env,mkvpath);
+    string pcmpath2 = jstring2string(env,subpath);
+    string dpath = jstring2string(env,dstpath);
+
+    Subtitles mObj;
+    mObj.addSubtitleStream(pcmpath1,pcmpath2,dpath);
+}
+extern "C" JNIEXPORT void JNICALL Java_com_example_demo_FFmpegTest_FFmpegTest_addSubtitlesForVideo(JNIEnv *env, jobject instance,jstring videopah,jstring subpath,jstring dstpath,jstring confpath)
+{
+    string pcmpath1 = jstring2string(env,videopah);
+    string pcmpath2 = jstring2string(env,subpath);
+    string dpath = jstring2string(env,dstpath);
+    string dconfpath = jstring2string(env,confpath);
+
+    Subtitles mObj;
+    mObj.addSubtitlesForVideo(pcmpath1,pcmpath2,dpath,dconfpath);
 }

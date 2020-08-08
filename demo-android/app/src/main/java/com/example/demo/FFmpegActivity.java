@@ -33,7 +33,8 @@ public class FFmpegActivity extends AppCompatActivity implements View.OnClickLis
         addBackButton();
 
         mTestSpinner = (Spinner) findViewById(R.id.ffmpeg_splinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.test_items));
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
+                getResources().getStringArray(R.array.test_items));
         mTestSpinner.setAdapter(adapter);
     }
 
@@ -411,6 +412,40 @@ public class FFmpegActivity extends AppCompatActivity implements View.OnClickLis
                     PathTool.copyAssetsToDst(FFmpegActivity.this,pcmname2,pcmpath2);
 
                     FFmpegTest.doAudioAcrossfade(pcmpath1,pcmpath2,dstpath,10);
+                    isProcessing = false;
+                    processFinish();
+                }).start();
+                break;
+            case 26:
+                new Thread(()->{
+                    String pcmname1 = "test_1280x720_3.mp4";
+                    String pcmname2 = "test_1280x720_3.srt";    // test_1280x720_3.ass
+                    String pcmpath1 = resourceDir+pcmname1;
+                    String pcmpath2 = resourceDir+pcmname2;
+                    String dstpath = resourceDir+"1-subtitles-out.mkv";
+                    PathTool.copyAssetsToDst(FFmpegActivity.this,pcmname1,pcmpath1);
+                    PathTool.copyAssetsToDst(FFmpegActivity.this,pcmname2,pcmpath2);
+
+                    FFmpegTest.addSubtitleStream(pcmpath1,pcmpath2,dstpath);
+                    isProcessing = false;
+                    processFinish();
+                }).start();
+                break;
+            case 27:
+                new Thread(()->{
+                    String pcmname1 = "test_1280x720_4.mp4";
+                    String pcmname2 = "test_1280x720_3.ass";
+                    String confname = "android_fonts.conf";
+                    String pcmpath1 = resourceDir+pcmname1;
+                    String pcmpath2 = resourceDir+pcmname2;
+                    String confpath = resourceDir+confname;
+                    String dstpath = resourceDir+"2-subtitles-out.mp4";
+
+                    PathTool.copyAssetsToDst(FFmpegActivity.this,pcmname1,pcmpath1);
+                    PathTool.copyAssetsToDst(FFmpegActivity.this,pcmname2,pcmpath2);
+                    PathTool.copyAssetsToDst(FFmpegActivity.this,confname,confpath);
+
+                    FFmpegTest.addSubtitlesForVideo(pcmpath1,pcmpath2,dstpath,confpath);
                     isProcessing = false;
                     processFinish();
                 }).start();

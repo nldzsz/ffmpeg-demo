@@ -48,6 +48,7 @@ target_link_libraries(adMedia android log
         # for dynamic
         avformat avcodec avfilter avutil swresample swscale
         # for static
-#        libavformat.a libavcodec.a libavfilter.a libavutil.a libswresample.a libswscale.a libfdk-aac.a libx264.a libmp3lame.a
+#        libavformat.a libavcodec.a libavfilter.a  libavutil.a libswresample.a libswscale.a libass.a libfontconfig.a libexpat.a
+#        libfreetype.a libfribidi.a libmp3lame.a libx264.a
         ${log-lib}
     )

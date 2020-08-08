@@ -7,6 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1803534A24DD7CE100740F1F /* Subtitles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1803534824DD7CE100740F1F /* Subtitles.cpp */; };
+		1803534F24DD7E0F00740F1F /* test_1280x720_3.ass in Resources */ = {isa = PBXBuildFile; fileRef = 1803534C24DD7E0F00740F1F /* test_1280x720_3.ass */; };
+		1803535024DD7E0F00740F1F /* test_1280x720_3.srt in Resources */ = {isa = PBXBuildFile; fileRef = 1803534D24DD7E0F00740F1F /* test_1280x720_3.srt */; };
+		1803535F24DD7F5700740F1F /* libass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1803535E24DD7F3C00740F1F /* libass.a */; };
+		1803536024DD7F5700740F1F /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 188B85C724BC218C00170C7A /* libavcodec.a */; };
+		1803536124DD7F5700740F1F /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 188B85C624BC218C00170C7A /* libavfilter.a */; };
+		1803536224DD7F5700740F1F /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 188B85C824BC218C00170C7A /* libavformat.a */; };
+		1803536324DD7F5700740F1F /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 188B85C524BC218C00170C7A /* libavutil.a */; };
+		1803536424DD7F5700740F1F /* libexpat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1803535A24DD7F3C00740F1F /* libexpat.a */; };
+		1803536624DD7F5700740F1F /* libfontconfig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1803535924DD7F3C00740F1F /* libfontconfig.a */; };
+		1803536724DD7F5700740F1F /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1803535B24DD7F3C00740F1F /* libfreetype.a */; };
+		1803536824DD7F5700740F1F /* libfribidi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1803535C24DD7F3C00740F1F /* libfribidi.a */; };
+		1803536924DD7F5700740F1F /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 188B85C924BC218C00170C7A /* libmp3lame.a */; };
+		1803536A24DD7F5700740F1F /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 188B85CA24BC218C00170C7A /* libswresample.a */; };
+		1803536B24DD7F5700740F1F /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 188B85CB24BC218C00170C7A /* libswscale.a */; };
+		1803536C24DD7F5700740F1F /* libx264.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 188B85CC24BC218C00170C7A /* libx264.a */; };
+		1872D42124DEB64600780B6A /* lantinghei.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 1872D42024DEB64600780B6A /* lantinghei.TTF */; };
 		1888BCBD24B4971200C8C817 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1888BCBC24B4971200C8C817 /* AppDelegate.m */; };
 		1888BCC024B4971200C8C817 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1888BCBF24B4971200C8C817 /* SceneDelegate.m */; };
 		1888BCC324B4971200C8C817 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1888BCC224B4971200C8C817 /* ViewController.m */; };
@@ -14,14 +31,6 @@
 		1888BCC824B4971400C8C817 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1888BCC724B4971400C8C817 /* Assets.xcassets */; };
 		1888BCCB24B4971400C8C817 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1888BCC924B4971400C8C817 /* LaunchScreen.storyboard */; };
 		1888BCCE24B4971400C8C817 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1888BCCD24B4971400C8C817 /* main.m */; };
-		188B85CD24BC218C00170C7A /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 188B85C524BC218C00170C7A /* libavutil.a */; };
-		188B85CE24BC218C00170C7A /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 188B85C624BC218C00170C7A /* libavfilter.a */; };
-		188B85CF24BC218C00170C7A /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 188B85C724BC218C00170C7A /* libavcodec.a */; };
-		188B85D024BC218C00170C7A /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 188B85C824BC218C00170C7A /* libavformat.a */; };
-		188B85D124BC218C00170C7A /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 188B85C924BC218C00170C7A /* libmp3lame.a */; };
-		188B85D224BC218C00170C7A /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 188B85CA24BC218C00170C7A /* libswresample.a */; };
-		188B85D324BC218C00170C7A /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 188B85CB24BC218C00170C7A /* libswscale.a */; };
-		188B85D424BC218C00170C7A /* libx264.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 188B85CC24BC218C00170C7A /* libx264.a */; };
 		188B85DA24BC3B9C00170C7A /* dropdownFlag@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 188B85D624BC3B9C00170C7A /* dropdownFlag@3x.png */; };
 		188B85DB24BC3B9C00170C7A /* dropdownFlag@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 188B85D724BC3B9C00170C7A /* dropdownFlag@2x.png */; };
 		188B85DC24BC3B9C00170C7A /* EBDropdownListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 188B85D824BC3B9C00170C7A /* EBDropdownListView.m */; };
@@ -76,6 +85,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1803534824DD7CE100740F1F /* Subtitles.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Subtitles.cpp; sourceTree = "<group>"; };
+		1803534924DD7CE100740F1F /* Subtitles.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Subtitles.hpp; sourceTree = "<group>"; };
+		1803534C24DD7E0F00740F1F /* test_1280x720_3.ass */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_1280x720_3.ass; sourceTree = "<group>"; };
+		1803534D24DD7E0F00740F1F /* test_1280x720_3.srt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_1280x720_3.srt; sourceTree = "<group>"; };
+		1803535924DD7F3C00740F1F /* libfontconfig.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfontconfig.a; path = ffmpeglib/lib/libfontconfig.a; sourceTree = "<group>"; };
+		1803535A24DD7F3C00740F1F /* libexpat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libexpat.a; path = ffmpeglib/lib/libexpat.a; sourceTree = "<group>"; };
+		1803535B24DD7F3C00740F1F /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = ffmpeglib/lib/libfreetype.a; sourceTree = "<group>"; };
+		1803535C24DD7F3C00740F1F /* libfribidi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfribidi.a; path = ffmpeglib/lib/libfribidi.a; sourceTree = "<group>"; };
+		1803535E24DD7F3C00740F1F /* libass.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libass.a; path = ffmpeglib/lib/libass.a; sourceTree = "<group>"; };
+		1872D42024DEB64600780B6A /* lantinghei.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = lantinghei.TTF; sourceTree = "<group>"; };
 		1888BCB824B4971200C8C817 /* demo-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "demo-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1888BCBB24B4971200C8C817 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1888BCBC24B4971200C8C817 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -288,24 +307,29 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				188B85CD24BC218C00170C7A /* libavutil.a in Frameworks */,
 				188B861824BC612500170C7A /* CoreMedia.framework in Frameworks */,
-				188B85D424BC218C00170C7A /* libx264.a in Frameworks */,
 				188B861424BC610700170C7A /* VideoToolbox.framework in Frameworks */,
 				188B862224BC616800170C7A /* Security.framework in Frameworks */,
-				188B85D024BC218C00170C7A /* libavformat.a in Frameworks */,
 				188B861C24BC613800170C7A /* AudioToolbox.framework in Frameworks */,
 				188B862524BC625600170C7A /* libz.tbd in Frameworks */,
 				188B862424BC624D00170C7A /* libbz2.tbd in Frameworks */,
-				188B85D124BC218C00170C7A /* libmp3lame.a in Frameworks */,
-				188B85D324BC218C00170C7A /* libswscale.a in Frameworks */,
 				188B862324BC624100170C7A /* libiconv.tbd in Frameworks */,
-				188B85CE24BC218C00170C7A /* libavfilter.a in Frameworks */,
 				188B861A24BC612F00170C7A /* CoreFoundation.framework in Frameworks */,
-				188B85CF24BC218C00170C7A /* libavcodec.a in Frameworks */,
-				188B85D224BC218C00170C7A /* libswresample.a in Frameworks */,
 				188B862624BC626600170C7A /* liblzma.tbd in Frameworks */,
 				188B861624BC611C00170C7A /* CoreVideo.framework in Frameworks */,
+				1803535F24DD7F5700740F1F /* libass.a in Frameworks */,
+				1803536024DD7F5700740F1F /* libavcodec.a in Frameworks */,
+				1803536124DD7F5700740F1F /* libavfilter.a in Frameworks */,
+				1803536224DD7F5700740F1F /* libavformat.a in Frameworks */,
+				1803536324DD7F5700740F1F /* libavutil.a in Frameworks */,
+				1803536424DD7F5700740F1F /* libexpat.a in Frameworks */,
+				1803536624DD7F5700740F1F /* libfontconfig.a in Frameworks */,
+				1803536724DD7F5700740F1F /* libfreetype.a in Frameworks */,
+				1803536824DD7F5700740F1F /* libfribidi.a in Frameworks */,
+				1803536924DD7F5700740F1F /* libmp3lame.a in Frameworks */,
+				1803536A24DD7F5700740F1F /* libswresample.a in Frameworks */,
+				1803536B24DD7F5700740F1F /* libswscale.a in Frameworks */,
+				1803536C24DD7F5700740F1F /* libx264.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -357,6 +381,11 @@
 		188B84BC24BC212800170C7A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1803535E24DD7F3C00740F1F /* libass.a */,
+				1803535A24DD7F3C00740F1F /* libexpat.a */,
+				1803535924DD7F3C00740F1F /* libfontconfig.a */,
+				1803535B24DD7F3C00740F1F /* libfreetype.a */,
+				1803535C24DD7F3C00740F1F /* libfribidi.a */,
 				188B862124BC616800170C7A /* Security.framework */,
 				188B862024BC615C00170C7A /* libbz2.tbd */,
 				188B861F24BC615400170C7A /* libiconv.tbd */,
@@ -594,36 +623,38 @@
 		188B85DD24BC451C00170C7A /* cppsrc */ = {
 			isa = PBXGroup;
 			children = (
+				1803534824DD7CE100740F1F /* Subtitles.cpp */,
+				1803534924DD7CE100740F1F /* Subtitles.hpp */,
 				189C71FA24C30CA2006D0B4D /* audio_acrossfade.cpp */,
 				189C71F924C30CA2006D0B4D /* audio_acrossfade.hpp */,
-				188B85DE24BC451C00170C7A /* VideoScale.cpp */,
-				188B85DF24BC451C00170C7A /* VideoJpg.cpp */,
-				188B85E024BC451C00170C7A /* HardEnDecoder.hpp */,
-				188B85E124BC451C00170C7A /* videoresample.hpp */,
-				188B85E224BC451C00170C7A /* SoftEnDecoder.hpp */,
-				188B85E324BC451C00170C7A /* AudioVolume.cpp */,
-				188B85E424BC451C00170C7A /* muxer.cpp */,
 				188B85E524BC451C00170C7A /* audio_encode.cpp */,
-				188B85E624BC451C00170C7A /* Merge.cpp */,
-				188B85E724BC451C00170C7A /* audio_resample.cpp */,
-				188B85E824BC451C00170C7A /* transcode.cpp */,
-				188B85E924BC451C00170C7A /* encodeMuxer.cpp */,
-				188B85EA24BC451C00170C7A /* demuxer.cpp */,
-				188B85EB24BC451C00170C7A /* Cut.cpp */,
 				188B85EC24BC451C00170C7A /* audio_encode.hpp */,
-				188B85ED24BC451C00170C7A /* Merge.hpp */,
-				188B85EE24BC451C00170C7A /* transcode.hpp */,
+				188B85E724BC451C00170C7A /* audio_resample.cpp */,
 				188B85EF24BC451C00170C7A /* audio_resample.hpp */,
-				188B85F024BC451C00170C7A /* encodeMuxer.hpp */,
-				188B85F124BC451C00170C7A /* demuxer.hpp */,
+				188B85E324BC451C00170C7A /* AudioVolume.cpp */,
+				188B85F924BC451C00170C7A /* AudioVolume.hpp */,
+				188B85EB24BC451C00170C7A /* Cut.cpp */,
 				188B85F224BC451C00170C7A /* Cut.hpp */,
-				188B85F324BC451C00170C7A /* VideoScale.hpp */,
-				188B85F424BC451C00170C7A /* VideoJpg.hpp */,
+				188B85EA24BC451C00170C7A /* demuxer.cpp */,
+				188B85F124BC451C00170C7A /* demuxer.hpp */,
+				188B85E924BC451C00170C7A /* encodeMuxer.cpp */,
+				188B85F024BC451C00170C7A /* encodeMuxer.hpp */,
 				188B85F524BC451C00170C7A /* HardEnDecoder.cpp */,
-				188B85F624BC451C00170C7A /* videoresample.cpp */,
+				188B85E024BC451C00170C7A /* HardEnDecoder.hpp */,
+				188B85E624BC451C00170C7A /* Merge.cpp */,
+				188B85ED24BC451C00170C7A /* Merge.hpp */,
+				188B85E424BC451C00170C7A /* muxer.cpp */,
 				188B85F724BC451C00170C7A /* muxer.hpp */,
 				188B85F824BC451C00170C7A /* SoftEnDecoder.cpp */,
-				188B85F924BC451C00170C7A /* AudioVolume.hpp */,
+				188B85E224BC451C00170C7A /* SoftEnDecoder.hpp */,
+				188B85E824BC451C00170C7A /* transcode.cpp */,
+				188B85EE24BC451C00170C7A /* transcode.hpp */,
+				188B85DF24BC451C00170C7A /* VideoJpg.cpp */,
+				188B85F424BC451C00170C7A /* VideoJpg.hpp */,
+				188B85F624BC451C00170C7A /* videoresample.cpp */,
+				188B85E124BC451C00170C7A /* videoresample.hpp */,
+				188B85DE24BC451C00170C7A /* VideoScale.cpp */,
+				188B85F324BC451C00170C7A /* VideoScale.hpp */,
 			);
 			name = cppsrc;
 			path = ../cppsrc;
@@ -645,6 +676,9 @@
 		188B867324BC66C700170C7A /* filesources */ = {
 			isa = PBXGroup;
 			children = (
+				1872D42024DEB64600780B6A /* lantinghei.TTF */,
+				1803534C24DD7E0F00740F1F /* test_1280x720_3.ass */,
+				1803534D24DD7E0F00740F1F /* test_1280x720_3.srt */,
 				189C71FD24C30EFA006D0B4D /* test_mp3_1.mp3 */,
 				189C71FC24C30EFA006D0B4D /* test_mp3_2.mp3 */,
 				188B867424BC66C700170C7A /* test_441_f32le_2.pcm */,
@@ -729,8 +763,10 @@
 			files = (
 				188B85DA24BC3B9C00170C7A /* dropdownFlag@3x.png in Resources */,
 				188B868B24BC66C700170C7A /* test_1280x720_4.mp4 in Resources */,
+				1803534F24DD7E0F00740F1F /* test_1280x720_3.ass in Resources */,
 				188B869324BC66C700170C7A /* test_441_s32le_2.amr in Resources */,
 				1888BCCB24B4971400C8C817 /* LaunchScreen.storyboard in Resources */,
+				1872D42124DEB64600780B6A /* lantinghei.TTF in Resources */,
 				188B869124BC66C700170C7A /* test_441_s8_2.amr in Resources */,
 				1888BCC824B4971400C8C817 /* Assets.xcassets in Resources */,
 				188B869424BC66C700170C7A /* test_441_f32le_2.amr in Resources */,
@@ -745,6 +781,7 @@
 				189C71FF24C30EFA006D0B4D /* test_mp3_1.mp3 in Resources */,
 				188B869724BC66C700170C7A /* test_441_s16be_2.amr in Resources */,
 				188B868624BC66C700170C7A /* test_441_f32le_2.pcm in Resources */,
+				1803535024DD7E0F00740F1F /* test_1280x720_3.srt in Resources */,
 				188B868D24BC66C700170C7A /* test_1280x720_1.mp4 in Resources */,
 				188B85DB24BC3B9C00170C7A /* dropdownFlag@2x.png in Resources */,
 				188B868924BC66C700170C7A /* test_240_s32le_2.pcm in Resources */,
@@ -775,6 +812,7 @@
 				188B860224BC451C00170C7A /* AudioVolume.cpp in Sources */,
 				188B860624BC451C00170C7A /* audio_resample.cpp in Sources */,
 				1888BCBD24B4971200C8C817 /* AppDelegate.m in Sources */,
+				1803534A24DD7CE100740F1F /* Subtitles.cpp in Sources */,
 				188B860E24BC451C00170C7A /* CodecUtil.c in Sources */,
 				188B85DC24BC3B9C00170C7A /* EBDropdownListView.m in Sources */,
 				188B860D24BC451C00170C7A /* SoftEnDecoder.cpp in Sources */,

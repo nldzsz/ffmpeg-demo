@@ -28,6 +28,8 @@
         <item name="doChangeAudioVolume2">doChangeAudioVolume2 23</item>
         <item name="doVideoScale">doVideoScale 24</item>
         <item name="doAudioAcrossfade">doAudioAcrossfade 25</item>
+        <item name="addSubtitleStream">addSubtitleStream 26</item>
+        <item name="addSubtitlesForVideo">addSubtitlesForVideo 27</item>
     </string-array>
 
 </resources>

@@ -49,13 +49,16 @@
         @"doChangeAudioVolume 22",
         @"doChangeAudioVolume2 23",
         @"doVideoScale 24",
-        @"doAudioacrossfade 25"
+        @"doAudioacrossfade 25",
+        @"addSubtitleStream 26",
+        @"addSubtitlesForVideo 27"
     ];
     return dic;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor whiteColor];
     isProcessing = NO;
     
     NSArray *items = [self itemsForffmpeg];
@@ -82,6 +85,7 @@
     self.playBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     self.playBtn.frame = CGRectMake(150, 370,100, 50);
     [self.playBtn setTitle:@"开始" forState:UIControlStateNormal];
+    [self.playBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.view addSubview:self.playBtn];
     [self.playBtn addTarget:self action:@selector(onTapPlayBtn:) forControlEvents:UIControlEventTouchUpInside];
 }
@@ -401,6 +405,34 @@
             NSString *dstpath = [path stringByAppendingPathComponent:@"1-output.mp3"];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 [BridgeFFMpeg doAcrossfade:pcmpath1 src2:pcmpath2 dst:dstpath duration:10];
+                self->isProcessing = false;
+                [self processFinish];
+            });
+        }
+        break;
+        case 26:
+        {
+            NSString *pcmpath1 = [[NSBundle mainBundle] pathForResource:@"test_1280x720_4.mp4" ofType:nil];
+            NSString *pcmpath2 = [[NSBundle mainBundle] pathForResource:@"test_1280x720_3.srt" ofType:nil];
+            NSString *dstpath = [path stringByAppendingPathComponent:@"1-subtitles-out.mkv"];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [BridgeFFMpeg addSubtitleStream:pcmpath1 src2:pcmpath2 dst:dstpath];
+                self->isProcessing = false;
+                [self processFinish];
+            });
+        }
+        break;
+        case 27:
+        {
+            NSString *pcmpath1 = [[NSBundle mainBundle] pathForResource:@"test_1280x720_4.mp4" ofType:nil];
+            NSString *pcmpath2 = [[NSBundle mainBundle] pathForResource:@"test_1280x720_3.srt" ofType:nil];
+            NSString *dstpath = [path stringByAppendingPathComponent:@"2-addsubtitles-video.mp4"];
+            NSString *confdpath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"fonts.conf"];
+            NSString *fontpath = [[NSBundle mainBundle] resourcePath];
+            NSDictionary *fontmaped = @{@"Myfont":@"latin"};
+            [BridgeFFMpeg configConfpath:confdpath fontsPath:fontpath withFonts:fontmaped];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [BridgeFFMpeg addSubtitlesForVideo:pcmpath1 src2:pcmpath2 dst:dstpath confdpath:confdpath];
                 self->isProcessing = false;
                 [self processFinish];
             });

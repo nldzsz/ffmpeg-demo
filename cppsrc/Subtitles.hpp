@@ -10,7 +10,9 @@
 #define Subtitles_hpp
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string>
+#include <map>
 using namespace::std;
 
 extern "C"
@@ -20,6 +22,9 @@ extern "C"
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
 #include <libavfilter/avfilter.h>
+#include <libavfilter/buffersrc.h>
+#include <libavfilter/buffersink.h>
+#include <libavutil/timestamp.h>
 }
 class Subtitles
 {
@@ -36,11 +41,11 @@ public:
     void addSubtitleStream(string videopath,string spath,string dstpath);
     
     /** 实现功能：将字幕流嵌入到视频中
-     
      *  1、要重新编解码，速度比较慢，字幕流最终被嵌入到了视频帧中
      *  2、由于字幕流已经被嵌入到了视频中，作为视频画面的一部分存在所以不同的播放器最终呈现的字幕效果一致。
      */
-    void addSubtitlesForVideo(string vpath,string spath,string dstpath);
+    bool configConfpath(string confpath,string fontsPath,map<string,string>fontmaps);
+    void addSubtitlesForVideo(string vpath,string spath,string dstpath,string confpath);
     
     
 private:
@@ -48,6 +53,18 @@ private:
     AVFormatContext *sfmt;
     AVFormatContext *ofmt;
     
+    int in_video_index,in_audio_index;
+    int ou_video_index,ou_audio_index;
+    AVCodecContext  *de_video_ctx;
+    AVCodecContext  *en_video_ctx;
+    AVFrame         *de_frame;
+    AVFilterGraph   *graph;
+    AVFilterContext *src_filter_ctx;
+    AVFilterContext *sink_filter_ctx;
+    
+    void doDecodec(AVPacket *pkt);
+    void doEncodec(AVFrame *frame);
+    bool initFilterGraph(string spath,string confpath);
     void releaseInternal();
 };
 

@@ -7,6 +7,8 @@
 //
 
 #import "BridgeFFMpeg.h"
+#include <map>
+#include <string>
 
 // for log
 extern "C" {
@@ -30,6 +32,7 @@ extern "C" {
 #include "AudioVolume.hpp"
 #include "VideoScale.hpp"
 #include "audio_acrossfade.hpp"
+#include "Subtitles.hpp"
 
 @implementation BridgeFFMpeg
 static void custom_log_callback(void *ptr,int level, const char* format,va_list val)
@@ -276,5 +279,52 @@ std::string jstring2string(NSString*jStr)
 
     AudioAcrossfade mObj;
     mObj.doAcrossfade(pcmpath1, pcmpath2, dpath,duration);
+}
++ (void)doVideoScale:(NSString *)src dst:(NSString *)dst
+{
+    string pcmpath1 = jstring2string(src);
+    string dpath = jstring2string(dst);
+
+    VideoScale mObj;
+    mObj.doScale(pcmpath1, dpath);
+}
++(void)addSubtitleStream:(NSString*)vpath src2:(NSString*)spath dst:(NSString*)dst
+{
+    string pcmpath1 = jstring2string(vpath);
+    string pcmpath2 = jstring2string(spath);
+    string dpath = jstring2string(dst);
+
+    Subtitles mObj;
+    mObj.addSubtitleStream(pcmpath1, pcmpath2,dpath);
+}
++(void)configConfpath:(NSString*)confpath fontsPath:(NSString*)fontspath withFonts:(NSDictionary*)fontsDic
+{
+    if ([[NSFileManager defaultManager] fileExistsAtPath:confpath]) {
+        [[NSFileManager defaultManager] removeItemAtPath:confpath error:nil];
+    }
+    [[NSFileManager defaultManager] createFileAtPath:confpath contents:nil attributes:nil];
+    
+    string pcmpath1 = jstring2string(confpath);
+    string pcmpath2 = jstring2string(fontspath);
+
+    Subtitles mObj;
+    map<std::string,std::string>fonts;
+    for (NSString *font in fontsDic.allKeys) {
+        NSString *mapedfont = fontsDic[font];
+        std::string cxxFont([font UTF8String]);
+        std::string cxxMapedfont([mapedfont UTF8String]);
+        fonts[cxxFont] = cxxMapedfont;
+    }
+    mObj.configConfpath(pcmpath1, pcmpath2, fonts);
+}
++(void)addSubtitlesForVideo:(NSString*)vpath src2:(NSString*)spath dst:(NSString*)dst confdpath:(NSString*)confdpath
+{
+    string pcmpath1 = jstring2string(vpath);
+    string pcmpath2 = jstring2string(spath);
+    string dpath = jstring2string(dst);
+    string cpath = jstring2string(confdpath);
+
+    Subtitles mObj;
+    mObj.addSubtitlesForVideo(pcmpath1, pcmpath2,dpath,cpath);
 }
 @end
