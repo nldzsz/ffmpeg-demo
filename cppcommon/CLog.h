@@ -14,6 +14,8 @@
 #include <stdarg.h>
 #include <assert.h>
 #include <sys/time.h>
+#include <time.h>
+#include <math.h>
 
 #ifdef __cplusplus
 

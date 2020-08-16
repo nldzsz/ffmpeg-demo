@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">demo-android</string>
+    <string name="waitting">等待处理完成再试</string>
+    <string name="processing">正在处理</string>
+    <string name="finish">处理完毕</string>
+</resources>

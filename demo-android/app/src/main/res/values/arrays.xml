@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--功能-->
+    <string-array name="test_items">
+        <item name="pcm2aac">pcm2aac 0</item>
+        <item name="doResample">doResample 1</item>
+        <item name="doResampleAVFrame">doResampleAVFrame 2</item>
+        <item name="doScale">doScale 3</item>
+        <item name="doDemuxer">doDemuxer 4 </item>
+        <item name="doMuxerTwoFile">doMuxerTwoFile 5</item>
+        <item name="doReMuxer">doReMuxer 6</item>
+        <item name="doSoftDecode">doSoftDecode 7</item>
+        <item name="doSoftDecode2">doSoftDecode2 8</item>
+        <item name="doSoftEncode">doSoftEncode 9</item>
+        <item name="video_doHardDecode">video_doHardDecode 10</item>
+        <item name="video_doHardEncode">video_doHardEncode 11</item>
+        <item name="doReMuxerWithStream">doReMuxerWithStream 12</item>
+        <item name="doExtensionTranscode">doExtensionTranscode 13</item>
+        <item name="doTranscode">doTranscode 14</item>
+        <item name="doEncodeMuxer">doEncodeMuxer 15</item>
+        <item name="doCut">doCut 16</item>
+        <item name="MergeTwo">MergeTwo 17</item>
+        <item name="MergeFiles">MergeFiles 18</item>
+        <item name="addMusic">addMusic 19</item>
+        <item name="doJpgGet">doJpgGet 20</item>
+        <item name="doJpgToVideo">doJpgToVideo 21</item>
+        <item name="doChangeAudioVolume">doChangeAudioVolume 22</item>
+        <item name="doChangeAudioVolume2">doChangeAudioVolume2 23</item>
+        <item name="doVideoScale">doVideoScale 24</item>
+        <item name="doAudioAcrossfade">doAudioAcrossfade 25</item>
+        <item name="addSubtitleStream">addSubtitleStream 26</item>
+        <item name="addSubtitlesForVideo">addSubtitlesForVideo 27</item>
+    </string-array>
+
+</resources>
