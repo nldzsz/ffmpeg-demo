@@ -6,6 +6,7 @@
 
 OpenSLESContext::OpenSLESContext() {
     LOGD("OpenSLESContext()");
+    slObject = NULL;
     initContext();
 }
 OpenSLESContext::~OpenSLESContext() {
@@ -24,8 +25,8 @@ void OpenSLESContext::initContext() {
     SLEngineOption options[] = {{SL_ENGINEOPTION_THREADSAFE,SL_BOOLEAN_TRUE}};
     // 创建引擎对象
     result = slCreateEngine(&slObject,
-                   2,
-                   options,
+                   0,
+                   NULL,
                    0, // no interfaces
                    NULL,// no interfaces
                    NULL // no required

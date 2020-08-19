@@ -121,57 +121,69 @@ public class OpenSLESActivity extends AppCompatActivity {
             break;
             case 3:{
                 DDlog.logd("播放4 " + mTestSpinner.getSelectedItem());
-                int bits = 8;
-                if (bits == 8) {
-                    // 小米 4 无法播放8位的音频数据
-                    mPlayer = new ADAudioTrackPlayer(this,"test_441_s8_2.amr",44100,
-                        AudioFormat.ENCODING_PCM_8BIT,AudioFormat.CHANNEL_OUT_STEREO,true);
-                } else if (bits == 16) {
+                int bits = 16;
+                if (bits == 16) {
                     mPlayer = new ADAudioTrackPlayer(this,"test_441_s16le_2.amr",44100,
                         AudioFormat.ENCODING_PCM_16BIT,AudioFormat.CHANNEL_OUT_STEREO,false);
-                } else if (bits == 17) {
+                }
+                else if (bits == 17) {
                     mPlayer = new ADAudioTrackPlayer(this,"test_441_s16be_2.amr",44100,
                         AudioFormat.ENCODING_PCM_16BIT,AudioFormat.CHANNEL_OUT_STEREO,true);
-                } else if (bits == 32) {
-                    mPlayer = new ADAudioTrackPlayer(this,"test_441_f32le_2.amr",44100,
-                        AudioFormat.ENCODING_PCM_FLOAT,AudioFormat.CHANNEL_OUT_STEREO,false);
                 }
+                // 32位的音频是可以播放的，由于文件太大，没有源文件，这里省略了
+//                else if (bits == 32) {
+//                    mPlayer = new ADAudioTrackPlayer(this,"test_441_f32le_2.amr",44100,
+//                        AudioFormat.ENCODING_PCM_FLOAT,AudioFormat.CHANNEL_OUT_STEREO,false);
+//                }
+//                else if (bits == 8) {
+//                    // 小米 4 无法播放8位的音频数据
+//                    mPlayer = new ADAudioTrackPlayer(this,"test_441_s8_2.amr",44100,
+//                            AudioFormat.ENCODING_PCM_8BIT,AudioFormat.CHANNEL_OUT_STEREO,true);
+//                }
 
                 mPlayer.play();
             }
             break;
             case 4:{
                 DDlog.logd("播放5 " + mTestSpinner.getSelectedItem());
-                File exFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                final String cPath = exFile.getAbsolutePath() + "/audio.pcm";
+                File extFile = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
+                if (!extFile.exists()) {
+                    extFile.mkdir();
+                }
+                final String cPath = extFile.getAbsolutePath() + "/audio.pcm";
                 final int bits = 16;
-                if (bits == 8) {
-                    // 播放8位 音频数据 安卓机器不支持;和上面AudioTrack结果一样
-                    mPlayer = new ADOpenSLES(cPath, 44100, 1, 0);
-                } else if (bits == 16) {
+                if (bits == 16) {
                     // 播放16位 音频数据
                     mPlayer = new ADOpenSLES(cPath, 44100, 1, 1);
-                } else if (bits == 32) {
-                    // 播放32位 音频数据
-                    mPlayer = new ADOpenSLES(cPath, 44100, 1, 2);
                 }
+                // 32位的音频是可以播放的，由于文件太大，没有源文件，这里省略了，要播放直接放开即可
+//                else if (bits == 32) {
+//                    // 播放32位 音频数据
+//                    mPlayer = new ADOpenSLES(cPath, 44100, 1, 2);
+//                }
+//                else if (bits == 8) {
+//                    // 播放8位 音频数据 安卓机器不支持;和上面AudioTrack结果一样
+//                    mPlayer = new ADOpenSLES(cPath, 44100, 1, 0);
+//                }
 
-                new Thread(new Runnable() {
+                    new Thread(new Runnable() {
                     @Override
                     public void run() {
                         Log.d("路径", "onCreate: " + cPath);
-                        if (bits == 8) {
-                            // 播放8位 音频数据
-                            PathTool.copyAssetsToDst(OpenSLESActivity.this,"test_441_s8_2.amr",cPath);
-                        } else if (bits == 16) {
+                        if (bits == 16) {
                             // 播放16位 音频数据
                             PathTool.copyAssetsToDst(OpenSLESActivity.this,"test_441_s16le_2.amr",cPath);
-                        } else if (bits == 32) {
-                            // 播放32位 音频数据
-                            PathTool.copyAssetsToDst(OpenSLESActivity.this,"test_441_s32le_2.amr",cPath);
                         }
+//                        else if (bits == 32) {
+//                            // 播放32位 音频数据
+//                            PathTool.copyAssetsToDst(OpenSLESActivity.this,"test_441_s32le_2.amr",cPath);
+//                        }
+//                        else if (bits == 8) {
+//                            // 播放8位 音频数据
+//                            PathTool.copyAssetsToDst(OpenSLESActivity.this,"test_441_s8_2.amr",cPath);
+//                        }
 
-                        // 拷贝完成后开始播放
+                            // 拷贝完成后开始播放
                         mPlayer.play();
                     }
                 }).start();

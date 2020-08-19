@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1872D42724E0CCB600780B6A /* SpeedSlow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1872D42524E0CCB600780B6A /* SpeedSlow.cpp */; };
+		1872D42A24E0CCC700780B6A /* MultiThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1872D42824E0CCC700780B6A /* MultiThread.cpp */; };
 		1873519324DBFEF0006B9EBC /* libass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1873519024DBFEE1006B9EBC /* libass.a */; };
 		1873519424DBFEF0006B9EBC /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1873518824DBFEE1006B9EBC /* libavcodec.a */; };
 		1873519524DBFEF0006B9EBC /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1873519124DBFEE2006B9EBC /* libavfilter.a */; };
@@ -54,6 +56,7 @@
 		188978BD24B5458F00ABE3E2 /* demuxer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 188978B124B5458F00ABE3E2 /* demuxer.cpp */; };
 		1892E57924C7CCD500E162ED /* Subtitles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1892E57724C7CCD500E162ED /* Subtitles.cpp */; };
 		1896F9D124CD20B700A62253 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1896F9D024CD20B700A62253 /* CoreText.framework */; };
+		18D85BD024E1384B0061D226 /* HttpsTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18D85BCE24E1384B0061D226 /* HttpsTest.cpp */; };
 		18E1B6DD24BEDFDF0049F95D /* audio_acrossfade.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18E1B6DB24BEDFDF0049F95D /* audio_acrossfade.cpp */; };
 /* End PBXBuildFile section */
 
@@ -81,6 +84,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1872D42524E0CCB600780B6A /* SpeedSlow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SpeedSlow.cpp; sourceTree = "<group>"; };
+		1872D42624E0CCB600780B6A /* SpeedSlow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SpeedSlow.hpp; sourceTree = "<group>"; };
+		1872D42824E0CCC700780B6A /* MultiThread.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MultiThread.cpp; sourceTree = "<group>"; };
+		1872D42924E0CCC700780B6A /* MultiThread.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MultiThread.hpp; sourceTree = "<group>"; };
 		1873518624DBFEE1006B9EBC /* libswresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswresample.a; path = ffmpeglib/lib/libswresample.a; sourceTree = "<group>"; };
 		1873518724DBFEE1006B9EBC /* libx264.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libx264.a; path = ffmpeglib/lib/libx264.a; sourceTree = "<group>"; };
 		1873518824DBFEE1006B9EBC /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavcodec.a; path = ffmpeglib/lib/libavcodec.a; sourceTree = "<group>"; };
@@ -145,6 +152,8 @@
 		1892E57724C7CCD500E162ED /* Subtitles.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Subtitles.cpp; sourceTree = "<group>"; };
 		1892E57824C7CCD500E162ED /* Subtitles.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Subtitles.hpp; sourceTree = "<group>"; };
 		1896F9D024CD20B700A62253 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		18D85BCE24E1384B0061D226 /* HttpsTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HttpsTest.cpp; sourceTree = "<group>"; };
+		18D85BCF24E1384B0061D226 /* HttpsTest.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HttpsTest.hpp; sourceTree = "<group>"; };
 		18E1B6DB24BEDFDF0049F95D /* audio_acrossfade.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = audio_acrossfade.cpp; sourceTree = "<group>"; };
 		18E1B6DC24BEDFDF0049F95D /* audio_acrossfade.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = audio_acrossfade.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -297,6 +306,12 @@
 				18E1B6DB24BEDFDF0049F95D /* audio_acrossfade.cpp */,
 				1892E57724C7CCD500E162ED /* Subtitles.cpp */,
 				1892E57824C7CCD500E162ED /* Subtitles.hpp */,
+				1872D42524E0CCB600780B6A /* SpeedSlow.cpp */,
+				1872D42624E0CCB600780B6A /* SpeedSlow.hpp */,
+				1872D42824E0CCC700780B6A /* MultiThread.cpp */,
+				1872D42924E0CCC700780B6A /* MultiThread.hpp */,
+				18D85BCE24E1384B0061D226 /* HttpsTest.cpp */,
+				18D85BCF24E1384B0061D226 /* HttpsTest.hpp */,
 			);
 			name = cppsrc;
 			path = ../cppsrc;
@@ -371,7 +386,9 @@
 				1888BD0324B4A55300C8C817 /* CLog.c in Sources */,
 				1888BD0524B4A55300C8C817 /* audio_resample.cpp in Sources */,
 				1888BD0224B4A55300C8C817 /* CodecUtil.c in Sources */,
+				18D85BD024E1384B0061D226 /* HttpsTest.cpp in Sources */,
 				188978B924B5458F00ABE3E2 /* videoresample.cpp in Sources */,
+				1872D42724E0CCB600780B6A /* SpeedSlow.cpp in Sources */,
 				18E1B6DD24BEDFDF0049F95D /* audio_acrossfade.cpp in Sources */,
 				188978BD24B5458F00ABE3E2 /* demuxer.cpp in Sources */,
 				1888BCA924B496DB00C8C817 /* main.cpp in Sources */,
@@ -379,6 +396,7 @@
 				188978BB24B5458F00ABE3E2 /* Cut.cpp in Sources */,
 				188978B424B5458F00ABE3E2 /* SoftEnDecoder.cpp in Sources */,
 				188978B624B5458F00ABE3E2 /* VideoJpg.cpp in Sources */,
+				1872D42A24E0CCC700780B6A /* MultiThread.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -9,7 +9,7 @@
 SLAudioPlayer::SLAudioPlayer(int bufSamples,Sample_rate rate, Sample_format format, Channel_Layout ch)
         :outBufSamples(bufSamples),fSample_rate(rate),fSample_format(format),fChannel_layout(ch)
 {
-    LOGD("SLAudioPlayer()");
+    LOGD("SLAudioPlayer() rate=%d format(%d) ch(%d)",rate,format,ch);
     slContext = new OpenSLESContext();
     initBuffers();
     initThreadLock();
@@ -186,8 +186,6 @@ void SLAudioPlayer::closeAudioPlayer() {
  **/
 void SLAudioPlayer::putAudioData(char * buff,int size)
 {
-    void *dst = NULL;
-    memcpy(dst,buff,1);
     // 从上一次位置开始填充数据
     int indexOfOutput = currentOutputIndex;
 

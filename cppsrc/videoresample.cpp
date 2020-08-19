@@ -60,8 +60,8 @@ void VideoScale::doScale(string srcpath,string dstpath)
 {
     enum AVPixelFormat src_pix_fmt = AV_PIX_FMT_YUV420P;
     enum AVPixelFormat dst_pix_fmt = AV_PIX_FMT_NV12;
-    int src_w = 640,src_h = 360;
-    int dst_w = 320,dst_h = 180;
+    int src_w = 320,src_h = 180;
+    int dst_w = 160,dst_h = 90;
     
     /** 1、因为视频的planner个数最多不超过4个，所以这里的src_data数组和linesize数组长度都是4
      *  2、linesize数组存储的是各个planner的宽，对应"视频的宽"，由于字节对齐可能会大于等于对应"视频的宽"

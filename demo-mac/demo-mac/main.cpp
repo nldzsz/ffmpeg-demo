@@ -23,6 +23,7 @@
 #include "VideoScale.hpp"
 #include "audio_acrossfade.hpp"
 #include "Subtitles.hpp"
+#include "HttpsTest.hpp"
 
 int main(int argc, const char * argv[]) {
     string curFile(__FILE__);
@@ -32,7 +33,7 @@ int main(int argc, const char * argv[]) {
     }
     string resourceDir = curFile.substr(0,pos)+"filesources/";
     
-    int test_use = 27;
+    int test_use = 3;
     if (test_use == 0) {
         string pcmpath = resourceDir+"test_441_f32le_2.pcm";
         string dstpath = resourceDir+"test_441_f32le_2.aac";
@@ -50,7 +51,7 @@ int main(int argc, const char * argv[]) {
         AudioResample aResample;
         aResample.doResampleAVFrame(srcpcm,dstpcm);
     } else if (test_use == 3) {
-        string srcyuvPath = resourceDir + "test_640x360_yuv420p.yuv";
+        string srcyuvPath = resourceDir + "test_320x180_yuv420p.yuv";
         string dstyuvPath = resourceDir + "test.yuv";
         VideoScale scale;
         scale.doScale(srcyuvPath,dstyuvPath);
@@ -204,6 +205,12 @@ int main(int argc, const char * argv[]) {
         string confpath = resourceDir + "mac_fonts.conf";
         Subtitles mObj;
         mObj.addSubtitlesForVideo(apath1, apath2,dstpath,confpath);
+    }
+    else if (test_use == 28) {
+        string srcpath = "https://img.flypie.net/tec1-7.mp4";
+        string dstpath = resourceDir + "https-out.mp4";
+        HttpsTest mObj;
+        mObj.doCopyStreamFromHttps(srcpath, dstpath);
     }
     
     return 0;

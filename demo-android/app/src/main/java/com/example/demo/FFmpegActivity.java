@@ -124,7 +124,7 @@ public class FFmpegActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case 3:
                 new Thread(()->{
-                    String pcmname = "test_640x360_yuv420p.yuv";
+                    String pcmname = "test_320x180_yuv420p.yuv";
                     String pcmpath = resourceDir+pcmname;
                     String dstpath = resourceDir+"test.yuv";
                     PathTool.copyAssetsToDst(FFmpegActivity.this,pcmname,pcmpath);

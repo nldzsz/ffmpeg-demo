@@ -154,7 +154,7 @@
         break;
         case 3:
         {
-            NSString *pcmpath = [[NSBundle mainBundle] pathForResource:@"test_640x360_yuv420p.yuv" ofType:nil];
+            NSString *pcmpath = [[NSBundle mainBundle] pathForResource:@"test_320x180_yuv420p.yuv" ofType:nil];
             NSString *dstpath = [path stringByAppendingPathComponent:@"test.yuv"];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 [BridgeFFMpeg doScale:pcmpath dst:dstpath];
