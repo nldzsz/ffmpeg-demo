@@ -218,7 +218,7 @@
         break;
         case 9:
         {
-            NSString *pcmpath = [[NSBundle mainBundle] pathForResource:@"test_640x360_yuv420p.yuv" ofType:nil];
+            NSString *pcmpath = [[NSBundle mainBundle] pathForResource:@"test_320x180_yuv420p.yuv" ofType:nil];
             NSString *dstpath = [path stringByAppendingPathComponent:@"1-abc-test.h264"];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 [BridgeFFMpeg doSoftEncode:pcmpath dst:dstpath];
@@ -240,7 +240,7 @@
         break;
         case 11:
         {
-            NSString *pcmpath = [[NSBundle mainBundle] pathForResource:@"test_640x360_yuv420p.yuv" ofType:nil];
+            NSString *pcmpath = [[NSBundle mainBundle] pathForResource:@"test_320x180_yuv420p.yuv" ofType:nil];
             NSString *dstpath = [path stringByAppendingPathComponent:@"3-test.h264"];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 [BridgeFFMpeg doHardEncode:pcmpath dst:dstpath];
