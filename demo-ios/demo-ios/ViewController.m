@@ -9,11 +9,13 @@
 #import "ViewController.h"
 #import "EBDropdownListView.h"
 #include "BridgeFFMpeg.h"
+#import "AVDemuxer.h"
 
 
 @interface ViewController ()
 {
     EBDropdownListView *_dropdownListView;
+    EBDropdownListView *_selectedListView;
     BOOL                isProcessing;
 }
 @property (strong, nonatomic) UIButton *playBtn;
@@ -56,12 +58,67 @@
     return dic;
 }
 
+- (NSArray*)itemsForAVFoundation
+{
+    NSArray *dic = @[
+         @"解封装 0",
+         @"封装 1",
+    ];
+    return dic;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     isProcessing = NO;
+    // ffmpeg & avfoundation
+    NSArray *selectedItems = @[@"ffmpeg",@"AVFoundation"];
+    NSMutableArray *selectedViews = [NSMutableArray array];
+    for (NSString *itemDes in selectedItems) {
+        EBDropdownListItem *item = [[EBDropdownListItem alloc] initWithItem:itemDes itemName:itemDes];
+        [selectedViews addObject:item];
+    }
+    _selectedListView = [[EBDropdownListView alloc] initWithDataSource:selectedViews];
+    _selectedListView.selectedIndex = 1;
+    _selectedListView.frame = CGRectMake(20, 100, 350, 30);
+    [_selectedListView setViewBorder:0.5 borderColor:[UIColor grayColor] cornerRadius:2];
+    [self.view addSubview:_selectedListView];
+    __weak typeof(self) weakSelf = self;
+    [_selectedListView setDropdownListViewSelectedBlock:^(EBDropdownListView *dropdownListView) {
+        [weakSelf initDropDownListView];
+    }];
     
-    NSArray *items = [self itemsForffmpeg];
+    
+    // 首次初始化
+    [weakSelf initDropDownListView];
+    
+    self.statusLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 300,300, 50)];
+    self.statusLabel.text = @"";
+    self.statusLabel.textColor = [UIColor whiteColor];
+    self.statusLabel.backgroundColor = [UIColor blackColor];
+    [self.view addSubview:self.statusLabel];
+    
+    self.playBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.playBtn.frame = CGRectMake(150, 420,100, 50);
+    [self.playBtn setTitle:@"开始" forState:UIControlStateNormal];
+    [self.playBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.view addSubview:self.playBtn];
+    [self.playBtn addTarget:self action:@selector(onTapPlayBtn:) forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)initDropDownListView
+{
+    if (_dropdownListView) {
+        [_dropdownListView removeFromSuperview];
+        _dropdownListView = nil;
+    }
+    
+    NSArray *items = nil;
+    if (_selectedListView.selectedIndex == 0) {
+        items = [self itemsForffmpeg];
+    } else {
+        items = [self itemsForAVFoundation];
+    }
     NSMutableArray *itemViews = [NSMutableArray array];
     NSInteger num = 0;
     for (NSString *itemDes in items) {
@@ -72,22 +129,9 @@
     }
     _dropdownListView = [[EBDropdownListView alloc] initWithDataSource:itemViews];
     _dropdownListView.selectedIndex = 0;
-    _dropdownListView.frame = CGRectMake(20, 100, 350, 30);
+    _dropdownListView.frame = CGRectMake(20, 150, 350, 30);
     [_dropdownListView setViewBorder:0.5 borderColor:[UIColor grayColor] cornerRadius:2];
     [self.view addSubview:_dropdownListView];
-    
-    self.statusLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 250,300, 50)];
-    self.statusLabel.text = @"";
-    self.statusLabel.textColor = [UIColor whiteColor];
-    self.statusLabel.backgroundColor = [UIColor blackColor];
-    [self.view addSubview:self.statusLabel];
-    
-    self.playBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.playBtn.frame = CGRectMake(150, 370,100, 50);
-    [self.playBtn setTitle:@"开始" forState:UIControlStateNormal];
-    [self.playBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [self.view addSubview:self.playBtn];
-    [self.playBtn addTarget:self action:@selector(onTapPlayBtn:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -103,6 +147,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         self.statusLabel.text=@"处理完毕...";
+        self->_selectedListView.userInteractionEnabled = YES;
     });
 }
 - (void)onTapPlayBtn:(UIButton*)btn
@@ -114,7 +159,13 @@
     }
     isProcessing = true;
     self.statusLabel.text=@"正在处理中...";
-
+    _selectedListView.userInteractionEnabled = NO;
+    
+    if (_selectedListView.selectedIndex == 1) { // 处理AVFoundation的请求
+        [self processAVFoundation];
+        return;
+    }
+    
     NSString *path = NSSearchPathForDirectoriesInDomains(NSCachesDirectory,NSUserDomainMask,YES)[0];
     
     NSInteger _selectIndex = _dropdownListView.selectedIndex;
@@ -165,7 +216,7 @@
         break;
         case 4:
         {
-            NSString *pcmpath = [[NSBundle mainBundle] pathForResource:@"test-mp3-1.mp3" ofType:nil];
+            NSString *pcmpath = [[NSBundle mainBundle] pathForResource:@"test_1280x720_3.mp4" ofType:nil];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 [BridgeFFMpeg doDemuxer:pcmpath];
                 self->isProcessing = false;
@@ -433,6 +484,40 @@
             [BridgeFFMpeg configConfpath:confdpath fontsPath:fontpath withFonts:fontmaped];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 [BridgeFFMpeg addSubtitlesForVideo:pcmpath1 src2:pcmpath2 dst:dstpath confdpath:confdpath];
+                self->isProcessing = false;
+                [self processFinish];
+            });
+        }
+        break;
+        default:
+            break;
+    }
+}
+
+
+- (void)processAVFoundation
+{
+    NSString *path = NSSearchPathForDirectoriesInDomains(NSCachesDirectory,NSUserDomainMask,YES)[0];
+    NSInteger _selectIndex = _dropdownListView.selectedIndex;
+    switch (_selectIndex) {
+        case 0:
+        {
+            NSURL *videoURL = [[NSBundle mainBundle] URLForResource:@"test_1280x720_3" withExtension:@"mp4"];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                AVDemuxer *demuxer = [[AVDemuxer alloc] initWithURL:videoURL];
+                demuxer.autoDecode = NO;
+                [demuxer startProcess];
+                self->isProcessing = false;
+                [self processFinish];
+            });
+        }
+        break;
+        case 1:
+        {
+            NSURL *videoURL = [[NSBundle mainBundle] URLForResource:@"test_1280x720_3" withExtension:@"mp4"];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                AVDemuxer *demuxer = [[AVDemuxer alloc] initWithURL:videoURL];
+                [demuxer startProcess];
                 self->isProcessing = false;
                 [self processFinish];
             });

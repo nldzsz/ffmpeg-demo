@@ -85,6 +85,9 @@ void Demuxer::doDemuxer(string srcPath)
 {
     AVFormatContext *inFmtCtx = NULL;
     int ret = 0;
+    struct timeval btime;
+    struct timeval etime;
+    gettimeofday(&btime, NULL);
 #define Use_Custom_io   0
 #if Use_Custom_io
     AVIOContext *ioCtx;
@@ -209,7 +212,8 @@ void Demuxer::doDemuxer(string srcPath)
         av_packet_unref(packet);
     }
     LOGD("end av_read_frame ret %s",av_err2str(ret));
-    
+    gettimeofday(&etime, NULL);
+    LOGD("解析耗时 %.2fs",(etime.tv_sec - btime.tv_sec) + (etime.tv_usec - btime.tv_usec)/1000000.0f);
     
     /** 释放内存
      */

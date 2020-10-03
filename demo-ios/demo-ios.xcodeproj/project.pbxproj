@@ -21,6 +21,10 @@
 		1803536A24DD7F5700740F1F /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 188B85CA24BC218C00170C7A /* libswresample.a */; };
 		1803536B24DD7F5700740F1F /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 188B85CB24BC218C00170C7A /* libswscale.a */; };
 		1803536C24DD7F5700740F1F /* libx264.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 188B85CC24BC218C00170C7A /* libx264.a */; };
+		18204B6C2528B58C00A881FB /* AVMuxer.m in Sources */ = {isa = PBXBuildFile; fileRef = 18204B6B2528B58C00A881FB /* AVMuxer.m */; };
+		18204B702528B5A200A881FB /* VTEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 18204B6F2528B5A200A881FB /* VTEncoder.m */; };
+		18204B742528B5B000A881FB /* VTDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 18204B732528B5B000A881FB /* VTDecoder.m */; };
+		18204B782528B5C900A881FB /* AVCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 18204B772528B5C900A881FB /* AVCapture.m */; };
 		1888BCBD24B4971200C8C817 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1888BCBC24B4971200C8C817 /* AppDelegate.m */; };
 		1888BCC024B4971200C8C817 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1888BCBF24B4971200C8C817 /* SceneDelegate.m */; };
 		1888BCC324B4971200C8C817 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1888BCC224B4971200C8C817 /* ViewController.m */; };
@@ -76,6 +80,7 @@
 		18947E48250F5B3F00C2A247 /* test_441_s16be_2.amr in Resources */ = {isa = PBXBuildFile; fileRef = 18947E37250F5B3F00C2A247 /* test_441_s16be_2.amr */; };
 		18947E49250F5B3F00C2A247 /* lantinghei.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 18947E38250F5B3F00C2A247 /* lantinghei.TTF */; };
 		189C71FB24C30CA2006D0B4D /* audio_acrossfade.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 189C71FA24C30CA2006D0B4D /* audio_acrossfade.cpp */; };
+		18D05F882528323700A8A63D /* AVDemuxer.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D05F872528323700A8A63D /* AVDemuxer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -86,6 +91,14 @@
 		1803535B24DD7F3C00740F1F /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = ffmpeglib/lib/libfreetype.a; sourceTree = "<group>"; };
 		1803535C24DD7F3C00740F1F /* libfribidi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfribidi.a; path = ffmpeglib/lib/libfribidi.a; sourceTree = "<group>"; };
 		1803535E24DD7F3C00740F1F /* libass.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libass.a; path = ffmpeglib/lib/libass.a; sourceTree = "<group>"; };
+		18204B6A2528B58C00A881FB /* AVMuxer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVMuxer.h; sourceTree = "<group>"; };
+		18204B6B2528B58C00A881FB /* AVMuxer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVMuxer.m; sourceTree = "<group>"; };
+		18204B6E2528B5A200A881FB /* VTEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VTEncoder.h; sourceTree = "<group>"; };
+		18204B6F2528B5A200A881FB /* VTEncoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VTEncoder.m; sourceTree = "<group>"; };
+		18204B722528B5B000A881FB /* VTDecoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VTDecoder.h; sourceTree = "<group>"; };
+		18204B732528B5B000A881FB /* VTDecoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VTDecoder.m; sourceTree = "<group>"; };
+		18204B762528B5C900A881FB /* AVCapture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVCapture.h; sourceTree = "<group>"; };
+		18204B772528B5C900A881FB /* AVCapture.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVCapture.m; sourceTree = "<group>"; };
 		1888BCB824B4971200C8C817 /* demo-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "demo-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1888BCBB24B4971200C8C817 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1888BCBC24B4971200C8C817 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -288,6 +301,8 @@
 		18947E38250F5B3F00C2A247 /* lantinghei.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = lantinghei.TTF; sourceTree = "<group>"; };
 		189C71F924C30CA2006D0B4D /* audio_acrossfade.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = audio_acrossfade.hpp; sourceTree = "<group>"; };
 		189C71FA24C30CA2006D0B4D /* audio_acrossfade.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = audio_acrossfade.cpp; sourceTree = "<group>"; };
+		18D05F862528323700A8A63D /* AVDemuxer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVDemuxer.h; sourceTree = "<group>"; };
+		18D05F872528323700A8A63D /* AVDemuxer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVDemuxer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -327,6 +342,7 @@
 		1888BCAF24B4971200C8C817 = {
 			isa = PBXGroup;
 			children = (
+				18D05F7025280D0E00A8A63D /* AVFoundation */,
 				188B867324BC66C700170C7A /* filesources */,
 				188B85FA24BC451C00170C7A /* cppcommon */,
 				188B85DD24BC451C00170C7A /* cppsrc */,
@@ -686,6 +702,24 @@
 			path = ../filesources;
 			sourceTree = "<group>";
 		};
+		18D05F7025280D0E00A8A63D /* AVFoundation */ = {
+			isa = PBXGroup;
+			children = (
+				18D05F862528323700A8A63D /* AVDemuxer.h */,
+				18D05F872528323700A8A63D /* AVDemuxer.m */,
+				18204B6A2528B58C00A881FB /* AVMuxer.h */,
+				18204B6B2528B58C00A881FB /* AVMuxer.m */,
+				18204B6E2528B5A200A881FB /* VTEncoder.h */,
+				18204B6F2528B5A200A881FB /* VTEncoder.m */,
+				18204B722528B5B000A881FB /* VTDecoder.h */,
+				18204B732528B5B000A881FB /* VTDecoder.m */,
+				18204B762528B5C900A881FB /* AVCapture.h */,
+				18204B772528B5C900A881FB /* AVCapture.m */,
+			);
+			name = AVFoundation;
+			path = "demo-ios/AVFoundation";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -789,6 +823,7 @@
 				188B860624BC451C00170C7A /* audio_resample.cpp in Sources */,
 				1888BCBD24B4971200C8C817 /* AppDelegate.m in Sources */,
 				1803534A24DD7CE100740F1F /* Subtitles.cpp in Sources */,
+				18204B6C2528B58C00A881FB /* AVMuxer.m in Sources */,
 				188B860E24BC451C00170C7A /* CodecUtil.c in Sources */,
 				188B85DC24BC3B9C00170C7A /* EBDropdownListView.m in Sources */,
 				188B860D24BC451C00170C7A /* SoftEnDecoder.cpp in Sources */,
@@ -798,7 +833,11 @@
 				1888BCCE24B4971400C8C817 /* main.m in Sources */,
 				188B860424BC451C00170C7A /* audio_encode.cpp in Sources */,
 				1888BCC024B4971200C8C817 /* SceneDelegate.m in Sources */,
+				18204B702528B5A200A881FB /* VTEncoder.m in Sources */,
+				18204B782528B5C900A881FB /* AVCapture.m in Sources */,
 				188B861224BC470300170C7A /* BridgeFFMpeg.mm in Sources */,
+				18204B742528B5B000A881FB /* VTDecoder.m in Sources */,
+				18D05F882528323700A8A63D /* AVDemuxer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
