@@ -7,11 +7,14 @@
 //
 
 #import "AVDemuxer.h"
-@interface AVDemuxer()
+@interface AVDemuxer()<AVAssetDownloadDelegate>
 {
     dispatch_semaphore_t decodeSemaphore;
 }
 @property(nonatomic,strong)NSURL *url;
+@property(nonatomic,strong)NSURL *remoteurl;
+@property(nonatomic,strong)AVAssetDownloadTask *downTask;
+
 @end
 
 @implementation AVDemuxer
@@ -62,38 +65,38 @@
      *
      *  后续的从容器中读取数据读取以及写入数据到容器中都需要依赖此对象
      */
-    NSLog(@"开始");
     // 1、初始化AVAsset对象
-    self.asset = [[AVURLAsset alloc] initWithURL:self.url options:inputOptions];
-//    AVURLAsset *inputAsset = [[AVURLAsset alloc] initWithURL:[NSURL URLWithString:@"https://images.flypie.net/test_1280x720_3.mp4"] options:inputOptions];
-    NSLog(@"结束");
+    AVURLAsset *inputAsset = [[AVURLAsset alloc] initWithURL:self.url options:inputOptions];
+//    self.asset = [[AVURLAsset alloc] initWithURL:[NSURL URLWithString:@"https://images.flypie.net/test_1280x720_3.mp4"] options:inputOptions];
     // 如果在这里直接调用如下属性，那么将采用同步方式初始化属性，会阻塞当前线程，一般本地资源是可以采用如下方式
 //    NSLog(@"duration %f",CMTimeGetSeconds(inputAsset.duration));
 //    NSLog(@"tracks %@",inputAsset.tracks);
-    __weak typeof(self) weakSelf = self;
+    __block AVDemuxer *blockSelf = self;
     // 2、解析容器格式，作用和ffmpeg的avformat_open_input()函数功能一样。初始化AVAsset对象通过此方式异步初始化属性;
     // 备注：inputAsset不能被释放，否则初始化会失败，回调函数不在主线程中
     CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
-    [self.asset loadValuesAsynchronouslyForKeys:@[@"tracks",@"duration"] completionHandler:^{
+    [inputAsset loadValuesAsynchronouslyForKeys:@[@"tracks"] completionHandler:^{
 //        NSLog(@"thread %@",[NSThread currentThread]);
         
         NSError *error = nil;
-        AVKeyValueStatus status = [weakSelf.asset statusOfValueForKey:@"tracks" error:&error];
+        AVKeyValueStatus status = [inputAsset statusOfValueForKey:@"tracks" error:&error];
         if (status != AVKeyValueStatusLoaded) {
             NSLog(@"error %@",error);
             return;
         }
         
-        NSLog(@"aync duration %f",CMTimeGetSeconds(weakSelf.asset.duration));
-        NSLog(@"aync tracks %@",weakSelf.asset.tracks);
+        NSLog(@"aync tracks %@",inputAsset.tracks);
         // 3、创建音视频读数据读取对象
-        [weakSelf processAsset];
+        blockSelf.asset = inputAsset;
+        [blockSelf processAsset];
         
         NSLog(@"总耗时 %f秒",CFAbsoluteTimeGetCurrent() - startTime);
         
         // 任务完毕
         dispatch_semaphore_signal(self->decodeSemaphore);
         NSLog(@"结束111");
+        
+        blockSelf = nil;
     }];
     
     // 阻塞当前线程
@@ -104,15 +107,21 @@
 - (void)processAsset
 {
     self.assetReader = [self createAssetReader];
+    if (!self.assetReader) {
+        return;
+    }
     
     AVAssetReaderOutput *videoTrackout = nil;
     AVAssetReaderOutput *audioTrackout = nil;
+    BOOL videoFinish = NO;
+    BOOL audioFinish = YES;
     for (AVAssetReaderOutput *output in self.assetReader.outputs) {
         if ([output.mediaType isEqualToString:AVMediaTypeVideo]) {
             videoTrackout = output;
         }
         if ([output.mediaType isEqualToString:AVMediaTypeAudio]) {
             audioTrackout = output;
+            audioFinish = NO;
         }
     }
     
@@ -125,51 +134,15 @@
     // 通过读取状态来判断是否还有未读取完的音视频数据
     CMSampleBufferRef videoSamplebuffer = NULL;
     CMSampleBufferRef audioSamplebuffer = NULL;
-    BOOL videoFinish = NO;
-    BOOL audioFinish = NO;
+    
     int sum = 0;
     while (self.assetReader.status == AVAssetReaderStatusReading && (!videoFinish || !audioFinish)) {
         
-        // 读取视频数据
-        if (videoTrackout != nil) {
-            videoSamplebuffer = [videoTrackout copyNextSampleBuffer];
-            if (videoSamplebuffer != NULL) {
-                CMTime pts = CMSampleBufferGetOutputPresentationTimeStamp(videoSamplebuffer);
-                CMTime dts = CMSampleBufferGetOutputDecodeTimeStamp(videoSamplebuffer);
-                CMTime duration = CMSampleBufferGetOutputDuration(videoSamplebuffer);
-                size_t size = CMSampleBufferGetSampleSize(videoSamplebuffer,0);
-                sum++;
-                // 对于未解压的数据，是可以获取到pts,dts,duration的，如果经过系统内部自动解码后，dts,duration可能会被丢失了
-                NSLog(@"video pts(%f),dts(%f),duration(%f) size(%ld) sum %d",CMTimeGetSeconds(pts),CMTimeGetSeconds(dts),CMTimeGetSeconds(duration),size,sum);
-                
-                // 释放资源
-                CMSampleBufferInvalidate(videoSamplebuffer);
-                CFRelease(videoSamplebuffer);
-            } else {
-                videoFinish = YES;
-            }
-            
-        } else {
-            videoFinish = YES;
-        }
-        
-        // 读取音频数据
-        if (audioTrackout != nil) {
-            audioSamplebuffer = [audioTrackout copyNextSampleBuffer];
-            if (audioSamplebuffer != NULL) {
-                CMTime pts = CMSampleBufferGetOutputPresentationTimeStamp(audioSamplebuffer);
-                CMTime dts = CMSampleBufferGetOutputDecodeTimeStamp(audioSamplebuffer);
-                CMTime duration = CMSampleBufferGetOutputDuration(audioSamplebuffer);
-                // 对于未解压的数据，是可以获取到pts,dts,duration的，如果经过系统内部自动解码后，dts,duration可能会被丢失了
-                NSLog(@"audio pts(%f),dts(%f),duration(%f)",CMTimeGetSeconds(pts),CMTimeGetSeconds(dts),CMTimeGetSeconds(duration));
-                
-                CMSampleBufferInvalidate(audioSamplebuffer);
-                CFRelease(audioSamplebuffer);
-            } else {
-                audioFinish = YES;
-            }
-        } else {
-            audioFinish = YES;
+        [self readNextVideoFrameFromOutput:videoTrackout];
+
+        if ( (audioTrackout) && (!audioFinish) )
+        {
+                [self readNextAudioSampleFromOutput:audioTrackout];
         }
     }
     
@@ -181,13 +154,57 @@
     }
 }
 
+- (BOOL)readNextVideoFrameFromOutput:(AVAssetReaderOutput *)readerVideoTrackOutput;
+{
+    if (self.assetReader.status == AVAssetReaderStatusReading)
+    {
+        // 从视频输出对象读取视频数据，如果没有了，则返回NULL
+        CMSampleBufferRef sampleBufferRef = [readerVideoTrackOutput copyNextSampleBuffer];
+        if (sampleBufferRef)
+        {
+            NSLog(@"read a video frame: %@", CFBridgingRelease(CMTimeCopyDescription(kCFAllocatorDefault, CMSampleBufferGetOutputPresentationTimeStamp(sampleBufferRef))));
+
+            
+            CMSampleBufferInvalidate(sampleBufferRef);
+            CFRelease(sampleBufferRef);
+
+            return YES;
+        }
+    }
+
+    return NO;
+}
+
+- (BOOL)readNextAudioSampleFromOutput:(AVAssetReaderOutput *)readerAudioTrackOutput;
+{
+    if (self.assetReader.status == AVAssetReaderStatusReading)
+    {
+        CMSampleBufferRef audioSampleBufferRef = [readerAudioTrackOutput copyNextSampleBuffer];
+        if (audioSampleBufferRef)
+        {
+            NSLog(@"read an audio frame: %@", CFBridgingRelease(CMTimeCopyDescription(kCFAllocatorDefault, CMSampleBufferGetOutputPresentationTimeStamp(audioSampleBufferRef))));
+//            [self.audioEncodingTarget processAudioBuffer:audioSampleBufferRef];
+            CFRelease(audioSampleBufferRef);
+            return YES;
+        }
+    }
+    
+    return NO;
+}
+
 - (AVAssetReader *)createAssetReader
 {
     NSError *error = nil;
     /** AVAssetReader对象
      *  它跟AVCaptureSession作用一样，作为从容器对象AVAsset对象读取数据的管理器，需要音视频输出对象
+     *
+     *  备注：此种方式只支持本地容器的数据读取
      */
     AVAssetReader *assetReader = [AVAssetReader assetReaderWithAsset:self.asset error:&error];
+    if (error) {
+        NSLog(@"error %@",error);
+        return  nil;
+    }
     NSMutableDictionary *videoOutputSettings = [NSMutableDictionary dictionary];
     if ([AVDemuxer supportsFastTextureUpload]) {
         [videoOutputSettings setObject:@(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange) forKey:(__bridge NSString*)kCVPixelBufferPixelFormatTypeKey];
@@ -222,6 +239,90 @@
     [assetReader addOutput:audioTrackOutput];
     
     return  assetReader;
+}
+
+- (id)initWithRemoteURL:(NSURL*)remoteURL
+{
+    if (self = [super init]) {
+        self.remoteurl = remoteURL;
+        self.autoDecode = NO;
+        
+        decodeSemaphore = dispatch_semaphore_create(0);
+        dispatch_semaphore_signal(decodeSemaphore);
+    }
+    
+    return self;
+}
+
+- (void)startRemoteProcess
+{
+    if (dispatch_semaphore_wait(decodeSemaphore, DISPATCH_TIME_NOW) != 0) {
+        return;
+    }
+    [self processRemoteAssset];
+    
+//    // 初始化AVURLAsset容器对象
+//    NSDictionary *options = @{
+//        AVURLAssetPreferPreciseDurationAndTimingKey:@(YES)
+//    };
+//    self.asset = [AVURLAsset URLAssetWithURL:self.remoteurl options:options];
+//    // 异步初始化容器属性
+//    __weak typeof(self) weakSelf = self;
+//    [self.asset loadValuesAsynchronouslyForKeys:@[@"tracks",@"duration"] completionHandler:^{
+//
+//        AVKeyValueStatus status = [weakSelf.asset statusOfValueForKey:@"tracks" error:nil];
+//        if (status != AVKeyValueStatusLoaded) {
+//            NSLog(@"load property failed");
+//            return;
+//        }
+//
+//        NSLog(@"tracks %@",weakSelf.asset.tracks);
+//        NSLog(@"duration %f",CMTimeGetSeconds(weakSelf.asset.duration));
+//
+//        [weakSelf processRemoteAssset];
+//
+//        dispatch_semaphore_signal(self->decodeSemaphore);
+//
+//    }];
+    
+    dispatch_semaphore_wait(decodeSemaphore, DISPATCH_TIME_FOREVER);
+    NSLog(@"结束111");
+}
+
+- (void)processRemoteAssset
+{
+    NSURLSessionConfiguration *config = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"title"];
+    config.URLCredentialStorage = nil;
+    
+    AVAssetDownloadURLSession *session = [AVAssetDownloadURLSession sessionWithConfiguration:config assetDownloadDelegate:self delegateQueue:[NSOperationQueue mainQueue]];
+    NSDictionary *avoptions = @{AVURLAssetPreferPreciseDurationAndTimingKey:@(YES)};
+    // https://images.flypie.net/test_1280x720_3.mp4
+    NSString *urlString = @"https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8";
+    AVURLAsset *url = [AVURLAsset URLAssetWithURL:[NSURL URLWithString:urlString] options:avoptions];
+    self.downTask = [session assetDownloadTaskWithURLAsset:url assetTitle:@"title" assetArtworkData:nil options:nil];
+    
+    // 开始下载
+    [self.downTask resume];
+}
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
+{
+    NSLog(@"error %@",error);
+}
+
+- (void)URLSession:(NSURLSession *)session assetDownloadTask:(AVAssetDownloadTask *)assetDownloadTask didResolveMediaSelection:(AVMediaSelection *)resolvedMediaSelection
+{
+    NSLog(@"开始111 %@",resolvedMediaSelection);
+}
+
+- (void)URLSession:(NSURLSession *)session assetDownloadTask:(AVAssetDownloadTask *)assetDownloadTask didFinishDownloadingToURL:(NSURL *)location
+{
+    NSLog(@"开始111 location %@",location);
+}
+
+- (void)URLSession:(NSURLSession *)session assetDownloadTask:(AVAssetDownloadTask *)assetDownloadTask didLoadTimeRange:(CMTimeRange)timeRange totalTimeRangesLoaded:(NSArray<NSValue *> *)loadedTimeRanges timeRangeExpectedToLoad:(CMTimeRange)timeRangeExpectedToLoad
+{
+    NSLog(@"开始111 %f %f %@",CMTimeGetSeconds(timeRange.duration),CMTimeGetSeconds(timeRangeExpectedToLoad.duration),loadedTimeRanges);
 }
 
 - (void)stopProcess

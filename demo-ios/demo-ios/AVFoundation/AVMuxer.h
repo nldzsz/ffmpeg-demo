@@ -8,10 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN
 
 @interface AVMuxer : NSObject
 
+/** 实现功能：接封装MP4文件然后再重新封装到MP4文件中，不重新进行编码
+ */
+- (void)remuxer:(NSURL*)srcURL dstURL:(NSURL*)dstURL;
 @end
-
-NS_ASSUME_NONNULL_END

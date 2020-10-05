@@ -10,6 +10,7 @@
 #import "EBDropdownListView.h"
 #include "BridgeFFMpeg.h"
 #import "AVDemuxer.h"
+#import "AVMuxer.h"
 
 
 @interface ViewController ()
@@ -61,14 +62,16 @@
 - (NSArray*)itemsForAVFoundation
 {
     NSArray *dic = @[
-         @"解封装 0",
-         @"封装 1",
+         @"demuxer 0",
+         @"muxer 1",
     ];
     return dic;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    NSLog(@"home %@",NSHomeDirectory());
+    
     self.view.backgroundColor = [UIColor whiteColor];
     isProcessing = NO;
     // ffmpeg & avfoundation
@@ -515,9 +518,11 @@
         case 1:
         {
             NSURL *videoURL = [[NSBundle mainBundle] URLForResource:@"test_1280x720_3" withExtension:@"mp4"];
+            NSString *dstPath = [path stringByAppendingPathComponent:@"1-test_1280x720_3.mp4"];
+            NSURL *dstURL = [NSURL fileURLWithPath:dstPath];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                AVDemuxer *demuxer = [[AVDemuxer alloc] initWithURL:videoURL];
-                [demuxer startProcess];
+                AVMuxer *muxer = [[AVMuxer alloc] init];
+                [muxer remuxer:videoURL dstURL:dstURL];
                 self->isProcessing = false;
                 [self processFinish];
             });

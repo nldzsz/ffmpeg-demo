@@ -19,5 +19,11 @@
 /** 实现解封装MP4文件，并且将其中的未压缩音视频数据读取出来
  */
 - (void)startProcess;
+
+
+// 对远程文件的解封装;貌似不支持对远程文件的读取
+- (id)initWithRemoteURL:(NSURL*)remoteURL;
+- (void)startRemoteProcess;
+
 - (void)stopProcess;
 @end

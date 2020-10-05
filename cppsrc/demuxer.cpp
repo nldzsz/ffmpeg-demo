@@ -197,16 +197,19 @@ void Demuxer::doDemuxer(string srcPath)
     
     
     AVPacket *packet = av_packet_alloc();
-    static int num = 0;
+    static int anum = 0;
+    static int vnum = 0;
     LOGD("begin av_read_frame");
     while ((ret = av_read_frame(inFmtCtx, packet)) >= 0) {
-        num++;
+        
         if (videoStream_Index == packet->stream_index) {
-            LOGD("video size %d num %d pos %ld pts %ld",packet->size,num,packet->pos,packet->pts);
+            vnum++;
+            LOGD("video size %d num %d pos %ld pts(%s)",packet->size,vnum,packet->pos,av_ts2timestr(packet->pts, &(inFmtCtx->streams[packet->stream_index]->time_base)));
         } else if (audioStream_Index == packet->stream_index){
-            LOGD("audio size %d num %d pos %ld pts %ld",packet->size,num,packet->pos,packet->pts);
+            anum++;
+            LOGD("audio size %d num %d pos %ld pts(%s)",packet->size,anum,packet->pos,av_ts2timestr(packet->pts, &(inFmtCtx->streams[packet->stream_index]->time_base)));
         } else {
-            LOGD("size %d num %d pos %ld pts %ld",packet->size,num,packet->stream_index);
+            LOGD("other size %d pos %ld",packet->size,packet->pos);
         }
         
         av_packet_unref(packet);

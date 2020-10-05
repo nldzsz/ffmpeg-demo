@@ -18,6 +18,7 @@ extern "C"{
 #include <libavutil/error.h>
 #include <libavutil/file.h>
 #include <libavformat/avio.h>
+#include <libavutil/timestamp.h>
 }
 using namespace std;
 
