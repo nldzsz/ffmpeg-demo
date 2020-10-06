@@ -29,8 +29,6 @@
         AVAssetReaderTrackOutput *videoOutput = nil,*audioOutput = nil;
         AVAssetReader *reader = [self createAssetReader:urlAsset videoOutput:&videoOutput audioOutput:&audioOutput];
         [self doDemuxer:reader videoOutput:videoOutput audioOutput:audioOutput thenMuxerTo:dstURL];
-        
-        dispatch_semaphore_signal(self->semaphore);
     }];
     
     // 等待任务完成
@@ -119,10 +117,22 @@
     }
     
     __block BOOL firstSample = YES;
-    // 启用调用视频输入对象的写入工作队列
+    /** 音视频写入监控队列，该队列的工作原理
+     *  1、此方法调用后不会阻塞，当输入对象处于可写状态并且可以向输入对象写入数据时，block会回调，该回调block会一直周期性的回调
+     *  直到输入队列处于不可写状态，所以就可以再此回调调用appendSampleBuffer写入数据了，这样能保证正常写入
+     *  2、videoInput不会持有该回调block
+     *  3、如果不通过requestMediaDataWhenReadyOnQueue回调方式而是直接调用appendSampleBuffer写入数据，则有可能会出错，因为音视频
+     *  两个输入对象是共用的一个写入管理器，可能处于不可写状态
+     *
+     */
     [videoInput requestMediaDataWhenReadyOnQueue:vwriteQueue usingBlock:^{
+        
+        // 虽然block会周期性的回调，不过一般在这里通过循环来持续性的写入数据，readyForMoreMediaData为YES代表现在处于可写状态了
         while (videoInput.readyForMoreMediaData) {
-            // 说明可以向封装器写入数据了
+
+            // 如果容器中音频和视频全部被读取完毕，那么status才会从AVAssetReaderStatusReading变成AVAssetReaderStatusCompleted
+            // 所以可以通过这个status来监听容器中数据是否全部读取完毕
+            // 备注：音视频中只有一个被读取完毕status的值仍为AVAssetReaderStatusReading
             if (reader.status == AVAssetReaderStatusReading) {
                 CMSampleBufferRef samplebuffer = [videoOutput copyNextSampleBuffer];
                 
@@ -136,27 +146,36 @@
                     [self printSamplebuffer:samplebuffer video:YES];
                     BOOL result = [videoInput appendSampleBuffer:samplebuffer];
                     NSLog(@"video writer %d",result);
+                } else {
+                    // 容器中音视频数据时长可能有些差距，那么会出现视频或者音频先读取完毕的情况，如果要监控音频或者视频中的某一个是否读取完毕
+                    // 那么通过判断samplebuffer是否为NULL
+                    videoFinish = YES;
+                    // 当调用markAsFinished之后，readyForMoreMediaData会变为NO，这个回调方法也不会再调用了
+                    // 该方法可以写在任何地方，不影响
+                    [videoInput markAsFinished];
+                    NSLog(@"没数据啦");
                 }
-            } else {
-                NSLog(@"说明视频读取完毕");
-                videoFinish = YES;
-                [videoInput markAsFinished];
-                
             }
+//            else {
+//                NSLog(@"状态 %ld",reader.status);
+//            }
         }
-        
+
         if (videoFinish && audioFinish) {
             NSLog(@"真正结束了1");
+            // 当音视频输入对象都调用markAsFnish函数后，就需要调用此方法结束整个封装，此方法可以写在这个回调里面也可以
+            // 写在任何地方
             [writer finishWritingWithCompletionHandler:^{
                 
             }];
+            dispatch_semaphore_signal(self->semaphore);
         }
     }];
     
     [audioInput requestMediaDataWhenReadyOnQueue:awriteQueue usingBlock:^{
-        while (audioInput.readyForMoreMediaData) {
+        
+        while (audioInput.readyForMoreMediaData) {  // 说明可以向封装器写入数据了
             
-            // 说明可以向封装器写入数据了
             if (reader.status == AVAssetReaderStatusReading) {
                 CMSampleBufferRef samplebuffer = [audioOutput copyNextSampleBuffer];
                 
@@ -169,12 +188,15 @@
                     [self printSamplebuffer:samplebuffer video:NO];
                     BOOL result = [audioInput appendSampleBuffer:samplebuffer];
                     NSLog(@"video writer %d",result);
+                } else {
+                    NSLog(@"说明音频读取完毕");
+                    audioFinish = YES;
+//                    [audioInput markAsFinished];
                 }
-            } else {
-                NSLog(@"说明音频读取完毕");
-                audioFinish = YES;
-                [audioInput markAsFinished];
             }
+//            else {
+//                NSLog(@"我的状态 %ld",reader.status);
+//            }
         }
         
         if (videoFinish && audioFinish) {
@@ -182,6 +204,7 @@
             [writer finishWritingWithCompletionHandler:^{
                 
             }];
+            dispatch_semaphore_signal(self->semaphore);
         }
     }];
 }
@@ -237,11 +260,14 @@
     // 往封装器中添加音视频输入对象，每添加一个输入对象代表要往容器中添加一路流，一般添加一路视频流
     if (vtrack) {
         /** AVAssetWriterInput 对象
-         *  用于将数据写入容器，可以写入压缩数据也可以写入未压缩数据，如果最后一个参数为nil则代表对数据不做压缩处理直接写入容器，不为nil则代表对对数据
-         *  按照指定格式压缩后写入容器
+         *  用于将数据写入容器，可以写入压缩数据也可以写入未压缩数据，如果outputSettings为nil则代表对数据不做压缩处理直接写入容器，
+         *  不为nil则代表对对数据按照指定格式压缩后写入容器
+         *  最后一个参数sourceFormatHint为CMFormatDescriptionRef类型，表示封装相关的参数信息，当outputSettings为nil时，该参数必须设定
+         *  否则无法封装(MOV格式除外)
          */
         CMFormatDescriptionRef srcformat = (__bridge CMFormatDescriptionRef)(vtrack.formatDescriptions[0]);
         AVAssetWriterInput *videoInput = [[AVAssetWriterInput alloc] initWithMediaType:AVMediaTypeVideo outputSettings:nil sourceFormatHint:srcformat];
+        CMFormatDescriptionGetExtension(<#CMFormatDescriptionRef  _Nonnull desc#>, <#CFStringRef  _Nonnull extensionKey#>)
         // 将写入对象添加到封装器中
         [writer addInput:videoInput];
     }
