@@ -7,11 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-
-NS_ASSUME_NONNULL_BEGIN
+#import <AVFoundation/AVFoundation.h>
+#import <CoreAudio/CoreAudioTypes.h>
 
 @interface AVCapture : NSObject
 
+// 录制一段时间的音视频然后保存到文件中，苹果只支持MOV mp4 m4v等少数格式
+- (void)startCaptureToURL:(NSURL*)dstURL duration:(float)time fileType:(AVFileType)fileType;
 @end
-
-NS_ASSUME_NONNULL_END

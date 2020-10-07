@@ -11,6 +11,7 @@
 #include "BridgeFFMpeg.h"
 #import "AVDemuxer.h"
 #import "AVMuxer.h"
+#import "AVCapture.h"
 
 
 @interface ViewController ()
@@ -64,6 +65,8 @@
     NSArray *dic = @[
          @"demuxer 0",
          @"muxer 1",
+         @"transcodec 2",
+         @"capture 3",
     ];
     return dic;
 }
@@ -523,6 +526,31 @@
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 AVMuxer *muxer = [[AVMuxer alloc] init];
                 [muxer remuxer:videoURL dstURL:dstURL];
+                self->isProcessing = false;
+                [self processFinish];
+            });
+        }
+        break;
+        case 2:
+        {
+            NSURL *videoURL = [[NSBundle mainBundle] URLForResource:@"test_1280x720_3" withExtension:@"mp4"];
+            NSString *dstPath = [path stringByAppendingPathComponent:@"1-test_1280x720_3.mov"];
+            NSURL *dstURL = [NSURL fileURLWithPath:dstPath];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                AVMuxer *muxer = [[AVMuxer alloc] init];
+                [muxer transcodec:videoURL dstURL:dstURL];
+                self->isProcessing = false;
+                [self processFinish];
+            });
+        }
+        break;
+        case 3:
+        {
+            NSString *dstPath = [path stringByAppendingPathComponent:@"1-test_capture_3.mp4"];
+            NSURL *dstURL = [NSURL fileURLWithPath:dstPath];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                AVCapture *capture = [[AVCapture alloc] init];
+                [capture startCaptureToURL:dstURL duration:3.0 fileType:AVFileTypeMPEG4];
                 self->isProcessing = false;
                 [self processFinish];
             });
