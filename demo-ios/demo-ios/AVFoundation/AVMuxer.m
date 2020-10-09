@@ -285,6 +285,7 @@
     semaphore = dispatch_semaphore_create(0);
     awriteQueue = dispatch_queue_create("awriteQueue.com", DISPATCH_QUEUE_SERIAL);
     vwriteQueue = dispatch_queue_create("vwriteQueue.com", DISPATCH_QUEUE_SERIAL);
+    CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
     
     AVURLAsset *inputAsset = [AVURLAsset assetWithURL:srcURL];
     [inputAsset loadValuesAsynchronouslyForKeys:@[@"tracks"] completionHandler:^{
@@ -293,7 +294,8 @@
     }];
     
     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-    NSLog(@"结束了");
+    NSLog(@"结束了，耗时 %f秒",CFAbsoluteTimeGetCurrent() - startTime);
+    
 }
 
 - (AVAssetReader*)createReader:(AVAsset*)asset

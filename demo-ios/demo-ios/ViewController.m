@@ -12,6 +12,7 @@
 #import "AVDemuxer.h"
 #import "AVMuxer.h"
 #import "AVCapture.h"
+#import "AVCapturePriviewer.h"
 
 
 @interface ViewController ()
@@ -67,6 +68,7 @@
          @"muxer 1",
          @"transcodec 2",
          @"capture 3",
+         @"capturepreview 4",
     ];
     return dic;
 }
@@ -554,6 +556,18 @@
                 self->isProcessing = false;
                 [self processFinish];
             });
+        }
+        break;
+        case 4:
+        {
+            NSString *dstPath = [path stringByAppendingPathComponent:@"1-test_capture.mov"];
+            NSURL *dstURL = [NSURL fileURLWithPath:dstPath];
+            AVCapturePriviewer *capture = [[AVCapturePriviewer alloc] initWithFrame:CGRectMake(10, 360,300, 168)];
+            capture.backgroundColor = [UIColor blackColor];
+            [self.view addSubview:capture];
+            [capture startCaptureMovieDst:dstURL];
+            self->isProcessing = false;
+            [self processFinish];
         }
         break;
         default:
