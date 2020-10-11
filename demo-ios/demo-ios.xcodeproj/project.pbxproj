@@ -79,7 +79,11 @@
 		18947E47250F5B3F00C2A247 /* test_441_f32le_2.aac in Resources */ = {isa = PBXBuildFile; fileRef = 18947E36250F5B3F00C2A247 /* test_441_f32le_2.aac */; };
 		18947E48250F5B3F00C2A247 /* test_441_s16be_2.amr in Resources */ = {isa = PBXBuildFile; fileRef = 18947E37250F5B3F00C2A247 /* test_441_s16be_2.amr */; };
 		18947E49250F5B3F00C2A247 /* lantinghei.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 18947E38250F5B3F00C2A247 /* lantinghei.TTF */; };
+		189647FF25313D7F00D79443 /* AVMYComposition.m in Sources */ = {isa = PBXBuildFile; fileRef = 189647FE25313D7F00D79443 /* AVMYComposition.m */; };
+		1896480A253163B900D79443 /* test_640x360_1.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 18964808253163B900D79443 /* test_640x360_1.mp4 */; };
+		1896480B253163B900D79443 /* test_640x360_mpeg4_1.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 18964809253163B900D79443 /* test_640x360_mpeg4_1.mp4 */; };
 		189BE841252E92B800C38E23 /* AVCapturePriviewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 189BE840252E92B800C38E23 /* AVCapturePriviewer.m */; };
+		189BE85625308C2F00C38E23 /* AVPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 189BE85525308C2F00C38E23 /* AVPlayerView.m */; };
 		189C71FB24C30CA2006D0B4D /* audio_acrossfade.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 189C71FA24C30CA2006D0B4D /* audio_acrossfade.cpp */; };
 		18D05F882528323700A8A63D /* AVDemuxer.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D05F872528323700A8A63D /* AVDemuxer.m */; };
 /* End PBXBuildFile section */
@@ -300,8 +304,14 @@
 		18947E36250F5B3F00C2A247 /* test_441_f32le_2.aac */ = {isa = PBXFileReference; lastKnownFileType = file; path = test_441_f32le_2.aac; sourceTree = "<group>"; };
 		18947E37250F5B3F00C2A247 /* test_441_s16be_2.amr */ = {isa = PBXFileReference; lastKnownFileType = file; path = test_441_s16be_2.amr; sourceTree = "<group>"; };
 		18947E38250F5B3F00C2A247 /* lantinghei.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = lantinghei.TTF; sourceTree = "<group>"; };
+		189647FD25313D7F00D79443 /* AVMYComposition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVMYComposition.h; sourceTree = "<group>"; };
+		189647FE25313D7F00D79443 /* AVMYComposition.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVMYComposition.m; sourceTree = "<group>"; };
+		18964808253163B900D79443 /* test_640x360_1.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = test_640x360_1.mp4; sourceTree = "<group>"; };
+		18964809253163B900D79443 /* test_640x360_mpeg4_1.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = test_640x360_mpeg4_1.mp4; sourceTree = "<group>"; };
 		189BE83F252E92B800C38E23 /* AVCapturePriviewer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVCapturePriviewer.h; sourceTree = "<group>"; };
 		189BE840252E92B800C38E23 /* AVCapturePriviewer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVCapturePriviewer.m; sourceTree = "<group>"; };
+		189BE85425308C2F00C38E23 /* AVPlayerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVPlayerView.h; sourceTree = "<group>"; };
+		189BE85525308C2F00C38E23 /* AVPlayerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVPlayerView.m; sourceTree = "<group>"; };
 		189C71F924C30CA2006D0B4D /* audio_acrossfade.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = audio_acrossfade.hpp; sourceTree = "<group>"; };
 		189C71FA24C30CA2006D0B4D /* audio_acrossfade.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = audio_acrossfade.cpp; sourceTree = "<group>"; };
 		18D05F862528323700A8A63D /* AVDemuxer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVDemuxer.h; sourceTree = "<group>"; };
@@ -683,6 +693,8 @@
 		188B867324BC66C700170C7A /* filesources */ = {
 			isa = PBXGroup;
 			children = (
+				18964808253163B900D79443 /* test_640x360_1.mp4 */,
+				18964809253163B900D79443 /* test_640x360_mpeg4_1.mp4 */,
 				18947E32250F5B3F00C2A247 /* abc-test.h264 */,
 				18947E38250F5B3F00C2A247 /* lantinghei.TTF */,
 				18947E2E250F5B3F00C2A247 /* test_320x180_yuv420p.yuv */,
@@ -720,6 +732,10 @@
 				18204B772528B5C900A881FB /* AVCapture.m */,
 				189BE83F252E92B800C38E23 /* AVCapturePriviewer.h */,
 				189BE840252E92B800C38E23 /* AVCapturePriviewer.m */,
+				189BE85425308C2F00C38E23 /* AVPlayerView.h */,
+				189BE85525308C2F00C38E23 /* AVPlayerView.m */,
+				189647FD25313D7F00D79443 /* AVMYComposition.h */,
+				189647FE25313D7F00D79443 /* AVMYComposition.m */,
 			);
 			name = AVFoundation;
 			path = "demo-ios/AVFoundation";
@@ -795,6 +811,7 @@
 				18947E41250F5B3F00C2A247 /* test_1280x720_3.srt in Resources */,
 				18947E49250F5B3F00C2A247 /* lantinghei.TTF in Resources */,
 				18947E40250F5B3F00C2A247 /* test_1280x720_3.ass in Resources */,
+				1896480B253163B900D79443 /* test_640x360_mpeg4_1.mp4 in Resources */,
 				1888BCCB24B4971400C8C817 /* LaunchScreen.storyboard in Resources */,
 				1888BCC824B4971400C8C817 /* Assets.xcassets in Resources */,
 				18947E45250F5B3F00C2A247 /* test_1280x720_3.mp4 in Resources */,
@@ -804,6 +821,7 @@
 				18947E44250F5B3F00C2A247 /* test_441_s16le_2.amr in Resources */,
 				1888BCC624B4971200C8C817 /* Main.storyboard in Resources */,
 				188B85DB24BC3B9C00170C7A /* dropdownFlag@2x.png in Resources */,
+				1896480A253163B900D79443 /* test_640x360_1.mp4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -834,6 +852,8 @@
 				188B85DC24BC3B9C00170C7A /* EBDropdownListView.m in Sources */,
 				188B860D24BC451C00170C7A /* SoftEnDecoder.cpp in Sources */,
 				188B860F24BC451C00170C7A /* CLog.c in Sources */,
+				189BE85625308C2F00C38E23 /* AVPlayerView.m in Sources */,
+				189647FF25313D7F00D79443 /* AVMYComposition.m in Sources */,
 				188B860924BC451C00170C7A /* demuxer.cpp in Sources */,
 				188B860124BC451C00170C7A /* VideoJpg.cpp in Sources */,
 				1888BCCE24B4971400C8C817 /* main.m in Sources */,

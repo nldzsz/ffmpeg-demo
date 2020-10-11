@@ -13,6 +13,8 @@
 #import "AVMuxer.h"
 #import "AVCapture.h"
 #import "AVCapturePriviewer.h"
+#import "AVPlayerView.h"
+#import "AVMYComposition.h"
 
 
 @interface ViewController ()
@@ -69,6 +71,9 @@
          @"transcodec 2",
          @"capture 3",
          @"capturepreview 4",
+         @"AVPlayerView 5",
+         @"AVComposition add music 6",
+         @"AVComposition merge file 7",
     ];
     return dic;
 }
@@ -568,6 +573,49 @@
             [capture startCaptureMovieDst:dstURL];
             self->isProcessing = false;
             [self processFinish];
+        }
+        break;
+        case 5:
+        {
+            NSURL *videoURL = [[NSBundle mainBundle] URLForResource:@"test_1280x720_3" withExtension:@"mp4"];
+            AVPlayerView *playerview = [[AVPlayerView alloc] initWithFrame:CGRectMake(10, 360,300, 168)];
+            playerview.backgroundColor = [UIColor blackColor];
+            [self.view addSubview:playerview];
+            [playerview startPlayer:videoURL];
+            
+            self->isProcessing = false;
+            [self processFinish];
+        }
+        break;
+        case 6:
+        {
+            NSURL *audioURL1 = [[NSBundle mainBundle] URLForResource:@"test_mp3_1" withExtension:@"mp3"];
+            NSURL *audioURL2 = [[NSBundle mainBundle] URLForResource:@"test_mp3_2" withExtension:@"mp3"];
+            NSURL *videoURL = [[NSBundle mainBundle] URLForResource:@"test_1280x720_1" withExtension:@"mp4"];
+            NSString *dstPath = [path stringByAppendingPathComponent:@"1-compostion.mp4"];
+            NSURL *dstURL = [NSURL fileURLWithPath:dstPath];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                AVMYComposition *playerview = [[AVMYComposition alloc] init];
+                [playerview startMerge:audioURL1 audio2:audioURL2 videoUrl:videoURL dst:dstURL];
+                
+                self->isProcessing = false;
+                [self processFinish];
+            });
+        }
+        break;
+        case 7:
+        {
+            NSURL *mp41URL = [[NSBundle mainBundle] URLForResource:@"test_640x360_1" withExtension:@"mp4"];
+            NSURL *mp42URL = [[NSBundle mainBundle] URLForResource:@"test_1280x720_3" withExtension:@"mp4"];
+            NSString *dstPath = [path stringByAppendingPathComponent:@"2-compostion.mp4"];
+            NSURL *dstURL = [NSURL fileURLWithPath:dstPath];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                AVMYComposition *playerview = [[AVMYComposition alloc] init];
+                [playerview mergeFile:mp41URL twoURL:mp42URL dst:dstURL];
+                
+                self->isProcessing = false;
+                [self processFinish];
+            });
         }
         break;
         default:
