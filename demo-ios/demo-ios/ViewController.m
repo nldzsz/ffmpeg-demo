@@ -15,6 +15,9 @@
 #import "AVCapturePriviewer.h"
 #import "AVPlayerView.h"
 #import "AVMYComposition.h"
+#import "AVGetImage.h"
+#import "AVVideoCut.h"
+#import "AVFaceDetect.h"
 
 
 @interface ViewController ()
@@ -74,6 +77,9 @@
          @"AVPlayerView 5",
          @"AVComposition add music 6",
          @"AVComposition merge file 7",
+         @"get Image From Video 8",
+         @"video cut 9",
+         @"face dectect 10",
     ];
     return dic;
 }
@@ -612,6 +618,32 @@
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 AVMYComposition *playerview = [[AVMYComposition alloc] init];
                 [playerview mergeFile:mp41URL twoURL:mp42URL dst:dstURL];
+                
+                self->isProcessing = false;
+                [self processFinish];
+            });
+        }
+        break;
+        case 8:
+        {
+            NSURL *videoURL = [[NSBundle mainBundle] URLForResource:@"test_1280x720_3" withExtension:@"mp4"];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                AVGetImage *getImage = [[AVGetImage alloc] init];
+                [getImage getImageFromURL:videoURL saveDstPath:path];
+                
+                self->isProcessing = false;
+                [self processFinish];
+            });
+        }
+        break;
+        case 9:
+        {
+            NSURL *videoURL = [[NSBundle mainBundle] URLForResource:@"test_1280x720_3" withExtension:@"mp4"];
+            NSString *dstPath = [path stringByAppendingPathComponent:@"2-cut.mp4"];
+            NSURL *dstURL = [NSURL fileURLWithPath:dstPath];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                AVVideoCut *cut = [[AVVideoCut alloc] init];
+                [cut cutVideo:videoURL dst:dstURL];
                 
                 self->isProcessing = false;
                 [self processFinish];

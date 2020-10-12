@@ -62,6 +62,9 @@
 		188B862424BC624D00170C7A /* libbz2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 188B862024BC615C00170C7A /* libbz2.tbd */; };
 		188B862524BC625600170C7A /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 188B861D24BC614000170C7A /* libz.tbd */; };
 		188B862624BC626600170C7A /* liblzma.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 188B861E24BC614900170C7A /* liblzma.tbd */; };
+		189226BC2532A10300D31BD8 /* AVGetImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 189226BB2532A10300D31BD8 /* AVGetImage.m */; };
+		189226C42532A12700D31BD8 /* AVFaceDetect.m in Sources */ = {isa = PBXBuildFile; fileRef = 189226C32532A12700D31BD8 /* AVFaceDetect.m */; };
+		189226C92532A13D00D31BD8 /* AVVideoCut.m in Sources */ = {isa = PBXBuildFile; fileRef = 189226C82532A13D00D31BD8 /* AVVideoCut.m */; };
 		18947E39250F5B3F00C2A247 /* test_mp3_1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 18947E28250F5B3E00C2A247 /* test_mp3_1.mp3 */; };
 		18947E3A250F5B3F00C2A247 /* test_mp3_2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 18947E29250F5B3E00C2A247 /* test_mp3_2.mp3 */; };
 		18947E3B250F5B3F00C2A247 /* test_1280x720_1.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 18947E2A250F5B3E00C2A247 /* test_1280x720_1.mp4 */; };
@@ -287,6 +290,12 @@
 		188B861F24BC615400170C7A /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
 		188B862024BC615C00170C7A /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
 		188B862124BC616800170C7A /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		189226BA2532A10200D31BD8 /* AVGetImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVGetImage.h; sourceTree = "<group>"; };
+		189226BB2532A10300D31BD8 /* AVGetImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVGetImage.m; sourceTree = "<group>"; };
+		189226C22532A12700D31BD8 /* AVFaceDetect.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVFaceDetect.h; sourceTree = "<group>"; };
+		189226C32532A12700D31BD8 /* AVFaceDetect.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVFaceDetect.m; sourceTree = "<group>"; };
+		189226C72532A13D00D31BD8 /* AVVideoCut.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVVideoCut.h; sourceTree = "<group>"; };
+		189226C82532A13D00D31BD8 /* AVVideoCut.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVVideoCut.m; sourceTree = "<group>"; };
 		18947E28250F5B3E00C2A247 /* test_mp3_1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = test_mp3_1.mp3; sourceTree = "<group>"; };
 		18947E29250F5B3E00C2A247 /* test_mp3_2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = test_mp3_2.mp3; sourceTree = "<group>"; };
 		18947E2A250F5B3E00C2A247 /* test_1280x720_1.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = test_1280x720_1.mp4; sourceTree = "<group>"; };
@@ -736,6 +745,12 @@
 				189BE85525308C2F00C38E23 /* AVPlayerView.m */,
 				189647FD25313D7F00D79443 /* AVMYComposition.h */,
 				189647FE25313D7F00D79443 /* AVMYComposition.m */,
+				189226BA2532A10200D31BD8 /* AVGetImage.h */,
+				189226BB2532A10300D31BD8 /* AVGetImage.m */,
+				189226C72532A13D00D31BD8 /* AVVideoCut.h */,
+				189226C82532A13D00D31BD8 /* AVVideoCut.m */,
+				189226C22532A12700D31BD8 /* AVFaceDetect.h */,
+				189226C32532A12700D31BD8 /* AVFaceDetect.m */,
 			);
 			name = AVFoundation;
 			path = "demo-ios/AVFoundation";
@@ -832,6 +847,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				189226BC2532A10300D31BD8 /* AVGetImage.m in Sources */,
 				188B860024BC451C00170C7A /* VideoScale.cpp in Sources */,
 				189BE841252E92B800C38E23 /* AVCapturePriviewer.m in Sources */,
 				188B860824BC451C00170C7A /* encodeMuxer.cpp in Sources */,
@@ -855,10 +871,12 @@
 				189BE85625308C2F00C38E23 /* AVPlayerView.m in Sources */,
 				189647FF25313D7F00D79443 /* AVMYComposition.m in Sources */,
 				188B860924BC451C00170C7A /* demuxer.cpp in Sources */,
+				189226C92532A13D00D31BD8 /* AVVideoCut.m in Sources */,
 				188B860124BC451C00170C7A /* VideoJpg.cpp in Sources */,
 				1888BCCE24B4971400C8C817 /* main.m in Sources */,
 				188B860424BC451C00170C7A /* audio_encode.cpp in Sources */,
 				1888BCC024B4971200C8C817 /* SceneDelegate.m in Sources */,
+				189226C42532A12700D31BD8 /* AVFaceDetect.m in Sources */,
 				18204B702528B5A200A881FB /* VTEncoder.m in Sources */,
 				18204B782528B5C900A881FB /* AVCapture.m in Sources */,
 				188B861224BC470300170C7A /* BridgeFFMpeg.mm in Sources */,
