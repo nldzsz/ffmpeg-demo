@@ -592,6 +592,14 @@ void AudioVolume::doChangeAudioVolume2(string srcpath,string dstpath)
     AVFilterInOut *inputs = avfilter_inout_alloc();
     AVFilterInOut *outputs = avfilter_inout_alloc();
     char filter_desc[200] = {0};
+    
+    /**     之前的写法为：sprintf(filter_desc, "aresample=%d,aformat=sample_fmts=%s:channel_layouts=%s",en_ctx->sample_rate,
+     av_get_sample_fmt_name(en_ctx->sample_fmt),av_get_channel_name(en_ctx->channel_layout));
+
+     *  遇到问题：部分声道类型通过av_get_channel_name(en_ctx->channel_layout)得到的声道类型名为null，所以导致创建滤镜时失败
+     *  分析原因：暂时未知，日后看源码再备注
+     *  解决方案：改成如下方式的滤镜描述符
+     */
     sprintf(filter_desc, "aresample=%d,aformat=sample_fmts=%s:channel_layouts=0x%" PRIX64,en_ctx->sample_rate,
             av_get_sample_fmt_name(en_ctx->sample_fmt),en_ctx->channel_layout);
     // 设置outputs的相关参数;outputs代表向滤镜描述符的第一个滤镜的输入端口输出数据，由于第一个滤镜的input label标签默认为"in"，
