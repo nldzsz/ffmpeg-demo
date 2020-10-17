@@ -592,8 +592,8 @@ void AudioVolume::doChangeAudioVolume2(string srcpath,string dstpath)
     AVFilterInOut *inputs = avfilter_inout_alloc();
     AVFilterInOut *outputs = avfilter_inout_alloc();
     char filter_desc[200] = {0};
-    sprintf(filter_desc, "aresample=%d,aformat=sample_fmts=%s:channel_layouts=%s",en_ctx->sample_rate,
-            av_get_sample_fmt_name(en_ctx->sample_fmt),av_get_channel_name(en_ctx->channel_layout));
+    sprintf(filter_desc, "aresample=%d,aformat=sample_fmts=%s:channel_layouts=0x%" PRIX64,en_ctx->sample_rate,
+            av_get_sample_fmt_name(en_ctx->sample_fmt),en_ctx->channel_layout);
     // 设置outputs的相关参数;outputs代表向滤镜描述符的第一个滤镜的输入端口输出数据，由于第一个滤镜的input label标签默认为"in"，
     // 所以这里outputs的name也设置为"in"
     outputs->name = av_strdup("in");
@@ -610,7 +610,7 @@ void AudioVolume::doChangeAudioVolume2(string srcpath,string dstpath)
     
     // 5、通过滤镜描述符创建并初始化各个滤镜并且按照滤镜描述符的顺序连接到一起
     if ((ret = avfilter_graph_parse_ptr(graph, filter_desc, &inputs, &outputs, NULL)) < 0) {
-        LOGD("avfilter_graph_parse_ptr() fail");
+        LOGD("avfilter_graph_parse_ptr() fail %s",av_err2str(ret));
         releasesources();
         return;
     }
